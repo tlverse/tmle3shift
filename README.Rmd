@@ -21,9 +21,7 @@ knitr::opts_chunk$set(
 [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](http://www.repostatus.org/badges/latest/wip.svg)](http://www.repostatus.org/#wip)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 
-> _Extensible_ TMLE framework
-
-__Author:__ [Jeremy Coyle](https://github.com/jeremyrcoyle)
+> TML Estimation of Shift Intervention Effects with the `tmle3` framework
 
 ---
 

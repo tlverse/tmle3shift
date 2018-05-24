@@ -1,0 +1,49 @@
+Package: tmle3shift
+Title: Targeted Maximum Likelihood Estimation of Effects of Shift Interventions
+Version: 0.0.1
+Authors@R: c(
+    person("Nima", "Hejazi", email = "nh@nimahejazi.org",
+           role = c("aut", "cre")),
+    person("Jeremy", "Coyle", email = "jeremy.coyle@gmail.com",
+           role = c("aut"))
+  )
+Description: Targeted maximum likelihood estimation (TMLE) of population-level
+    causal effects under stochastic treatment regimes and related nonparametric
+    variable importance analysis. Tools are provided for computing the TMLE of a
+    treatment effect under interventions that are shifts of a continuous-valued
+    treatment variable, as first described by Diaz and van der Laan (2013; doi:
+    TODO). This is a plug-in package for use with the tmle3 R package and the
+    tlverse ecosystem for Targeted Learning.
+Depends:
+    R (>= 3.5.0)
+License: GPL-3
+Imports:
+    sl3,
+    tmle3,
+    origami,
+    delayed,
+    R6,
+    uuid,
+    methods,
+    ggplot2,
+    stats
+Suggests:
+    testthat,
+    knitr,
+    rmarkdown,
+    condensier,
+    txshift
+Remotes:
+    github::tlverse/sl3@devel,
+    github::tlverse/origami,
+    github::tlverse/delayed,
+    github::tlverse/tmle3,
+    github::osofr/condensier,
+    github::nhejazi/txshift
+URL: https://tmle3shift.tlverse.com/
+BugReports: https://github.com/tlverse/tmle3shift/issues
+Encoding: UTF-8
+LazyData: true
+LazyLoad: yes
+VignetteBuilder: knitr
+RoxygenNote: 6.0.1.9000

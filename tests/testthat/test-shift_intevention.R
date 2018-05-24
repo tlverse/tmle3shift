@@ -69,9 +69,17 @@ tmle_task <- tmle_spec$make_tmle_task(data, node_list)
 ## define likelihood
 likelihood <- tmle_spec$make_likelihood(tmle_task, learner_list)
 
+# test shift functions
+shift_fun <- function(tmle_task, delta = 0.5) {
+  tmle_task$get_tmle_node("A") + delta
+}
+shift_fun_inv <- function(tmle_task, delta = 0.5) {
+  tmle_task$get_tmle_node("A") - delta
+}
+
 ## define parameter
 intervention <- define_lf(LF_shift, "A", likelihood$factor_list[["A"]],
-                          shift_additive, shift_additive_inverse)
+                          shift_additive, shift_additive_inv)
 tsm <- define_param(Param_TSM, likelihood, intervention)
 
 ## define update method (submodel + loss function)

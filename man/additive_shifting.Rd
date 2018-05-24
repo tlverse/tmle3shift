@@ -2,12 +2,12 @@
 % Please edit documentation in R/shift_additive.R
 \name{shift_additive}
 \alias{shift_additive}
-\alias{shift_additive_inverse}
-\title{Helper Functions for Additive Shifts of Continuous-Valued Interventions}
+\alias{shift_additive_inv}
+\title{Additive Shifts of Continuous-Valued Interventions}
 \usage{
-shift_additive(tmle_task, delta = 0.5)
+shift_additive(tmle_task, delta = 0)
 
-shift_additive_inverse(tmle_task, delta = 0.5)
+shift_additive_inv(tmle_task, delta = 0)
 }
 \arguments{
 \item{tmle_task}{A \code{tmle3_Task} object containing data and nodes, as
@@ -15,18 +15,12 @@ described and implemented in the \code{tmle3} package. Please refer to the
 documentation and supporting materials of that package for details.}
 
 \item{delta}{A \code{numeric} value giving a value of the shift to be applied
-the treatment. This is an additive shift of the treatment so it will merely
-be added to the observed value of the treatment node "A".}
-
-\item{tmle_task}{A \code{tmle3_Task} object containing data and nodes, as
-described and implemented in the \code{tmle3} package. Please refer to the
-documentation and supporting materials of that package for details.}
-
-\item{delta}{A \code{numeric} value giving a value of the shift to be applied
-the treatment. This is the inverse of an additive shift of the treatment so
-it will be subtracted from the observed value of the treatment node "A".}
+to the treatment. This is an additive shift so the value is merely to be
+added to the observed value of the treatment node "A". In the case of the
+inverse additive shift, the specified value will be subtracted from the
+observed value of the treatment node "A".}
 }
 \description{
-Helper Functions for Additive Shifts of Continuous-Valued Interventions
+Additive Shifts of Continuous-Valued Interventions
 }
 \concept{shifting_interventions}

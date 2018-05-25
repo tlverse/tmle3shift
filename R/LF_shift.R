@@ -76,7 +76,7 @@ LF_shift <- R6Class(
   inherit = LF_base,
   public = list(
     initialize = function(name, original_lf, shift_function, shift_inverse,
-                          shift_delta, ...) {
+                              shift_delta, ...) {
       super$initialize(name, ..., type = "density")
       private$.original_lf <- original_lf
       private$.shift_function <- shift_function

@@ -24,4 +24,3 @@ shift_additive <- function(tmle_task, delta = 0) {
 shift_additive_inv <- function(tmle_task, delta = 0) {
   return(tmle_task$get_tmle_node("A") - delta)
 }
-

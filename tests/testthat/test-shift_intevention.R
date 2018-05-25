@@ -36,16 +36,28 @@ node_list <- list(W = "W", A = "A", Y = "Y")
 lrn1 <- Lrnr_mean$new()
 lrn2 <- Lrnr_glm$new()
 lrn3 <- Lrnr_ranger$new()
-sl_lrn <- Lrnr_sl$new(learners = list(lrn1, lrn2, lrn3),
-                      metalearner = Lrnr_nnls$new())
+sl_lrn <- Lrnr_sl$new(
+  learners = list(lrn1, lrn2, lrn3),
+  metalearner = Lrnr_nnls$new()
+)
 
 # learners used for conditional density regression (e.g., propensity score)
-lrn1_dens <- Lrnr_condensier$new(nbins = 20, bin_estimator = lrn1,
-                                 bin_method = "equal.mass")
-lrn2_dens <- Lrnr_condensier$new(nbins = 10, bin_estimator = lrn1,
-                                 bin_method = "equal.mass")
-sl_lrn_dens <- Lrnr_sl$new(learners = list(lrn1_dens, lrn2_dens),
-                           metalearner = Lrnr_solnp_density$new())
+lrn1_dens <- Lrnr_condensier$new(
+  nbins = 25, bin_estimator = lrn1,
+  bin_method = "dhist"
+)
+lrn2_dens <- Lrnr_condensier$new(
+  nbins = 20, bin_estimator = lrn2,
+  bin_method = "dhist"
+)
+lrn3_dens <- Lrnr_condensier$new(
+  nbins = 15, bin_estimator = lrn3,
+  bin_method = "dhist"
+)
+sl_lrn_dens <- Lrnr_sl$new(
+  learners = list(lrn1_dens, lrn2_dens, lrn3_dens),
+  metalearner = Lrnr_solnp_density$new()
+)
 
 # specify outcome and treatment regressions and create learner list
 Q_learner <- sl_lrn
@@ -71,10 +83,12 @@ updater <- tmle3_Update$new()
 likelihood_targeted <- Targeted_Likelihood$new(likelihood_init, updater)
 
 # define shift intervention and required shift functions
-intervention <- define_lf(tmle3shift::LF_shift, name = "A",
-                          original_lf = likelihood_init$factor_list[["A"]],
-                          shift_additive, shift_additive_inv,  # shift fxns
-                          shift_delta = 0.5)
+intervention <- define_lf(tmle3shift::LF_shift,
+  name = "A",
+  original_lf = likelihood_init$factor_list[["A"]],
+  shift_additive, shift_additive_inv, # shift fxns
+  shift_delta = 0.5
+)
 
 # TODO: make params not store likelihood info internally!
 tsm <- define_param(Param_TSM, likelihood_targeted, intervention)
@@ -84,8 +98,9 @@ updater$tmle_params <- tsm
 tmle_fit <- fit_tmle3(tmle_task, likelihood_targeted, list(tsm), updater)
 
 ## extract results from tmle3_Fit object
-(tmle3_psi <- tmle_fit$summary$tmle_est)
-(tmle3_se <- tmle_fit$summary$se)
+tmle_fit
+tmle3_psi <- tmle_fit$summary$tmle_est
+tmle3_se <- tmle_fit$summary$se
 
 
 ################################################################################
@@ -97,7 +112,7 @@ set.seed(429153)
 # TODO: validate that we're getting the same errors on g fitting
 tmle_sl_shift_classic <- tmle_txshift(
   W = W, A = A, Y = Y, delta = 0.5,
-  fluc_method = "standard",
+  fluc_method = "weighted",
   g_fit_args = list(
     fit_type = "sl",
     sl_lrnrs = g_learner
@@ -109,16 +124,16 @@ tmle_sl_shift_classic <- tmle_txshift(
 )
 
 # extract results from fit object produced by classical package
-(classic_psi <- tmle_sl_shift_classic$psi)
-(classic_se <- sqrt(tmle_sl_shift_classic$var))
+summary(tmle_sl_shift_classic)
+classic_psi <- tmle_sl_shift_classic$psi
+classic_se <- sqrt(tmle_sl_shift_classic$var)
 
 # only approximately equal (although it's O(1/n))
 test_that("Parameter point estimate matches result from classic package", {
-  expect_equal(tmle3_psi, classic_psi, tol = 1 / n_obs)
+  expect_equal(tmle3_psi, classic_psi, tol = 1 / n_obs, scale = classic_psi)
 })
 
 # only approximately equal (although it's O(1/n))
 test_that("Standard error matches result from classic package", {
-  expect_equal(tmle3_se, classic_se, tol = 1 / n_obs)
+  expect_equal(tmle3_se, classic_se, tol = 1 / n_obs, scale = classic_se)
 })
-

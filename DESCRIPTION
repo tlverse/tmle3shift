@@ -28,19 +28,19 @@ Depends:
     R (>= 3.5.0)
 License: GPL-3
 Imports:
-    sl3,
-    tmle3,
-    origami,
-    delayed,
     R6,
     uuid,
-    methods,
-    ggplot2,
-    stats
+    methods
 Suggests:
     testthat,
     knitr,
     rmarkdown,
+    sl3,
+    tmle3,
+    origami,
+    delayed,
+    ggplot2,
+    stats,
     condensier,
     txshift,
     ranger

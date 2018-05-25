@@ -26,8 +26,8 @@ build_script:
   - travis-tool.sh install_github jimhester/covr
   - travis-tool.sh install_github tlverse/delayed
   - travis-tool.sh install_github tlverse/origami
-  - travis-tool.sh install_github tlverse/sl3@devel
   - travis-tool.sh install_github tlverse/tmle3
+  - travis-tool.sh install_github tlverse/sl3@devel
 
 test_script:
   - travis-tool.sh run_tests

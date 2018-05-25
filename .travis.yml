@@ -28,14 +28,15 @@ addons:
 r_packages:
   - devtools
   - covr
+  - ranger
 
 r_github_packages:
   - r-lib/devtools
   - jimhester/covr
   - tlverse/delayed
   - tlverse/origami
-  - tlverse/sl3@devel
   - tlverse/tmle3
+  - tlverse/sl3@devel
 
 after_success:
   - Rscript -e 'covr::codecov()'

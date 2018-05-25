@@ -32,7 +32,8 @@ Suggests:
     knitr,
     rmarkdown,
     condensier,
-    txshift
+    txshift,
+    ranger
 Remotes:
     github::tlverse/sl3@devel,
     github::tlverse/origami,

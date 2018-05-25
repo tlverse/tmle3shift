@@ -1,22 +1,28 @@
 #' Shifted Likelihood Factor
 #'
-#' Shifts a likelihood factor according to a \code{shift_function}. In effect,
+#' Shifts a likelihood factor according to a \code{shift_function} and a given
+#' magnitude of the desired shift (\code{shift_delta}). In effect,
 #' \code{get_likelihood(tmle_task)} from \code{tmle3} will instead be the
 #' likelihood from the \code{original_lf}, but a for shifted value
-#' \eqn{A'=}\code{shift_function}\eqn{(A,W)}
+#' \eqn{A'=}\code{shift_function}\eqn{(A, W)}
 #'
 #' @references
-#' Díaz, Iván, and Mark J van der Laan. 2017. "Stochastic Treatment Regimes." In
-#'  Targeted Learning in Data Science: Causal Inference for Complex Longitudinal
-#'  Studies, 167–80. Springer Science & Business Media.
-#' Muñoz, Iván Díaz, and Mark J van der Laan. 2012. "Population Intervention
-#'  Causal Effects Based on Stochastic Interventions." Biometrics 68 (2). Wiley
-#'  Online Library: 541–49.
+#' \describe{
+#'   \item{"Stochastic Treatment Regimes."}{Díaz, Iván, and van der Laan, Mark
+#'         J (2017). In Targeted Learning in Data Science: Causal Inference for
+#'         Complex Longitudinal Studies, 167–80. Springer Science & Business
+#'         Media.}
+#'   \item{"Population Intervention Causal Effects Based on Stochastic
+#'         Interventions."}{Muñoz, Iván Díaz, and van der Laan, Mark J (2012).
+#'         Biometrics 68 (2). Wiley Online Library: 541–49.}
+#' }
 #'
 #' @importFrom R6 R6Class
 #' @importFrom uuid UUIDgenerate
 #' @importFrom methods is
+#'
 #' @family Likelihood objects
+#'
 #' @keywords data
 #'
 #' @return \code{LF_base} object
@@ -39,9 +45,12 @@
 #'     \item{\code{shift_inverse}}{\code{function}, the inverse of a given
 #'           \code{shift_function}
 #'     }
+#'     \item{\code{shift_delta}}{\code{numeric}, specification of the magnitude
+#'           of the desired shift (on the level of the treatment)
+#'     }
 #'     \item{\code{...}}{Not currently used.
 #'     }
-#'     }
+#'   }
 #'
 #' @section Fields:
 #' \describe{
@@ -53,7 +62,11 @@
 #'     \item{\code{shift_inverse}}{\code{function}, the inverse of a given
 #'           \code{shift_function}
 #'     }
+#'     \item{\code{shift_delta}}{\code{numeric}, specification of the magnitude
+#'           of the desired shift (on the level of the treatment)
 #'     }
+#'   }
+#'
 #' @export
 #
 LF_shift <- R6Class(
@@ -63,18 +76,19 @@ LF_shift <- R6Class(
   inherit = LF_base,
   public = list(
     initialize = function(name, original_lf, shift_function, shift_inverse,
-                          ...) {
+                          shift_delta, ...) {
       super$initialize(name, ..., type = "density")
       private$.original_lf <- original_lf
       private$.shift_function <- shift_function
       private$.shift_inverse <- shift_inverse
+      private$.shift_delta <- shift_delta
     },
     get_mean = function(tmle_task) {
       stop("get_mean not supported for LF_shift")
     },
     get_density = function(tmle_task) {
       # get shifted data
-      shifted_values <- self$shift_inverse(tmle_task)
+      shifted_values <- self$shift_inverse(tmle_task, self$shift_delta)
 
       # generate cf_task data
       cf_data <- data.table(shifted_values)
@@ -88,7 +102,7 @@ LF_shift <- R6Class(
       return(cf_likelihood)
     },
     cf_values = function(tmle_task) {
-      cf_values <- self$shift_function(tmle_task)
+      cf_values <- self$shift_function(tmle_task, self$shift_delta)
       return(cf_values)
     }
   ),
@@ -101,12 +115,16 @@ LF_shift <- R6Class(
     },
     shift_inverse = function() {
       return(private$.shift_inverse)
+    },
+    shift_delta = function() {
+      return(private$.shift_delta)
     }
   ),
   private = list(
     .name = NULL,
     .original_lf = NULL,
     .shift_function = NULL,
-    .shift_inverse = NULL
+    .shift_inverse = NULL,
+    .shift_delta = NULL
   )
 )

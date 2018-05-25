@@ -1,6 +1,7 @@
 ---
-output: rmarkdown::github_document
-bibliography: "`r here::here('README-refs.bib')`"
+output:
+  rmarkdown::github_document
+bibliography: "README-refs.bib"
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -13,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# R/`tmle3shiftshift`
+# R/`tmle3shift`
 
 [![Travis-CI Build Status](https://travis-ci.org/tlverse/tmle3shift.svg?branch=master)](https://travis-ci.org/tlverse/tmle3shift)
 [![AppVeyor Build  Status](https://ci.appveyor.com/api/projects/status/github/tlverse/tmle3shift?branch=master&svg=true)](https://ci.appveyor.com/project/tlverse/tmle3shift)
@@ -21,7 +22,7 @@ knitr::opts_chunk$set(
 [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](http://www.repostatus.org/badges/latest/wip.svg)](http://www.repostatus.org/#wip)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 
-> TML Estimation of Shift Intervention Effects with the `tmle3` framework
+> Targeted Learning of Stochastic Intervention Effects, done `tlverse`-style
 
 ---
 
@@ -49,14 +50,6 @@ You can install the development version of `tmle3shift` from GitHub via
 ```{r gh-installation, eval = FALSE}
 devtools::install_github("tlverse/tmle3shift")
 ```
-
----
-
-## Getting Started
-
-The best place to get started is the "Framework Overview" document, which
-describes the individual components of the `tmle3shift` framework. It may be found
-here: https://tmle3shift.tlverse.org/articles/framework.html.
 
 ---
 

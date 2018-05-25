@@ -2,11 +2,21 @@ Package: tmle3shift
 Title: Targeted Maximum Likelihood Estimation of Effects of Shift Interventions
 Version: 0.0.1
 Authors@R: c(
-    person("Nima", "Hejazi", email = "nh@nimahejazi.org",
-           role = c("aut", "cre")),
     person("Jeremy", "Coyle", email = "jeremy.coyle@gmail.com",
-           role = c("aut"))
+           role = c("aut", "cre", "cph"),
+           comment = c(ORCID = "0000-0002-9874-6649")),
+    person("Nima", "Hejazi", email = "nh@nimahejazi.org",
+           role = "aut",
+           comment = c(ORCID = "0000-0002-7127-2789")),
+    person("David", "Benkeser", email = "benkeser@emory.edu",
+           role = "ctb",
+           comment = c(ORCID = "0000-0002-1019-8343")),
+    person("Iván", "Díaz", email = "ild2005@med.cornell.edu",
+           role = "ctb"),
+    person("Mark", "van der Laan", email = "laan@berkeley.edu",
+           role = c("aut", "ths"))
   )
+Maintainer: Nima Hejazi <nh@nimahejazi.org>
 Description: Targeted maximum likelihood estimation (TMLE) of population-level
     causal effects under stochastic treatment regimes and related nonparametric
     variable importance analysis. Tools are provided for computing the TMLE of a

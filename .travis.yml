@@ -9,7 +9,7 @@ cache: packages
 
 warnings_are_errors: true
 r_build_args: ''
-r_check_args: '--no-build-vignettes'
+r_check_args: '--no-vignettes'
 
 r:
   - oldrel
@@ -28,18 +28,24 @@ addons:
 r_packages:
   - devtools
   - covr
-  - ranger
 
 r_github_packages:
   - r-lib/devtools
+  - Rdatatable/data.table
   - jimhester/covr
   - tlverse/delayed
   - tlverse/origami
   - tlverse/tmle3
   - tlverse/sl3@devel
+  - osofr/condensier
+  - jeremyrcoyle/hal9001
+  - nhejazi/txshift
 
 after_success:
-  - Rscript -e 'covr::codecov()'
+  - travis_wait 30 Rscript -e 'covr::codecov()'
+
+on_failure:
+  - "./travis-tool.sh dump_logs"
 
 notifications:
   email:

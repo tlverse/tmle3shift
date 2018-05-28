@@ -23,11 +23,15 @@ cache:
 build_script:
   - travis-tool.sh install_deps
   - travis-tool.sh install_github r-lib/devtools
+  - travis-tool.sh install_github Rdatatable/data.table
   - travis-tool.sh install_github jimhester/covr
   - travis-tool.sh install_github tlverse/delayed
   - travis-tool.sh install_github tlverse/origami
   - travis-tool.sh install_github tlverse/tmle3
   - travis-tool.sh install_github tlverse/sl3@devel
+  - travis-tool.sh install_github jeremyrcoyle/hal9001
+  - travis-tool.sh install_github osofr/condensier
+  - travis-tool.sh install_github nhejazi/txshift
 
 test_script:
   - travis-tool.sh run_tests
@@ -35,6 +39,9 @@ test_script:
 on_failure:
   - 7z a failure.zip *.Rcheck\*
   - appveyor PushArtifact failure.zip
+
+on_success:
+     - Rscript -e "covr::codecov()"
 
 artifacts:
   - path: '*.Rcheck\**\*.log'

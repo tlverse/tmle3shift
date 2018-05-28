@@ -56,6 +56,22 @@ If you encounter any bugs or have any specific feature requests, please
 
 -----
 
+## Related
+
+  - [R/`txshift`](https://github.com/nhejazi/txshift) - An R package
+    providing an implementation of the same statistical methodology as
+    found here, except without use of the `tmle3` engine.
+
+-----
+
+## Funding
+
+The development of this software was supported in part through a grant
+from the National Institutes of Health: [T32
+LM012417-02](https://projectreporter.nih.gov/project_info_description.cfm?aid=9248418&icde=37849831&ddparam=&ddvalue=&ddsub=&cr=1&csb=default&cs=ASC&pball=).
+
+-----
+
 ## License
 
 The contents of this repository are distributed under the GPL-3 license.

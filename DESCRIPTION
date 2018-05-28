@@ -2,12 +2,12 @@ Package: tmle3shift
 Title: Targeted Maximum Likelihood Estimation of Effects of Shift Interventions
 Version: 0.0.1
 Authors@R: c(
-    person("Jeremy", "Coyle", email = "jeremy.coyle@gmail.com",
-           role = c("aut", "cre", "cph"),
-           comment = c(ORCID = "0000-0002-9874-6649")),
     person("Nima", "Hejazi", email = "nh@nimahejazi.org",
-           role = "aut",
+           role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-7127-2789")),
+    person("Jeremy", "Coyle", email = "jeremy.coyle@gmail.com",
+           role = c("aut", "cph"),
+           comment = c(ORCID = "0000-0002-9874-6649")),
     person("David", "Benkeser", email = "benkeser@emory.edu",
            role = "ctb",
            comment = c(ORCID = "0000-0002-1019-8343")),
@@ -30,19 +30,21 @@ License: GPL-3
 Imports:
     R6,
     uuid,
-    methods
+    methods,
+    sl3,
+    tmle3,
+    origami,
+    delayed
 Suggests:
     testthat,
     knitr,
     rmarkdown,
-    sl3,
-    tmle3,
-    origami,
-    delayed,
     ggplot2,
     stats,
     condensier,
     txshift,
+    Rsolnp,
+    nnls,
     ranger
 Remotes:
     github::tlverse/sl3@devel,

@@ -1,4 +1,4 @@
-context("Shift interventions")
+context("Shift intervention results match those from classic implementation")
 
 library(uuid)
 library(assertthat)

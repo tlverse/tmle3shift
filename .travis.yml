@@ -1,0 +1,52 @@
+branches:
+  only:
+  - master
+  - devel
+
+language: r
+sudo: required
+cache: packages
+
+warnings_are_errors: true
+r_build_args: ''
+r_check_args: '--no-vignettes'
+
+r:
+  - release
+  - devel
+
+before_install:
+  - Rscript -e 'update.packages(ask = FALSE)'
+
+# Install nlopt package to help nloptr install (for r-oldrel)
+addons:
+  apt:
+    packages:
+      - libnlopt-dev
+
+r_packages:
+  - devtools
+  - covr
+
+r_github_packages:
+  - r-lib/devtools
+  - Rdatatable/data.table
+  - jimhester/covr
+  - tlverse/delayed
+  - tlverse/origami
+  - tlverse/tmle3
+  - tlverse/sl3@devel
+  - osofr/condensier
+  - jeremyrcoyle/hal9001
+  - nhejazi/txshift
+
+after_success:
+  - travis_wait 30 Rscript -e 'covr::codecov()'
+
+on_failure:
+  - "./travis-tool.sh dump_logs"
+
+notifications:
+  email:
+    on_success: change
+    on_failure: change

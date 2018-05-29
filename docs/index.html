@@ -79,8 +79,8 @@
 <div id="whats-tmle3shift" class="section level2">
 <h2 class="hasAnchor">
 <a href="#whats-tmle3shift" class="anchor"></a>What’s <code>tmle3shift</code>?</h2>
-<p><code>tmle3shift</code> is an adapter / plug-in R package for use with <code>tmle3</code>, a general framework that supports the implementation of a range of TMLE parameters with a unified interface. <code>tmle3shift</code> extends support to the estimation of parameters defined as shift interventions of continuous-valued treatments by way of stochastic treatment regimes. For a detailed description of the parameter, TML estimator, and algorithm implemented in <code>tmle3shift</code>, the interested reader is invited to consult <span class="citation">Muñoz and van der Laan (2012)</span> and <span class="citation">Díaz and van der Laan (2018)</span>.</p>
-<p>For a general discussion of the framework of targeted minimum loss-based estimation and the role this methodology plays in statistical causal inference, the canonical references are <span class="citation">van der Laan and Rose (2011)</span> and <span class="citation">van der Laan and Rose (2018)</span>.</p>
+<p><code>tmle3shift</code> is an adapter/extension R package in the <code>tlverse</code> ecosystem that exposes support for the estimation of target parameters defined as shifts of interventions of continuous-valued treatments by way of stochastic treatment regimes. As an adapter package, <code>tmle3shift</code> builds upon the core <code>tlverse</code> grammar introduced by <code>tmle3</code>, a general framework that supports the implementation of a range of TMLE parameters through a unified interface. For a detailed description of the target parameter, TML estimator, and algorithm implemented in <code>tmle3shift</code>, the interested reader is invited to consult <span class="citation">Muñoz and van der Laan (2012)</span> and <span class="citation">Díaz and van der Laan (2018)</span>.</p>
+<p>For a general discussion of the framework of targeted minimum loss-based estimation and the role this methodology plays in statistical and causal inference, the canonical references are <span class="citation">van der Laan and Rose (2011)</span> and <span class="citation">van der Laan and Rose (2018)</span>.</p>
 <hr>
 </div>
 <div id="installation" class="section level2">
@@ -94,6 +94,21 @@
 <h2 class="hasAnchor">
 <a href="#issues" class="anchor"></a>Issues</h2>
 <p>If you encounter any bugs or have any specific feature requests, please <a href="https://github.com/tlverse/tmle3shift/issues">file an issue</a>.</p>
+<hr>
+</div>
+<div id="related" class="section level2">
+<h2 class="hasAnchor">
+<a href="#related" class="anchor"></a>Related</h2>
+<ul>
+<li>
+<a href="https://github.com/nhejazi/txshift">R/<code>txshift</code></a> - An R package providing an independent implementation of the same TML estimation procedure and statistical methodology as is made available here, without reliance on the <code>tlverse</code> grammar provided by the <code>tmle3</code> engine.</li>
+</ul>
+<hr>
+</div>
+<div id="funding" class="section level2">
+<h2 class="hasAnchor">
+<a href="#funding" class="anchor"></a>Funding</h2>
+<p>The development of this software was supported in part through a grant from the National Institutes of Health: <a href="https://projectreporter.nih.gov/project_info_description.cfm?aid=9248418&amp;icde=37849831&amp;ddparam=&amp;ddvalue=&amp;ddsub=&amp;cr=1&amp;csb=default&amp;cs=ASC&amp;pball=">T32 LM012417-02</a>.</p>
 <hr>
 </div>
 <div id="license" class="section level2">
@@ -140,8 +155,8 @@
 <div class="developers">
 <h2>Developers</h2>
 <ul class="list-unstyled">
-<li>Jeremy Coyle <br><small class="roles"> Author, maintainer, copyright holder </small> <a href="https://orcid.org/0000-0002-9874-6649" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" height="16"></a> </li>
-<li>Nima Hejazi <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-7127-2789" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" height="16"></a> </li>
+<li>Nima Hejazi <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-7127-2789" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" height="16"></a> </li>
+<li>Jeremy Coyle <br><small class="roles"> Author, copyright holder </small> <a href="https://orcid.org/0000-0002-9874-6649" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" height="16"></a> </li>
 <li>Mark van der Laan <br><small class="roles"> Author, thesis advisor </small>  </li>
 <li><a href="authors.html">All authors...</a></li>
 </ul>
@@ -163,7 +178,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Jeremy Coyle, Nima Hejazi, Mark van der Laan.</p>
+  <p>Developed by Nima Hejazi, Jeremy Coyle, Mark van der Laan.</p>
 </div>
 
 <div class="pkgdown">

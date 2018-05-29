@@ -12,7 +12,6 @@ r_build_args: ''
 r_check_args: '--no-vignettes'
 
 r:
-  - oldrel
   - release
   - devel
 

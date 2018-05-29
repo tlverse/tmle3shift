@@ -22,17 +22,19 @@ v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/
 
 ## What’s `tmle3shift`?
 
-`tmle3shift` is an adapter / plug-in R package for use with `tmle3`, a
-general framework that supports the implementation of a range of TMLE
-parameters with a unified interface. `tmle3shift` extends support to the
-estimation of parameters defined as shift interventions of
-continuous-valued treatments by way of stochastic treatment regimes. For
-a detailed description of the parameter, TML estimator, and algorithm
-implemented in `tmle3shift`, the interested reader is invited to consult
-Muñoz and van der Laan (2012) and Díaz and van der Laan (2018).
+`tmle3shift` is an adapter/extension R package in the `tlverse`
+ecosystem that exposes support for the estimation of target parameters
+defined as shifts of interventions of continuous-valued treatments by
+way of stochastic treatment regimes. As an adapter package, `tmle3shift`
+builds upon the core `tlverse` grammar introduced by `tmle3`, a general
+framework that supports the implementation of a range of TMLE parameters
+through a unified interface. For a detailed description of the target
+parameter, TML estimator, and algorithm implemented in `tmle3shift`, the
+interested reader is invited to consult Muñoz and van der Laan (2012)
+and Díaz and van der Laan (2018).
 
 For a general discussion of the framework of targeted minimum loss-based
-estimation and the role this methodology plays in statistical causal
+estimation and the role this methodology plays in statistical and causal
 inference, the canonical references are van der Laan and Rose (2011) and
 van der Laan and Rose (2018).
 
@@ -59,8 +61,10 @@ If you encounter any bugs or have any specific feature requests, please
 ## Related
 
   - [R/`txshift`](https://github.com/nhejazi/txshift) - An R package
-    providing an implementation of the same statistical methodology as
-    found here, except without use of the `tmle3` engine.
+    providing an independent implementation of the same TML estimation
+    procedure and statistical methodology as is made available here,
+    without reliance on the `tlverse` grammar provided by the `tmle3`
+    engine.
 
 -----
 

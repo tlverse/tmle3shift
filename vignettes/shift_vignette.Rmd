@@ -1,0 +1,159 @@
+---
+title: "Targeted Learning with Stochastic Treatment Regimes"
+author: "[Nima Hejazi](https://nimahejazi.org), [David
+  Benkeser](https://www.benkeserstatistics.com/), and [Jeremy
+  Coyle](https://github.com/jeremyrcoyle)"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+bibliography: vignette-refs.bib
+vignette: >
+  %\VignetteIndexEntry{Targeted Learning with Stochastic Treatment Regimes}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo=FALSE}
+options(scipen=999)
+```
+
+## Introduction
+
+Stochastic treatment regimes present a relatively simple manner in which to
+assess the effects of continuous treatments by way of parameters that examine
+the effects induced by the counterfactual shifting of the observed values of a
+treatment of interest. Here, we present an implementation of a new algorithm for
+computing targeted minimum loss-based estimates of treatment shift parameters
+defined based on a shifting function $d(A,W)$. For a technical presentation of
+the algorithm, the interested reader is invited to consult @diaz2018stochastic.
+For additional background on Targeted Learning and previous work on stochastic
+treatment regimes, please consider consulting @vdl2011targeted,
+@vdl2018targeted, and @munoz2012population.
+
+To start, let's load the packages we'll use and set a seed for simulation:
+
+```{r setup}
+library(tidyverse)
+library(data.table)
+library(condensier)
+library(sl3)
+library(txshift)
+set.seed(429153)
+```
+
+---
+
+## Data and Notation
+
+1. Start with a simple additive shift -- i.e., $d(a,w) = a + \delta$ if
+   $a < u(w) - \delta$ or $d(a, w) = a$ if $a \geq u(w) - \delta$.
+
+2. The additive shift will have support everywhere (i.e.,
+   $a < u(w)$ is true everywhere).
+
+3. The data structure that we now observe is $O = (W, A, Y)$.
+
+### Simulate Data
+
+```{r}
+# grab from unit test
+```
+
+---
+
+## Methodology
+
+```{r}
+# basic tmle3 setup
+```
+
+```
+
+### Interlude: Constructing Optimal Stacked Regressions with `sl3`
+
+To easily incorporate ensemble machine learning into the estimation procedure,
+we rely on the facilities provided in the [`sl3` R
+package](https://sl3.tlverse.org). For a complete guide on using the `sl3` R
+package, consider consulting https://sl3.tlverse.org, or https://tlverse.org for
+the `tlverse` ecosystem, of which `sl3` is a major part.
+
+```{r}
+# SL learners to be used for most fits (e.g., IPCW, outcome regression)
+lrnr_lib <- make_learner_stack("Lrnr_mean", "Lrnr_glm_fast", "Lrnr_ranger")
+sl_lrn <- Lrnr_sl$new(learners = lrnr_lib, metalearner = Lrnr_nnls$new())
+
+# SL learners for conditional densities to be used for the propensity score fit
+lrnr_dens_lib <- make_learner_stack(list("Lrnr_condensier", nbins = 35,
+                                          bin_estimator = Lrnr_glm_fast$new(),
+                                          bin_method = "equal.len",
+                                          pool = FALSE),
+                                    list("Lrnr_condensier", nbins = 30,
+                                          bin_estimator = Lrnr_ranger$new(),
+                                          bin_method = "equal.len",
+                                          pool = FALSE),
+                                    list("Lrnr_condensier", nbins = 25,
+                                          bin_estimator = Lrnr_ranger$new(),
+                                          bin_method = "equal.len",
+                                          pool = FALSE)
+                                   )
+sl_lrn_dens <- Lrnr_sl$new(learners = lrnr_dens_lib,
+                           metalearner = Lrnr_solnp_density$new())
+```
+
+### Estimating Stochastic Interventions Effects with Optimal Stacked Regressions
+
+Using the framework provided by the [`sl3` package](https://sl3.tlverse.org),
+the nuisance parameters of the TML estimator may be fit with ensemble learning,
+using the cross-validation framework of the Super Learner algorithm of
+@vdl2007super.
+
+```{r}
+# simple tmle3 fit
+```
+
+```{r}
+# ???
+```
+
+### Statistical Inference for Targeted Maximum Likelihood Estimates
+
+Recall that the asymptotic distribution of TML estimators has been studied
+thoroughly:
+$$\psi_n - \psi_0 = (P_n - P_0) \cdot D(\bar{Q}_n^*, g_n) + R(\hat{P}^*, P_0),$$
+which, provided the following two conditions:
+
+1. If $D(\bar{Q}_n^*, g_n)$ converges to $D(P_0)$ in $L_2(P_0)$ norm, and
+2. the size of the class of functions considered for estimation of $\bar{Q}_n^*$
+   and $g_n$ is bounded (technically, $\exists \mathcal{F}$ st
+   $D(\bar{Q}_n^*, g_n) \in \mathcal{F}$ *__whp__*, where $\mathcal{F}$ is a
+   Donsker class),
+readily admits the conclusion that
+$\psi_n - \psi_0 = (P_n - P_0) \cdot D(P_0) + R(\hat{P}^*, P_0)$.
+
+Under the additional condition that the remainder term $R(\hat{P}^*, P_0)$
+decays as $o_P \left( \frac{1}{\sqrt{n}} \right),$ we have that
+$$\psi_n - \psi_0 = (P_n - P_0) \cdot D(P_0) + o_P \left( \frac{1}{\sqrt{n}}
+ \right),$$
+which, by a central limit theorem, establishes a Gaussian limiting distribution
+for the estimator:
+
+$$\sqrt{n}(\psi_n - \psi) \to N(0, V(D(P_0))),$$
+where $V(D(P_0))$ is the variance of the efficient influence curve (canonical
+gradient) when $\psi$ admits an asymptotically linear representation.
+
+The above implies that $\psi_n$ is a $\sqrt{n}$-consistent estimator of $\psi$,
+that it is asymptotically normal (as given above), and that it is locally
+efficient. This allows us to build Wald-type confidence intervals in a
+straightforward manner:
+
+$$\psi_n \pm z_{\alpha} \cdot \frac{\sigma_n}{\sqrt{n}},$$
+where $\sigma_n^2$ is an estimator of $V(D(P_0))$. The estimator $\sigma_n^2$
+may be obtained using the bootstrap or computed directly via the following
+
+$$\sigma_n^2 = \frac{1}{n} \sum_{i = 1}^{n} D^2(\bar{Q}_n^*, g_n)(O_i)$$
+
+```{r}
+# summary method for tmle3 fit object
+```
+
+## References
+

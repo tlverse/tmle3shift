@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Authors • tmle3shift</title>
+<title>Outcome under Delta-Shifted Treatment — tmle_shift • tmle3shift</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -22,13 +22,19 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
-<link href="pkgdown.css" rel="stylesheet">
-<script src="jquery.sticky-kit.min.js"></script>
-<script src="pkgdown.js"></script>
+<link href="../pkgdown.css" rel="stylesheet">
+<script src="../jquery.sticky-kit.min.js"></script>
+<script src="../pkgdown.js"></script>
 
 
 
-<meta property="og:title" content="Authors" />
+<meta property="og:title" content="Outcome under Delta-Shifted Treatment — tmle_shift" />
+
+<meta property="og:description" content="O = (W, A, Y)
+W = Covariates
+A = Treatment (binary or categorical)
+Y = Outcome (binary or bounded continuous)" />
+<meta name="twitter:card" content="summary" />
 
 
 <!-- mathjax -->
@@ -53,7 +59,7 @@
   </head>
 
   <body>
-    <div class="container template-authors">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -64,7 +70,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="index.html">tmle3shift</a>
+        <a class="navbar-link" href="../index.html">tmle3shift</a>
         <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
       </span>
     </div>
@@ -75,13 +81,13 @@
   <a href="https://tlverse.org">tlverse</a>
 </li>
 <li>
-  <a href="index.html">tmle3</a>
+  <a href="../index.html">tmle3</a>
 </li>
 <li>
-  <a href="articles/shift_vignette.html">Overview</a>
+  <a href="../articles/shift_vignette.html">Overview</a>
 </li>
 <li>
-  <a href="reference/index.html">Reference</a>
+  <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
       
@@ -102,38 +108,57 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Authors</h1>
+    <h1>Outcome under Delta-Shifted Treatment</h1>
+    
+    <div class="hidden name"><code>tmle_shift.Rd</code></div>
     </div>
 
-    <ul class="list-unstyled">
-      <li>
-        <p><strong>Nima Hejazi</strong>. Author, maintainer. <a href='https://orcid.org/0000-0002-7127-2789' target='orcid.widget'><img src='https://members.orcid.org/sites/default/files/vector_iD_icon.svg' class='orcid' height='16'></a>
-        </p>
-      </li>
-      <li>
-        <p><strong>Jeremy Coyle</strong>. Author, copyright holder. <a href='https://orcid.org/0000-0002-9874-6649' target='orcid.widget'><img src='https://members.orcid.org/sites/default/files/vector_iD_icon.svg' class='orcid' height='16'></a>
-        </p>
-      </li>
-      <li>
-        <p><strong>David Benkeser</strong>. Contributor. <a href='https://orcid.org/0000-0002-1019-8343' target='orcid.widget'><img src='https://members.orcid.org/sites/default/files/vector_iD_icon.svg' class='orcid' height='16'></a>
-        </p>
-      </li>
-      <li>
-        <p><strong>Iván Díaz</strong>. Contributor. 
-        </p>
-      </li>
-      <li>
-        <p><strong>Mark van der Laan</strong>. Author, thesis advisor. 
-        </p>
-      </li>
-    </ul>
+    <div class="ref-description">
+    
+    <p>O = (W, A, Y)
+W = Covariates
+A = Treatment (binary or categorical)
+Y = Outcome (binary or bounded continuous)</p>
+    
+    </div>
+
+    <pre class="usage"><span class='fu'>tmle_shift</span>(<span class='kw'>shift_fxn</span> <span class='kw'>=</span> <span class='no'>shift_additive</span>, <span class='kw'>shift_fxn_inv</span> <span class='kw'>=</span> <span class='no'>shift_additive_inv</span>,
+  <span class='kw'>shift_val</span> <span class='kw'>=</span> <span class='fl'>0</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>shift_fxn</th>
+      <td><p>A <code>function</code> defining the type of shift to be applied
+to the treatment. For an example, see <code>shift_additive</code>.</p></td>
+    </tr>
+    <tr>
+      <th>shift_fxn_inv</th>
+      <td><p>A <code>function</code> defining the inverse of the type of
+shift to be applied to the treatment. For an example, see
+<code>shift_additive_inv</code>.</p></td>
+    </tr>
+    <tr>
+      <th>shift_val</th>
+      <td><p>A <code>numeric</code>, specification of the magnitude of the
+desired shift (on the level of the treatment). This is a value passed to
+the <code>function</code>s above for modulating the treatment.</p></td>
+    </tr>
+    </table>
+    
 
   </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+                </ul>
 
+  </div>
 </div>
-
 
       <footer>
       <div class="copyright">

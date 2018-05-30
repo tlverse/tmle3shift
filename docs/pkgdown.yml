@@ -2,4 +2,7 @@ pandoc: 2.2.1
 pkgdown: 1.0.0
 pkgdown_sha: ~
 articles: []
+urls:
+  reference: https://tmle3shift.tlverse.org/reference
+  article: https://tmle3shift.tlverse.org/articles
 

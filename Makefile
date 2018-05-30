@@ -21,7 +21,7 @@ build:
 	Rscript -e "devtools::build()"
 
 buildfast:
-	    Rscript -e "devtools::build(vignettes = FALSE)"
+	Rscript -e "devtools::build(vignettes = FALSE)"
 
 style:
 	Rscript -e "styler::style_pkg()"

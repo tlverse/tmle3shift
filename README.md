@@ -18,6 +18,9 @@ v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/
 > Targeted Learning of Stochastic Intervention Effects, done
 > `tlverse`-style
 
+**Authors:** [Nima Hejazi](https://nimahejazi.org) and [Jeremy
+Coyle](https://github.com/jeremyrcoyle)
+
 -----
 
 ## What’s `tmle3shift`?
@@ -63,8 +66,7 @@ If you encounter any bugs or have any specific feature requests, please
   - [R/`txshift`](https://github.com/nhejazi/txshift) - An R package
     providing an independent implementation of the same TML estimation
     procedure and statistical methodology as is made available here,
-    without reliance on the `tlverse` grammar provided by the `tmle3`
-    engine.
+    without reliance on the `tlverse` grammar provided by `tmle3`.
 
 -----
 

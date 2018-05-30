@@ -24,6 +24,9 @@ knitr::opts_chunk$set(
 
 > Targeted Learning of Stochastic Intervention Effects, done `tlverse`-style
 
+__Authors:__ [Nima Hejazi](https://nimahejazi.org) and [Jeremy
+Coyle](https://github.com/jeremyrcoyle)
+
 ---
 
 ## What's `tmle3shift`?

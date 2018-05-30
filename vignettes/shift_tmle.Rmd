@@ -55,8 +55,33 @@ set.seed(429153)
 ### Simulate Data
 
 ```{r}
-# grab from unit test
+## simulate simple data for tmle-shift sketch
+n_obs <- 1000 # number of observations
+n_w <- 1 # number of baseline covariates
+tx_mult <- 2 # multiplier for the effect of W = 1 on the treatment
+
+## baseline covariates -- simple, binary
+W <- as.numeric(replicate(n_w, rbinom(n_obs, 1, 0.5)))
+
+## create treatment based on baseline W
+A <- as.numeric(rnorm(n_obs, mean = tx_mult * W, sd = 1))
+
+## create outcome as a linear function of A, W + white noise
+Y <- A + W + rnorm(n_obs, mean = 0, sd = 1)
 ```
+
+The above composes our observed data structure $O = (W, A, Y)$. To formally
+express this fact using the `tlverse` grammar introduced by the `tmle3` package,
+we create a single data object and specify the functional relationships between
+the nodes in the directed acyclic graph (DAG) via nonparametric structural
+equation models (NPSEM), reflected in the node list that we set up:
+
+```{r}
+## organize data and nodes for tmle3
+data <- data.table(W, A, Y)
+node_list <- list(W = "W", A = "A", Y = "Y")
+```
+
 
 ---
 
@@ -64,8 +89,6 @@ set.seed(429153)
 
 ```{r}
 # basic tmle3 setup
-```
-
 ```
 
 ### Interlude: Constructing Optimal Stacked Regressions with `sl3`
@@ -77,26 +100,39 @@ package, consider consulting https://sl3.tlverse.org, or https://tlverse.org for
 the `tlverse` ecosystem, of which `sl3` is a major part.
 
 ```{r}
-# SL learners to be used for most fits (e.g., IPCW, outcome regression)
-lrnr_lib <- make_learner_stack("Lrnr_mean", "Lrnr_glm_fast", "Lrnr_ranger")
-sl_lrn <- Lrnr_sl$new(learners = lrnr_lib, metalearner = Lrnr_nnls$new())
+# learners used for conditional expectation regression (e.g., outcome)
+lrn1 <- Lrnr_mean$new()
+lrn2 <- Lrnr_glm$new()
+lrn3 <- Lrnr_ranger$new()
+sl_lrn <- Lrnr_sl$new(
+  learners = list(lrn1, lrn2, lrn3),
+  metalearner = Lrnr_nnls$new()
+)
 
-# SL learners for conditional densities to be used for the propensity score fit
-lrnr_dens_lib <- make_learner_stack(list("Lrnr_condensier", nbins = 35,
-                                          bin_estimator = Lrnr_glm_fast$new(),
-                                          bin_method = "equal.len",
-                                          pool = FALSE),
-                                    list("Lrnr_condensier", nbins = 30,
-                                          bin_estimator = Lrnr_ranger$new(),
-                                          bin_method = "equal.len",
-                                          pool = FALSE),
-                                    list("Lrnr_condensier", nbins = 25,
-                                          bin_estimator = Lrnr_ranger$new(),
-                                          bin_method = "equal.len",
-                                          pool = FALSE)
-                                   )
-sl_lrn_dens <- Lrnr_sl$new(learners = lrnr_dens_lib,
-                           metalearner = Lrnr_solnp_density$new())
+# learners used for conditional density regression (e.g., propensity score)
+lrn1_dens <- Lrnr_condensier$new(
+  nbins = 25, bin_estimator = lrn1,
+  bin_method = "dhist"
+)
+lrn2_dens <- Lrnr_condensier$new(
+  nbins = 20, bin_estimator = lrn2,
+  bin_method = "dhist"
+)
+lrn3_dens <- Lrnr_condensier$new(
+  nbins = 15, bin_estimator = lrn3,
+  bin_method = "dhist"
+)
+sl_lrn_dens <- Lrnr_sl$new(
+  learners = list(lrn1_dens, lrn2_dens, lrn3_dens),
+  metalearner = Lrnr_solnp_density$new()
+)
+```
+
+```{r}
+# specify outcome and treatment regressions and create learner list
+Q_learner <- sl_lrn
+g_learner <- sl_lrn_dens
+learner_list <- list(Y = Q_learner, A = g_learner)
 ```
 
 ### Estimating Stochastic Interventions Effects with Optimal Stacked Regressions

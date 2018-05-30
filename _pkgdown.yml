@@ -12,7 +12,7 @@ navbar:
     - text: "tmle3"
       href: "index.html"
     - text: "Overview"
-      href: "articles/shift_vignette.html"
+      href: "articles/shift_tmle.html"
     - text: "Reference"
       href: "reference/index.html"
   right:

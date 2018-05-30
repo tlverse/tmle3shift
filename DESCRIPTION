@@ -1,6 +1,6 @@
 Package: tmle3shift
 Title: Targeted Maximum Likelihood Estimation of Effects of Shift Interventions
-Version: 0.0.1
+Version: 0.1.0
 Authors@R: c(
     person("Nima", "Hejazi", email = "nh@nimahejazi.org",
            role = c("aut", "cre"),

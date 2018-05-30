@@ -67,7 +67,7 @@ issue](https://github.com/tlverse/tmle3shift/issues).
 * [R/`txshift`](https://github.com/nhejazi/txshift) - An R package providing an
   independent implementation of the same TML estimation procedure and
   statistical methodology as is made available here, without reliance on the
-  `tlverse` grammar provided by the `tmle3` engine.
+  `tlverse` grammar provided by `tmle3`.
 
 ---
 

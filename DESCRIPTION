@@ -25,7 +25,7 @@ Description: Targeted maximum likelihood estimation (TMLE) of population-level
     TODO). This is a plug-in package for use with the tmle3 R package and the
     tlverse ecosystem for Targeted Learning.
 Depends:
-    R (>= 3.5.0)
+    R (>= 3.4.0)
 License: GPL-3
 Imports:
     R6,

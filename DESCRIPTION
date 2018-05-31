@@ -42,6 +42,7 @@ Suggests:
     stats,
     ggplot2,
     tidyverse,
+    data.table,
     condensier,
     txshift,
     Rsolnp,

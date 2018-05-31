@@ -37,6 +37,7 @@ library(data.table)
 library(condensier)
 library(sl3)
 library(tmle3)
+library(tmle3shift)
 set.seed(429153)
 ```
 
@@ -195,14 +196,28 @@ In fact, we need only call a handful of functions to compute our TML estimator,
 each of which encapsulate one of the major steps of the targeted maximum
 likelihood estimation methodology.
 
-First, ...
+First, we use the `tmle_spec` object for our treatment shift parameter in order
+to define an _initial likelihood_ for the statistical estimation problem. This
+_initial likelihood_ requires only the specification of a `tmle_task` object,
+which contains the data, and a `learner_list`, which specifies the learning
+algorithms (ensemble learners, in our example) to be used in each of the initial
+estimators (of relevant factors of the likelihood) that must be computed. To do
+this easily, we need only invoke the `make_initial_likelihood` method:
 
 ```{r}
 # define likelihood
 likelihood_init <- tmle_spec$make_initial_likelihood(tmle_task, learner_list)
 ```
 
-Then, ...
+The key steps of computing a TML estimator are components needed to update the
+initial estimators in a manner that is optimal in the sense of loss-based
+minimization. To do this, our next step is to initialize an _update method_,
+which we do by simply invoking the `make_updater` method of our `tmle_spec`
+object. With the _update method_ and _initial likelihood_ in hand, we combine
+these to initialize a _targeted likelihood_ object, which concerns itself only
+with updating _factors_ of the likelihood relevant for optimizing the TML
+estimate of the parameter -- below, we do this by invoking the `new` method of
+the `Targeted_Likelihood` object that is included in the core `tmle3` package:
 
 ```{r}
 # define update method (submodel and loss function)
@@ -210,7 +225,11 @@ updater <- tmle_spec$make_updater()
 likelihood_targeted <- Targeted_Likelihood$new(likelihood_init, updater)
 ```
 
-Next, ...
+Next, we combine our targeted likelihood and `tmle_task` in order to specify the
+arguments relevant for computing our TML estimator. As this is a bookkeeping
+step, we need only notice that we make use of the `make_params` method that is
+specific to the `tmle_spec` of our shifted treatment parameter and provide the
+resultant object (`tmle_params`) to the `updater` object we initialized above.
 
 ```{r}
 # define parameter
@@ -218,13 +237,20 @@ tmle_params <- tmle_spec$make_params(tmle_task, likelihood_targeted)
 updater$tmle_params <- tmle_params
 ```
 
-Finally, ...
+Finally, having put together the various ingredients, we are ready to compute
+our TML estimator, which we do simply through invoking the `fit_tmle3` function
+of the `tmle3` package. Note that all information specific to estimating our
+parameter of interest are contained within the latter three arguments to this
+function:
 
 ```{r}
 # fit tmle update
 tmle_fit <- fit_tmle3(tmle_task, likelihood_targeted, tmle_params, updater)
 tmle_fit
 ```
+
+The `print` method of the resultant `tmle_fit` object conveniently displays the
+results from computing our TML estimator.
 
 ### Statistical Inference for Targeted Maximum Likelihood Estimates
 

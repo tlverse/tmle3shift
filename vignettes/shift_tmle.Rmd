@@ -12,7 +12,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, echo=FALSE}
+```{r options, echo=FALSE}
 options(scipen=999)
 ```
 
@@ -55,8 +55,8 @@ set.seed(429153)
 
 ### Simulate Data
 
-```{r}
-## simulate simple data for tmle-shift sketch
+```{r sim_data}
+# simulate simple data for tmle-shift sketch
 n_obs <- 1000 # number of observations
 n_w <- 1 # number of baseline covariates
 tx_mult <- 2 # multiplier for the effect of W = 1 on the treatment
@@ -77,8 +77,8 @@ we create a single data object and specify the functional relationships between
 the nodes in the directed acyclic graph (DAG) via nonparametric structural
 equation models (NPSEM), reflected in the node list that we set up:
 
-```{r}
-## organize data and nodes for tmle3
+```{r data_nodes}
+# organize data and nodes for tmle3
 data <- data.table(W, A, Y)
 node_list <- list(W = "W", A = "A", Y = "Y")
 ```
@@ -97,27 +97,14 @@ interest (called a `tmle3_Spec` in the `tlverse` nomenclature) simply by calling
 the scale of the treatment $A$ -- that is, we specify $\delta = 0.5$ (note that
 this is an arbitrarily chosen value for this example).
 
-```{r}
+```{r spec_init}
 # initialize a tmle specification
 tmle_spec <- tmle_shift(shift_val = 0.5)
 ```
 
 As seen above, the `tmle_shift` specification object (like all `tmle3_Spec`
 objects) does _not_ store the data for our specific analysis of interest.
-Instead, we use `tmle3_Task` objects to store such data. The initialized
-`tmle_shift` specification object makes it simple to generate a task, which can
-be done simply by calling the `make_tmle_task` method (and passing in the data
-and node list we built above):
-
-```{r}
-# define data as task object
-tmle_task <- tmle_spec$make_tmle_task(data, node_list)
-tmle_task
-```
-
-Prior to discussing how to fit a TML estimator, we'll first discuss how to
-incorporate ensemble learning into the necessary nuisance regressions using the
-`sl3` package.
+Instead, we use `tmle3_Task` objects to store such data.
 
 ### _Interlude:_ Constructing Optimal Stacked Regressions with `sl3`
 
@@ -132,7 +119,7 @@ the nuisance parameters of the TML estimator may be fit with ensemble learning,
 using the cross-validation framework of the Super Learner algorithm of
 @vdl2007super.
 
-```{r}
+```{r sl3_lrnrs}
 # learners used for conditional expectation regression (e.g., outcome)
 lrn1 <- Lrnr_mean$new()
 lrn2 <- Lrnr_glm$new()
@@ -172,7 +159,7 @@ treatment mechanism (often denoted "g" in the literature).
 We make the above explicit with respect to standard notation by bundling the
 ensemble learners into a list object below:
 
-```{r}
+```{r make_lrnr_list}
 # specify outcome and treatment regressions and create learner list
 Q_learner <- sl_lrn
 g_learner <- sl_lrn_dens
@@ -185,67 +172,10 @@ in building a TMLE for the parameter of interest here. In particular, it makes
 explicit the fact that our `Q_learner` is used in fitting the outcome regression
 while our `g_learner` is used in fitting our treatment mechanism regression.
 
-### Targeted Estimation Stochastic Interventions Effects with Ensemble Learning
+### Targeted Estimation of Stochastic Interventions Effects
 
-Having defined and initialized ensemble learners to be used in computing our
-TML estimator, we now return to the process of computing this estimator using
-the framework provided in the `tmle3` package and extended to this stochastic
-intervention target parameter in this package.
-
-In fact, we need only call a handful of functions to compute our TML estimator,
-each of which encapsulate one of the major steps of the targeted maximum
-likelihood estimation methodology.
-
-First, we use the `tmle_spec` object for our treatment shift parameter in order
-to define an _initial likelihood_ for the statistical estimation problem. This
-_initial likelihood_ requires only the specification of a `tmle_task` object,
-which contains the data, and a `learner_list`, which specifies the learning
-algorithms (ensemble learners, in our example) to be used in each of the initial
-estimators (of relevant factors of the likelihood) that must be computed. To do
-this easily, we need only invoke the `make_initial_likelihood` method:
-
-```{r}
-# define likelihood
-likelihood_init <- tmle_spec$make_initial_likelihood(tmle_task, learner_list)
-```
-
-The key steps of computing a TML estimator are components needed to update the
-initial estimators in a manner that is optimal in the sense of loss-based
-minimization. To do this, our next step is to initialize an _update method_,
-which we do by simply invoking the `make_updater` method of our `tmle_spec`
-object. With the _update method_ and _initial likelihood_ in hand, we combine
-these to initialize a _targeted likelihood_ object, which concerns itself only
-with updating _factors_ of the likelihood relevant for optimizing the TML
-estimate of the parameter -- below, we do this by invoking the `new` method of
-the `Targeted_Likelihood` object that is included in the core `tmle3` package:
-
-```{r}
-# define update method (submodel and loss function)
-updater <- tmle_spec$make_updater()
-likelihood_targeted <- Targeted_Likelihood$new(likelihood_init, updater)
-```
-
-Next, we combine our targeted likelihood and `tmle_task` in order to specify the
-arguments relevant for computing our TML estimator. As this is a bookkeeping
-step, we need only notice that we make use of the `make_params` method that is
-specific to the `tmle_spec` of our shifted treatment parameter and provide the
-resultant object (`tmle_params`) to the `updater` object we initialized above.
-
-```{r}
-# define parameter
-tmle_params <- tmle_spec$make_params(tmle_task, likelihood_targeted)
-updater$tmle_params <- tmle_params
-```
-
-Finally, having put together the various ingredients, we are ready to compute
-our TML estimator, which we do simply through invoking the `fit_tmle3` function
-of the `tmle3` package. Note that all information specific to estimating our
-parameter of interest are contained within the latter three arguments to this
-function:
-
-```{r}
-# fit tmle update
-tmle_fit <- fit_tmle3(tmle_task, likelihood_targeted, tmle_params, updater)
+```{r fit_tmle}
+tmle_fit <- tmle3(tmle_spec, data, node_list, learner_list)
 tmle_fit
 ```
 
@@ -292,7 +222,7 @@ $$\sigma_n^2 = \frac{1}{n} \sum_{i = 1}^{n} D^2(\bar{Q}_n^*, g_n)(O_i)$$
 Having now re-examined these facts, let's simply examine the results of
 computing our TML estimator:
 
-```{r}
+```{r tmle_inference}
 tmle_fit
 ```
 

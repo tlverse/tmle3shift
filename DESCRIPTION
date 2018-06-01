@@ -21,9 +21,10 @@ Description: Targeted maximum likelihood estimation (TMLE) of population-level
     causal effects under stochastic treatment regimes and related nonparametric
     variable importance analysis. Tools are provided for computing the TMLE of a
     treatment effect under interventions that are shifts of a continuous-valued
-    treatment variable, as first described by Diaz and van der Laan (2013; doi:
-    TODO). This is a plug-in package for use with the tmle3 R package and the
-    tlverse ecosystem for Targeted Learning.
+    treatment, as first described by I. Díaz Muñoz and M.J. van der Laan (2013;
+    doi: <10.1111/j.1541-0420.2011.01685.x>) and expanded upon in I. Díaz and
+    M.J. van der Laan (2018). This is an adapter package for use with the tmle3
+    framework and the tlverse software ecosystem for Targeted Learning.
 Depends:
     R (>= 3.4.0)
 License: GPL-3

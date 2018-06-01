@@ -135,7 +135,7 @@
 <div id="simulate-data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#simulate-data" class="anchor"></a>Simulate Data</h3>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">## simulate simple data for tmle-shift sketch</a>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="co"># simulate simple data for tmle-shift sketch</span></a>
 <a class="sourceLine" id="cb16-2" data-line-number="2">n_obs &lt;-<span class="st"> </span><span class="dv">1000</span> <span class="co"># number of observations</span></a>
 <a class="sourceLine" id="cb16-3" data-line-number="3">n_w &lt;-<span class="st"> </span><span class="dv">1</span> <span class="co"># number of baseline covariates</span></a>
 <a class="sourceLine" id="cb16-4" data-line-number="4">tx_mult &lt;-<span class="st"> </span><span class="dv">2</span> <span class="co"># multiplier for the effect of W = 1 on the treatment</span></a>
@@ -149,7 +149,7 @@
 <a class="sourceLine" id="cb16-12" data-line-number="12">## create outcome as a linear function of A, W + white noise</a>
 <a class="sourceLine" id="cb16-13" data-line-number="13">Y &lt;-<span class="st"> </span>A <span class="op">+</span><span class="st"> </span>W <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n_obs, <span class="dt">mean =</span> <span class="dv">0</span>, <span class="dt">sd =</span> <span class="dv">1</span>)</a></code></pre></div>
 <p>The above composes our observed data structure <span class="math inline">\(O = (W, A, Y)\)</span>. To formally express this fact using the <code>tlverse</code> grammar introduced by the <code>tmle3</code> package, we create a single data object and specify the functional relationships between the nodes in the directed acyclic graph (DAG) via nonparametric structural equation models (NPSEM), reflected in the node list that we set up:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">## organize data and nodes for tmle3</a>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="co"># organize data and nodes for tmle3</span></a>
 <a class="sourceLine" id="cb17-2" data-line-number="2">data &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/data.table/topics/data.table">data.table</a></span>(W, A, Y)</a>
 <a class="sourceLine" id="cb17-3" data-line-number="3">node_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">W =</span> <span class="st">"W"</span>, <span class="dt">A =</span> <span class="st">"A"</span>, <span class="dt">Y =</span> <span class="st">"Y"</span>)</a></code></pre></div>
 <p>We now have an observed data structure (<code>data</code>) and a specification of the role that each variable in the data set plays as the nodes in a DAG.</p>
@@ -162,103 +162,69 @@
 <p>To start, we will initialize a specification for the TMLE of our parameter of interest (called a <code>tmle3_Spec</code> in the <code>tlverse</code> nomenclature) simply by calling <code>tmle_shift</code>. We specify the argument <code>shift_val = 0.5</code> when initializing the <code>tmle3_Spec</code> object to communicate that we’re interested in a shift of <span class="math inline">\(0.5\)</span> on the scale of the treatment <span class="math inline">\(A\)</span> – that is, we specify <span class="math inline">\(\delta = 0.5\)</span> (note that this is an arbitrarily chosen value for this example).</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="co"># initialize a tmle specification</span></a>
 <a class="sourceLine" id="cb18-2" data-line-number="2">tmle_spec &lt;-<span class="st"> </span><span class="kw"><a href="../reference/tmle_shift.html">tmle_shift</a></span>(<span class="dt">shift_val =</span> <span class="fl">0.5</span>)</a></code></pre></div>
-<p>As seen above, the <code>tmle_shift</code> specification object (like all <code>tmle3_Spec</code> objects) does <em>not</em> store the data for our specific analysis of interest. Instead, we use <code>tmle3_Task</code> objects to store such data. The initialized <code>tmle_shift</code> specification object makes it simple to generate a task, which can be done simply by calling the <code>make_tmle_task</code> method (and passing in the data and node list we built above):</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="co"># define data as task object</span></a>
-<a class="sourceLine" id="cb19-2" data-line-number="2">tmle_task &lt;-<span class="st"> </span>tmle_spec<span class="op">$</span><span class="kw">make_tmle_task</span>(data, node_list)</a>
-<a class="sourceLine" id="cb19-3" data-line-number="3">tmle_task</a></code></pre></div>
-<pre><code>## A sl3 Task with 1000 obs and these nodes:
-## $W
-## tmle3_Node: W
-##  Variables: W
-##  Parents: 
-## 
-## $A
-## tmle3_Node: A
-##  Variables: A
-##  Parents: W
-## 
-## $Y
-## tmle3_Node: Y
-##  Variables: Y
-##  Parents: A, W</code></pre>
-<p>Prior to discussing how to fit a TML estimator, we’ll first discuss how to incorporate ensemble learning into the necessary nuisance regressions using the <code>sl3</code> package.</p>
+<p>As seen above, the <code>tmle_shift</code> specification object (like all <code>tmle3_Spec</code> objects) does <em>not</em> store the data for our specific analysis of interest. Instead, we use <code>tmle3_Task</code> objects to store such data.</p>
 <div id="interlude-constructing-optimal-stacked-regressions-with-sl3" class="section level3">
 <h3 class="hasAnchor">
 <a href="#interlude-constructing-optimal-stacked-regressions-with-sl3" class="anchor"></a><em>Interlude:</em> Constructing Optimal Stacked Regressions with <code>sl3</code>
 </h3>
 <p>To easily incorporate ensemble machine learning into the estimation procedure, we rely on the facilities provided in the <a href="https://sl3.tlverse.org"><code>sl3</code> R package</a>. For a complete guide on using the <code>sl3</code> R package, consider consulting <a href="https://sl3.tlverse.org" class="uri">https://sl3.tlverse.org</a>, or <a href="https://tlverse.org" class="uri">https://tlverse.org</a> for the <code>tlverse</code> ecosystem, of which <code>sl3</code> is a major part.</p>
 <p>Using the framework provided by the <a href="https://sl3.tlverse.org"><code>sl3</code> package</a>, the nuisance parameters of the TML estimator may be fit with ensemble learning, using the cross-validation framework of the Super Learner algorithm of <span class="citation">van der Laan, Polley, and Hubbard (2007)</span>.</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="co"># learners used for conditional expectation regression (e.g., outcome)</span></a>
-<a class="sourceLine" id="cb21-2" data-line-number="2">lrn1 &lt;-<span class="st"> </span>Lrnr_mean<span class="op">$</span><span class="kw">new</span>()</a>
-<a class="sourceLine" id="cb21-3" data-line-number="3">lrn2 &lt;-<span class="st"> </span>Lrnr_glm<span class="op">$</span><span class="kw">new</span>()</a>
-<a class="sourceLine" id="cb21-4" data-line-number="4">lrn3 &lt;-<span class="st"> </span>Lrnr_ranger<span class="op">$</span><span class="kw">new</span>()</a>
-<a class="sourceLine" id="cb21-5" data-line-number="5">sl_lrn &lt;-<span class="st"> </span>Lrnr_sl<span class="op">$</span><span class="kw">new</span>(</a>
-<a class="sourceLine" id="cb21-6" data-line-number="6">  <span class="dt">learners =</span> <span class="kw">list</span>(lrn1, lrn2, lrn3),</a>
-<a class="sourceLine" id="cb21-7" data-line-number="7">  <span class="dt">metalearner =</span> Lrnr_nnls<span class="op">$</span><span class="kw">new</span>()</a>
-<a class="sourceLine" id="cb21-8" data-line-number="8">)</a>
-<a class="sourceLine" id="cb21-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb21-10" data-line-number="10"><span class="co"># learners used for conditional density regression (e.g., propensity score)</span></a>
-<a class="sourceLine" id="cb21-11" data-line-number="11">lrn1_dens &lt;-<span class="st"> </span>Lrnr_condensier<span class="op">$</span><span class="kw">new</span>(</a>
-<a class="sourceLine" id="cb21-12" data-line-number="12">  <span class="dt">nbins =</span> <span class="dv">25</span>, <span class="dt">bin_estimator =</span> lrn1,</a>
-<a class="sourceLine" id="cb21-13" data-line-number="13">  <span class="dt">bin_method =</span> <span class="st">"dhist"</span></a>
-<a class="sourceLine" id="cb21-14" data-line-number="14">)</a>
-<a class="sourceLine" id="cb21-15" data-line-number="15">lrn2_dens &lt;-<span class="st"> </span>Lrnr_condensier<span class="op">$</span><span class="kw">new</span>(</a>
-<a class="sourceLine" id="cb21-16" data-line-number="16">  <span class="dt">nbins =</span> <span class="dv">20</span>, <span class="dt">bin_estimator =</span> lrn2,</a>
-<a class="sourceLine" id="cb21-17" data-line-number="17">  <span class="dt">bin_method =</span> <span class="st">"dhist"</span></a>
-<a class="sourceLine" id="cb21-18" data-line-number="18">)</a>
-<a class="sourceLine" id="cb21-19" data-line-number="19">lrn3_dens &lt;-<span class="st"> </span>Lrnr_condensier<span class="op">$</span><span class="kw">new</span>(</a>
-<a class="sourceLine" id="cb21-20" data-line-number="20">  <span class="dt">nbins =</span> <span class="dv">15</span>, <span class="dt">bin_estimator =</span> lrn3,</a>
-<a class="sourceLine" id="cb21-21" data-line-number="21">  <span class="dt">bin_method =</span> <span class="st">"dhist"</span></a>
-<a class="sourceLine" id="cb21-22" data-line-number="22">)</a>
-<a class="sourceLine" id="cb21-23" data-line-number="23">sl_lrn_dens &lt;-<span class="st"> </span>Lrnr_sl<span class="op">$</span><span class="kw">new</span>(</a>
-<a class="sourceLine" id="cb21-24" data-line-number="24">  <span class="dt">learners =</span> <span class="kw">list</span>(lrn1_dens, lrn2_dens, lrn3_dens),</a>
-<a class="sourceLine" id="cb21-25" data-line-number="25">  <span class="dt">metalearner =</span> Lrnr_solnp_density<span class="op">$</span><span class="kw">new</span>()</a>
-<a class="sourceLine" id="cb21-26" data-line-number="26">)</a></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="co"># learners used for conditional expectation regression (e.g., outcome)</span></a>
+<a class="sourceLine" id="cb19-2" data-line-number="2">lrn1 &lt;-<span class="st"> </span>Lrnr_mean<span class="op">$</span><span class="kw">new</span>()</a>
+<a class="sourceLine" id="cb19-3" data-line-number="3">lrn2 &lt;-<span class="st"> </span>Lrnr_glm<span class="op">$</span><span class="kw">new</span>()</a>
+<a class="sourceLine" id="cb19-4" data-line-number="4">lrn3 &lt;-<span class="st"> </span>Lrnr_ranger<span class="op">$</span><span class="kw">new</span>()</a>
+<a class="sourceLine" id="cb19-5" data-line-number="5">sl_lrn &lt;-<span class="st"> </span>Lrnr_sl<span class="op">$</span><span class="kw">new</span>(</a>
+<a class="sourceLine" id="cb19-6" data-line-number="6">  <span class="dt">learners =</span> <span class="kw">list</span>(lrn1, lrn2, lrn3),</a>
+<a class="sourceLine" id="cb19-7" data-line-number="7">  <span class="dt">metalearner =</span> Lrnr_nnls<span class="op">$</span><span class="kw">new</span>()</a>
+<a class="sourceLine" id="cb19-8" data-line-number="8">)</a>
+<a class="sourceLine" id="cb19-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb19-10" data-line-number="10"><span class="co"># learners used for conditional density regression (e.g., propensity score)</span></a>
+<a class="sourceLine" id="cb19-11" data-line-number="11">lrn1_dens &lt;-<span class="st"> </span>Lrnr_condensier<span class="op">$</span><span class="kw">new</span>(</a>
+<a class="sourceLine" id="cb19-12" data-line-number="12">  <span class="dt">nbins =</span> <span class="dv">25</span>, <span class="dt">bin_estimator =</span> lrn1,</a>
+<a class="sourceLine" id="cb19-13" data-line-number="13">  <span class="dt">bin_method =</span> <span class="st">"dhist"</span></a>
+<a class="sourceLine" id="cb19-14" data-line-number="14">)</a>
+<a class="sourceLine" id="cb19-15" data-line-number="15">lrn2_dens &lt;-<span class="st"> </span>Lrnr_condensier<span class="op">$</span><span class="kw">new</span>(</a>
+<a class="sourceLine" id="cb19-16" data-line-number="16">  <span class="dt">nbins =</span> <span class="dv">20</span>, <span class="dt">bin_estimator =</span> lrn2,</a>
+<a class="sourceLine" id="cb19-17" data-line-number="17">  <span class="dt">bin_method =</span> <span class="st">"dhist"</span></a>
+<a class="sourceLine" id="cb19-18" data-line-number="18">)</a>
+<a class="sourceLine" id="cb19-19" data-line-number="19">lrn3_dens &lt;-<span class="st"> </span>Lrnr_condensier<span class="op">$</span><span class="kw">new</span>(</a>
+<a class="sourceLine" id="cb19-20" data-line-number="20">  <span class="dt">nbins =</span> <span class="dv">15</span>, <span class="dt">bin_estimator =</span> lrn3,</a>
+<a class="sourceLine" id="cb19-21" data-line-number="21">  <span class="dt">bin_method =</span> <span class="st">"dhist"</span></a>
+<a class="sourceLine" id="cb19-22" data-line-number="22">)</a>
+<a class="sourceLine" id="cb19-23" data-line-number="23">sl_lrn_dens &lt;-<span class="st"> </span>Lrnr_sl<span class="op">$</span><span class="kw">new</span>(</a>
+<a class="sourceLine" id="cb19-24" data-line-number="24">  <span class="dt">learners =</span> <span class="kw">list</span>(lrn1_dens, lrn2_dens, lrn3_dens),</a>
+<a class="sourceLine" id="cb19-25" data-line-number="25">  <span class="dt">metalearner =</span> Lrnr_solnp_density<span class="op">$</span><span class="kw">new</span>()</a>
+<a class="sourceLine" id="cb19-26" data-line-number="26">)</a></code></pre></div>
 <p>As seen above, we can generate two different ensemble learners for the two nuisance regressions that must be fit in the process of computing this TML estimator. In particular, we use a Super Learner composed of an intercept model, a GLM, and a random forest (as implemented in <code>ranger</code>) for fitting the outcome regressions (often denoted “Q” in the literature) while we use variations of these learners for the conditional density estimation needed in fitting the treatment mechanism (often denoted “g” in the literature).</p>
 <p>We make the above explicit with respect to standard notation by bundling the ensemble learners into a list object below:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="co"># specify outcome and treatment regressions and create learner list</span></a>
-<a class="sourceLine" id="cb22-2" data-line-number="2">Q_learner &lt;-<span class="st"> </span>sl_lrn</a>
-<a class="sourceLine" id="cb22-3" data-line-number="3">g_learner &lt;-<span class="st"> </span>sl_lrn_dens</a>
-<a class="sourceLine" id="cb22-4" data-line-number="4">learner_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">Y =</span> Q_learner, <span class="dt">A =</span> g_learner)</a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="co"># specify outcome and treatment regressions and create learner list</span></a>
+<a class="sourceLine" id="cb20-2" data-line-number="2">Q_learner &lt;-<span class="st"> </span>sl_lrn</a>
+<a class="sourceLine" id="cb20-3" data-line-number="3">g_learner &lt;-<span class="st"> </span>sl_lrn_dens</a>
+<a class="sourceLine" id="cb20-4" data-line-number="4">learner_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">Y =</span> Q_learner, <span class="dt">A =</span> g_learner)</a></code></pre></div>
 <p>The <code>learner_list</code> object above specifies the role that each of the ensemble learners we’ve generated is to play in computing initial estimators to be used in building a TMLE for the parameter of interest here. In particular, it makes explicit the fact that our <code>Q_learner</code> is used in fitting the outcome regression while our <code>g_learner</code> is used in fitting our treatment mechanism regression.</p>
 </div>
-<div id="targeted-estimation-stochastic-interventions-effects-with-ensemble-learning" class="section level3">
+<div id="targeted-estimation-of-stochastic-interventions-effects" class="section level3">
 <h3 class="hasAnchor">
-<a href="#targeted-estimation-stochastic-interventions-effects-with-ensemble-learning" class="anchor"></a>Targeted Estimation Stochastic Interventions Effects with Ensemble Learning</h3>
-<p>Having defined and initialized ensemble learners to be used in computing our TML estimator, we now return to the process of computing this estimator using the framework provided in the <code>tmle3</code> package and extended to this stochastic intervention target parameter in this package.</p>
-<p>In fact, we need only call a handful of functions to compute our TML estimator, each of which encapsulate one of the major steps of the targeted maximum likelihood estimation methodology.</p>
-<p>First, we use the <code>tmle_spec</code> object for our treatment shift parameter in order to define an <em>initial likelihood</em> for the statistical estimation problem. This <em>initial likelihood</em> requires only the specification of a <code>tmle_task</code> object, which contains the data, and a <code>learner_list</code>, which specifies the learning algorithms (ensemble learners, in our example) to be used in each of the initial estimators (of relevant factors of the likelihood) that must be computed. To do this easily, we need only invoke the <code>make_initial_likelihood</code> method:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="co"># define likelihood</span></a>
-<a class="sourceLine" id="cb23-2" data-line-number="2">likelihood_init &lt;-<span class="st"> </span>tmle_spec<span class="op">$</span><span class="kw">make_initial_likelihood</span>(tmle_task, learner_list)</a></code></pre></div>
+<a href="#targeted-estimation-of-stochastic-interventions-effects" class="anchor"></a>Targeted Estimation of Stochastic Interventions Effects</h3>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1">tmle_fit &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/tmle3/topics/tmle3">tmle3</a></span>(tmle_spec, data, node_list, learner_list)</a></code></pre></div>
 <pre><code>## 
-## Iter: 1 fn: 1829.0370     Pars:  0.89609118 0.10389296 0.00001585
-## Iter: 2 fn: 1829.0370     Pars:  0.896094455 0.103901610 0.000003935
+## Iter: 1 fn: 1829.0370     Pars:  0.896093575 0.103899269 0.000007156
+## Iter: 2 fn: 1829.0370     Pars:  0.89609552640 0.10390446314 0.00000001046
 ## solnp--&gt; Completed in 2 iterations
 ## 
 ## density meta-learner fit:
 ## Lrnr_condensier_dhist_25_20_FALSE_NA_FALSE_NULL 
-##                                  0.896094454769 
+##                                0.89609552639874 
 ## Lrnr_condensier_dhist_20_20_FALSE_NA_FALSE_NULL 
-##                                  0.103901610342 
+##                                0.10390446314153 
 ## Lrnr_condensier_dhist_15_20_FALSE_NA_FALSE_NULL 
-##                                  0.000003934889</code></pre>
-<p>The key steps of computing a TML estimator are components needed to update the initial estimators in a manner that is optimal in the sense of loss-based minimization. To do this, our next step is to initialize an <em>update method</em>, which we do by simply invoking the <code>make_updater</code> method of our <code>tmle_spec</code> object. With the <em>update method</em> and <em>initial likelihood</em> in hand, we combine these to initialize a <em>targeted likelihood</em> object, which concerns itself only with updating <em>factors</em> of the likelihood relevant for optimizing the TML estimate of the parameter – below, we do this by invoking the <code>new</code> method of the <code>Targeted_Likelihood</code> object that is included in the core <code>tmle3</code> package:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="co"># define update method (submodel and loss function)</span></a>
-<a class="sourceLine" id="cb25-2" data-line-number="2">updater &lt;-<span class="st"> </span>tmle_spec<span class="op">$</span><span class="kw">make_updater</span>()</a>
-<a class="sourceLine" id="cb25-3" data-line-number="3">likelihood_targeted &lt;-<span class="st"> </span>Targeted_Likelihood<span class="op">$</span><span class="kw">new</span>(likelihood_init, updater)</a></code></pre></div>
-<p>Next, we combine our targeted likelihood and <code>tmle_task</code> in order to specify the arguments relevant for computing our TML estimator. As this is a bookkeeping step, we need only notice that we make use of the <code>make_params</code> method that is specific to the <code>tmle_spec</code> of our shifted treatment parameter and provide the resultant object (<code>tmle_params</code>) to the <code>updater</code> object we initialized above.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="co"># define parameter</span></a>
-<a class="sourceLine" id="cb26-2" data-line-number="2">tmle_params &lt;-<span class="st"> </span>tmle_spec<span class="op">$</span><span class="kw">make_params</span>(tmle_task, likelihood_targeted)</a>
-<a class="sourceLine" id="cb26-3" data-line-number="3">updater<span class="op">$</span>tmle_params &lt;-<span class="st"> </span>tmle_params</a></code></pre></div>
-<p>Finally, having put together the various ingredients, we are ready to compute our TML estimator, which we do simply through invoking the <code>fit_tmle3</code> function of the <code>tmle3</code> package. Note that all information specific to estimating our parameter of interest are contained within the latter three arguments to this function:</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="co"># fit tmle update</span></a>
-<a class="sourceLine" id="cb27-2" data-line-number="2">tmle_fit &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/tmle3/topics/tmle3_Fit">fit_tmle3</a></span>(tmle_task, likelihood_targeted, tmle_params, updater)</a>
-<a class="sourceLine" id="cb27-3" data-line-number="3">tmle_fit</a></code></pre></div>
+##                                0.00000001045961</code></pre>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1">tmle_fit</a></code></pre></div>
 <pre><code>## A tmle3_Fit that took 1 step(s)
 ##    type         param init_est tmle_est         se    lower   upper
-## 1:  TSM E[Y_{A=NULL}] 2.057384 2.068541 0.06859764 1.934092 2.20299
+## 1:  TSM E[Y_{A=NULL}] 2.057384 2.068541 0.06859765 1.934093 2.20299
 ##    psi_transformed lower_transformed upper_transformed
-## 1:        2.068541          1.934092           2.20299</code></pre>
+## 1:        2.068541          1.934093           2.20299</code></pre>
 <p>The <code>print</code> method of the resultant <code>tmle_fit</code> object conveniently displays the results from computing our TML estimator.</p>
 </div>
 <div id="statistical-inference-for-targeted-maximum-likelihood-estimates" class="section level3">
@@ -276,12 +242,12 @@
 <p><span class="math display">\[\psi_n \pm z_{\alpha} \cdot \frac{\sigma_n}{\sqrt{n}},\]</span> where <span class="math inline">\(\sigma_n^2\)</span> is an estimator of <span class="math inline">\(V(D(P_0))\)</span>. The estimator <span class="math inline">\(\sigma_n^2\)</span> may be obtained using the bootstrap or computed directly via the following</p>
 <p><span class="math display">\[\sigma_n^2 = \frac{1}{n} \sum_{i = 1}^{n} D^2(\bar{Q}_n^*, g_n)(O_i)\]</span></p>
 <p>Having now re-examined these facts, let’s simply examine the results of computing our TML estimator:</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1">tmle_fit</a></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1">tmle_fit</a></code></pre></div>
 <pre><code>## A tmle3_Fit that took 1 step(s)
 ##    type         param init_est tmle_est         se    lower   upper
-## 1:  TSM E[Y_{A=NULL}] 2.057384 2.068541 0.06859764 1.934092 2.20299
+## 1:  TSM E[Y_{A=NULL}] 2.057384 2.068541 0.06859765 1.934093 2.20299
 ##    psi_transformed lower_transformed upper_transformed
-## 1:        2.068541          1.934092           2.20299</code></pre>
+## 1:        2.068541          1.934093           2.20299</code></pre>
 </div>
 </div>
 <div id="references" class="section level2 unnumbered">

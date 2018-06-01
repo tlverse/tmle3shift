@@ -31,7 +31,7 @@ treatment regimes, please consider consulting @vdl2011targeted,
 
 To start, let's load the packages we'll use and set a seed for simulation:
 
-```{r setup}
+```{r setup, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(data.table)
 library(condensier)
@@ -74,8 +74,8 @@ Y <- A + W + rnorm(n_obs, mean = 0, sd = 1)
 The above composes our observed data structure $O = (W, A, Y)$. To formally
 express this fact using the `tlverse` grammar introduced by the `tmle3` package,
 we create a single data object and specify the functional relationships between
-the nodes in the directed acyclic graph (DAG) via nonparametric structural
-equation models (NPSEM), reflected in the node list that we set up:
+the nodes in the _directed acyclic graph_ (DAG) via _nonparametric structural
+equation models_ (NPSEMs), reflected in the node list that we set up:
 
 ```{r data_nodes}
 # organize data and nodes for tmle3
@@ -103,8 +103,10 @@ tmle_spec <- tmle_shift(shift_val = 0.5)
 ```
 
 As seen above, the `tmle_shift` specification object (like all `tmle3_Spec`
-objects) does _not_ store the data for our specific analysis of interest.
-Instead, we use `tmle3_Task` objects to store such data.
+objects) does _not_ store the data for our specific analysis of interest. Later,
+we'll see that passing a data object directly to the `tmle3` wrapper function,
+alongside the instantiated `tmle_spec`, will serve to construct a `tmle3_Task`
+object internally (see the `tmle3` documentation for details).
 
 ### _Interlude:_ Constructing Optimal Stacked Regressions with `sl3`
 
@@ -112,7 +114,8 @@ To easily incorporate ensemble machine learning into the estimation procedure,
 we rely on the facilities provided in the [`sl3` R
 package](https://sl3.tlverse.org). For a complete guide on using the `sl3` R
 package, consider consulting https://sl3.tlverse.org, or https://tlverse.org for
-the `tlverse` ecosystem, of which `sl3` is a major part.
+the [`tlverse` ecosystem](https://github.com/tlverse), of which `sl3` is a major
+part.
 
 Using the framework provided by the [`sl3` package](https://sl3.tlverse.org),
 the nuisance parameters of the TML estimator may be fit with ensemble learning,
@@ -151,10 +154,12 @@ sl_lrn_dens <- Lrnr_sl$new(
 As seen above, we can generate two different ensemble learners for the two
 nuisance regressions that must be fit in the process of computing this TML
 estimator. In particular, we use a Super Learner composed of an intercept model,
-a GLM, and a random forest (as implemented in `ranger`) for fitting the outcome
-regressions (often denoted "Q" in the literature) while we use variations of
-these learners for the conditional density estimation needed in fitting the
-treatment mechanism (often denoted "g" in the literature).
+a GLM, and a random forest (as implemented in [the `ranger` R
+package](cran.r-project.org/package=ranger)) for fitting the outcome regressions
+(often denoted "Q" in the literature) while we use variations of these learners,
+through [the `condensier` R package](https://github.com/osofr/condensier), for
+the conditional density estimation needed in fitting the treatment mechanism
+(often denoted "g" in the literature).
 
 We make the above explicit with respect to standard notation by bundling the
 ensemble learners into a list object below:

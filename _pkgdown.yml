@@ -1,0 +1,20 @@
+title: tmle3shift
+url: https://tmle3shift.tlverse.org
+template:
+  params:
+    bootswatch: flatly
+    ganalytics: UA-115145808-1
+navbar:
+  title: ""
+  left:
+    - text: "tlverse"
+      href: https://tlverse.org
+    - text: "tmle3"
+      href: "index.html"
+    - text: "Overview"
+      href: "articles/shift_tmle.html"
+    - text: "Reference"
+      href: "reference/index.html"
+  right:
+    - icon: fa-github fa-lg
+      href: https://github.com/tlverse/tmle3shift

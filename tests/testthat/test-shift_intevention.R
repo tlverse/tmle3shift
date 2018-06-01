@@ -10,7 +10,7 @@ library(ranger)
 set.seed(429153)
 
 ################################################################################
-# 1) Setup data and learners for tests
+# setup data and learners for tests
 ################################################################################
 
 ## simulate simple data for tmle-shift sketch
@@ -66,36 +66,28 @@ learner_list <- list(Y = Q_learner, A = g_learner)
 
 
 ################################################################################
-# 2) Setup and compute TMLE of shift intervention parameter with tmle3
+# setup and compute TMLE of shift intervention parameter with tmle3_shift
 ################################################################################
 
 # initialize a tmle specification
-tmle_spec <- tmle_TSM_all()
+tmle_spec <- tmle_shift(shift_val = 0.5)
 
-## define data
+## define data (from tmle3_Spec base class)
 tmle_task <- tmle_spec$make_tmle_task(data, node_list)
 
-## define likelihood
+## define likelihood (from tmle3_Spec base class)
 likelihood_init <- tmle_spec$make_initial_likelihood(tmle_task, learner_list)
 
-# define targeted likelihood via update step
-updater <- tmle3_Update$new()
+## define update method (submodel and loss function)
+updater <- tmle_spec$make_updater()
 likelihood_targeted <- Targeted_Likelihood$new(likelihood_init, updater)
 
-# define shift intervention and required shift functions
-intervention <- define_lf(tmle3shift::LF_shift,
-  name = "A",
-  original_lf = likelihood_init$factor_list[["A"]],
-  shift_additive, shift_additive_inv, # shift fxns
-  shift_delta = 0.5
-)
+## define param
+tmle_params <- tmle_spec$make_params(tmle_task, likelihood_targeted)
+updater$tmle_params <- tmle_params
 
-# TODO: make params not store likelihood info internally!
-tsm <- define_param(Param_TSM, likelihood_targeted, intervention)
-updater$tmle_params <- tsm
-
-## fit TMLE
-tmle_fit <- fit_tmle3(tmle_task, likelihood_targeted, list(tsm), updater)
+## fit tmle update
+tmle_fit <- fit_tmle3(tmle_task, likelihood_targeted, tmle_params, updater)
 
 ## extract results from tmle3_Fit object
 tmle_fit
@@ -104,12 +96,12 @@ tmle3_se <- tmle_fit$summary$se
 
 
 ################################################################################
-# 3) compare with the txshift R package
+# compute numerical result using classical implementation (txshift R package)
 ################################################################################
 library(txshift)
 set.seed(429153)
 
-# TODO: validate that we're getting the same errors on g fitting
+## TODO: validate that we're getting the same errors on g fitting
 tmle_sl_shift_classic <- tmle_txshift(
   W = W, A = A, Y = Y, delta = 0.5,
   fluc_method = "weighted",
@@ -123,17 +115,22 @@ tmle_sl_shift_classic <- tmle_txshift(
   )
 )
 
-# extract results from fit object produced by classical package
+## extract results from fit object produced by classical package
 summary(tmle_sl_shift_classic)
 classic_psi <- tmle_sl_shift_classic$psi
 classic_se <- sqrt(tmle_sl_shift_classic$var)
 
-# only approximately equal (although it's O(1/n))
+
+################################################################################
+# test numerical equivalence of tmle3 and classical implementations
+################################################################################
+
+## only approximately equal (although it's O(1/n))
 test_that("Parameter point estimate matches result from classic package", {
   expect_equal(tmle3_psi, classic_psi, tol = 1 / n_obs, scale = classic_psi)
 })
 
-# only approximately equal (although it's O(1/n))
+## only approximately equal (although it's O(1/n))
 test_that("Standard error matches result from classic package", {
   expect_equal(tmle3_se, classic_se, tol = 1 / n_obs, scale = classic_se)
 })

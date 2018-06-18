@@ -10,7 +10,7 @@
 #' @export
 #
 tmle3_Spec_shift <- R6Class(
-  classname = "tmle3_Spec_TSM_all",
+  classname = "tmle3_Spec_shift",
   portable = TRUE,
   class = TRUE,
   inherit = tmle3_Spec,

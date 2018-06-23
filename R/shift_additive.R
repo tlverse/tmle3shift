@@ -12,6 +12,8 @@
 #' @family shifting_interventions
 #'
 #' @rdname additive_shifting
+#'
+#' @export
 #
 shift_additive <- function(tmle_task, delta = 0) {
   return(tmle_task$get_tmle_node("A") + delta)
@@ -20,6 +22,8 @@ shift_additive <- function(tmle_task, delta = 0) {
 #' @family shifting_interventions
 #'
 #' @rdname additive_shifting
+#'
+#' @export
 #
 shift_additive_inv <- function(tmle_task, delta = 0) {
   return(tmle_task$get_tmle_node("A") - delta)

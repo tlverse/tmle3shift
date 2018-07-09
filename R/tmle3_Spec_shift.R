@@ -26,6 +26,28 @@ tmle3_Spec_shift <- R6Class(
       )
       do.call(super$initialize, options)
     },
+    # finds minimum and maximum values of shifted treatment for aux. covar.
+    guard_shift = function(tmle_task, likelihood) {
+      ## make n counterfactual values of the treatment A
+      levels_a <- as.list(unique(sort(tmle_task$get_tmle_node("A"))))
+      gn_a <- sapply(levels_a, function(a) {
+        cf_task <- tmle_task$generate_counterfactual_task(UUIDgenerate(),
+                                                          data.table(A = a))
+        dens_this_a <- likelihood$get_likelihoods(cf_task, "A")
+      })
+      gn_a_bool <- gn_a > 1 / tmle_task$nrow
+      get_uw <- apply(gn_a_bool, 1, function(x) {
+        max(which(x))
+      })
+      names(get_uw) <- NULL
+      get_lw <- apply(gn_a_bool, 1, function(x) {
+        min(which(x))
+      })
+      names(get_lw) <- NULL
+      uw <- unlist(levels_a[get_uw])
+      lw <- unlist(levels_a[get_lw])
+      return(cbind(lw, uw))
+    },
     make_params = function(tmle_task, likelihood) {
       # TODO: export and use sl3:::get_levels
       A_vals <- tmle_task$get_tmle_node("A")

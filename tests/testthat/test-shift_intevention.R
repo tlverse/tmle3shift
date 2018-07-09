@@ -78,6 +78,26 @@ tmle_task <- tmle_spec$make_tmle_task(data, node_list)
 ## define likelihood (from tmle3_Spec base class)
 likelihood_init <- tmle_spec$make_initial_likelihood(tmle_task, learner_list)
 
+## make n counterfactual values of the treatment A
+levels_a <- as.list(unique(sort(data$A)))[sample(n_obs, 10)]
+g_wrt_a <- sapply(levels_a, function(a) {
+  cf_task <- tmle_task$generate_counterfactual_task(UUIDgenerate(),
+                                                    data.table(A = a))
+  dens_a <- likelihood_init$get_likelihoods(cf_task, "A")
+})
+g_wrt_a_bool <- g_wrt_a > 1 / n_obs
+get_uw <- apply(g_wrt_a_bool, 1, function(x) {
+  max(which(x))
+})
+names(get_uw) <- NULL
+get_lw <- apply(g_wrt_a_bool, 1, function(x) {
+  min(which(x))
+})
+names(get_lw) <- NULL
+uw <- unlist(levels_a[get_uw])
+lw <- unlist(levels_a[get_lw])
+
+
 ## define update method (submodel and loss function)
 updater <- tmle_spec$make_updater()
 likelihood_targeted <- Targeted_Likelihood$new(likelihood_init, updater)

@@ -75,10 +75,11 @@ LF_shift <- R6Class(
   class = TRUE,
   inherit = LF_base,
   public = list(
-    initialize = function(name, original_lf, shift_function, shift_inverse,
-                              shift_delta, ...) {
+    initialize = function(name, original_lf, likelihood_base, shift_function,
+                          shift_inverse, shift_delta, ...) {
       super$initialize(name, ..., type = "density")
       private$.original_lf <- original_lf
+      private$.likelihood_base <- likelihood_base
       private$.shift_function <- shift_function
       private$.shift_inverse <- shift_inverse
       private$.shift_delta <- shift_delta
@@ -88,7 +89,8 @@ LF_shift <- R6Class(
     },
     get_density = function(tmle_task) {
       # get shifted data
-      shifted_values <- self$shift_inverse(tmle_task, self$shift_delta)
+      shifted_values <- self$shift_inverse(tmle_task, self$shift_delta,
+                                           self$likelihood_base)
 
       # generate cf_task data
       cf_data <- data.table(shifted_values)
@@ -102,13 +104,17 @@ LF_shift <- R6Class(
       return(cf_likelihood)
     },
     cf_values = function(tmle_task) {
-      cf_values <- self$shift_function(tmle_task, self$shift_delta)
+      cf_values <- self$shift_function(tmle_task, self$shift_delta,
+                                       self$likelihood_base)
       return(cf_values)
     }
   ),
   active = list(
     original_lf = function() {
       return(private$.original_lf)
+    },
+    likelihood_base = function() {
+      return(private$.likelihood_base)
     },
     shift_function = function() {
       return(private$.shift_function)
@@ -123,6 +129,7 @@ LF_shift <- R6Class(
   private = list(
     .name = NULL,
     .original_lf = NULL,
+    .likelihood_base = NULL,
     .shift_function = NULL,
     .shift_inverse = NULL,
     .shift_delta = NULL

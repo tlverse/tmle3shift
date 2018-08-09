@@ -84,7 +84,7 @@ tmle3_Spec_shift <- R6Class(
 
 ################################################################################
 
-#' Outcome under Delta-Shifted Treatment
+#' Outcome under Shifted Treatment
 #'
 #' O = (W, A, Y)
 #' W = Covariates

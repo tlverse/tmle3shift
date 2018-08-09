@@ -8,6 +8,7 @@
 #'  added to the observed value of the treatment node "A". In the case of the
 #'  inverse additive shift, the specified value will be subtracted from the
 #'  observed value of the treatment node "A".
+#' @param ... Additional arguments (currently unused).
 #'
 #' @family shifting_interventions
 #'
@@ -15,7 +16,7 @@
 #'
 #' @export
 #
-shift_additive <- function(tmle_task, delta = 0) {
+shift_additive <- function(tmle_task, delta = 0, ...) {
   return(tmle_task$get_tmle_node("A") + delta)
 }
 
@@ -25,6 +26,6 @@ shift_additive <- function(tmle_task, delta = 0) {
 #'
 #' @export
 #
-shift_additive_inv <- function(tmle_task, delta = 0) {
+shift_additive_inv <- function(tmle_task, delta = 0, ...) {
   return(tmle_task$get_tmle_node("A") - delta)
 }

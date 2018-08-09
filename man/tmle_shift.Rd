@@ -2,10 +2,10 @@
 % Please edit documentation in R/tmle3_Spec_shift.R
 \name{tmle_shift}
 \alias{tmle_shift}
-\title{Outcome under Delta-Shifted Treatment}
+\title{Outcome under Shifted Treatment}
 \usage{
-tmle_shift(shift_fxn = shift_additive, shift_fxn_inv = shift_additive_inv,
-  shift_val = 0)
+tmle_shift(shift_fxn = shift_additive,
+  shift_fxn_inv = shift_additive_inv, shift_val = 0)
 }
 \arguments{
 \item{shift_fxn}{A \code{function} defining the type of shift to be applied

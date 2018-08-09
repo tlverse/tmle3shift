@@ -5,9 +5,9 @@
 \alias{shift_additive_inv}
 \title{Additive Shifts of Continuous-Valued Interventions}
 \usage{
-shift_additive(tmle_task, delta = 0)
+shift_additive(tmle_task, delta = 0, ...)
 
-shift_additive_inv(tmle_task, delta = 0)
+shift_additive_inv(tmle_task, delta = 0, ...)
 }
 \arguments{
 \item{tmle_task}{A \code{tmle3_Task} object containing data and nodes, as
@@ -19,8 +19,15 @@ to the treatment. This is an additive shift so the value is merely to be
 added to the observed value of the treatment node "A". In the case of the
 inverse additive shift, the specified value will be subtracted from the
 observed value of the treatment node "A".}
+
+\item{...}{Additional arguments (currently unused).}
 }
 \description{
 Additive Shifts of Continuous-Valued Interventions
+}
+\seealso{
+Other shifting_interventions: \code{\link{shift_additive_guard}}
+
+Other shifting_interventions: \code{\link{shift_additive_guard}}
 }
 \concept{shifting_interventions}

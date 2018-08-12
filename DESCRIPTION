@@ -1,5 +1,6 @@
 Package: tmle3shift
-Title: Targeted Maximum Likelihood Estimation of Effects of Shift Interventions
+Title: Targeted Maximum Likelihood Estimation of the Effects of Stochastic Shift
+  Interventions
 Version: 0.1.0
 Authors@R: c(
     person("Nima", "Hejazi", email = "nh@nimahejazi.org",
@@ -50,12 +51,12 @@ Suggests:
     nnls,
     ranger
 Remotes:
-    github::tlverse/sl3@devel,
+    github::osofr/condensier,
+    github::nhejazi/txshift,
     github::tlverse/origami,
     github::tlverse/delayed,
-    github::tlverse/tmle3,
-    github::osofr/condensier,
-    github::nhejazi/txshift
+    github::tlverse/sl3@safe-set,
+    github::tlverse/tmle3@safe-set
 URL: https://tmle3shift.tlverse.com/
 BugReports: https://github.com/tlverse/tmle3shift/issues
 Encoding: UTF-8

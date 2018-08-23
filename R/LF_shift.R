@@ -96,7 +96,8 @@ LF_shift <- R6Class(
       cf_data <- data.table(shifted_values)
       setnames(cf_data, self$name)
 
-      cf_task <- tmle_task$generate_counterfactual_task(UUIDgenerate(), cf_data)
+      cf_task <- tmle_task$generate_counterfactual_task(UUIDgenerate(),
+                                                        cf_data)
 
       # get original likelihood for shifted data
       cf_likelihood <- self$original_lf$get_likelihood(cf_task)

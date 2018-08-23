@@ -46,14 +46,13 @@ tmle3_Spec_shift <- R6Class(
       intervention <- tmle3::define_lf(LF_shift,
         name = "A",
         original_lf = likelihood$factor_list[["A"]],
-        likelihood_base = likelihood, # PASS IN LIKELIHOOD TWICE?
+        likelihood_base = likelihood, # pass likelihood twice for fancy shifts
         shift_fxn, shift_fxn_inv, # shift fxns (may be user-supplied)
         shift_delta = delta_shift # parameter for shifting of treatment
       )
 
       shifted_mean <- tmle3::Param_TSM$new(likelihood, intervention)
       tmle_params <- list(shifted_mean)
-
       return(tmle_params)
     }
   ),
@@ -89,3 +88,4 @@ tmle_shift <- function(shift_fxn = shift_additive,
   # TODO: unclear why this has to be in a factory function
   tmle3_Spec_shift$new(shift_fxn, shift_fxn_inv, shift_val)
 }
+

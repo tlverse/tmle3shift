@@ -99,7 +99,9 @@ this is an arbitrarily chosen value for this example).
 
 ```{r spec_init}
 # initialize a tmle specification
-tmle_spec <- tmle_shift(shift_val = 0.5)
+tmle_spec <- tmle_shift(shift_val = 0.5,
+                        shift_fxn = shift_additive_bounded,
+                        shift_fxn_inv = shift_additive_bounded_inv)
 ```
 
 As seen above, the `tmle_shift` specification object (like all `tmle3_Spec`

@@ -2,6 +2,8 @@
 
 export(LF_shift)
 export(shift_additive)
+export(shift_additive_bounded)
+export(shift_additive_bounded_inv)
 export(shift_additive_guard)
 export(shift_additive_guard_inv)
 export(shift_additive_inv)

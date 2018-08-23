@@ -63,7 +63,7 @@ shift_additive_guard_inv <- function(tmle_task, delta = 0, likelihood_base) {
 }
 
 
-#' Final Maximal Shifts from the Observed Data
+#' Find Maximum Plausible Intervention Shifts from the Observed Data
 #'
 #' @param tmle_task A \code{tmle3_Task} object containing data and nodes, as
 #'  described and implemented in the \code{tmle3} package. Please refer to the

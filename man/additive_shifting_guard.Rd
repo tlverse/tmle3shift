@@ -6,9 +6,9 @@
 \alias{get_bounds_maximal}
 \title{Additive Shifts of Continuous-Valued Interventions with Bound Guards}
 \usage{
-shift_additive_guard(tmle_task, delta = 0, likelihood_base)
+shift_additive_guard(tmle_task, delta, likelihood_base, ...)
 
-shift_additive_guard_inv(tmle_task, delta = 0, likelihood_base)
+shift_additive_guard_inv(tmle_task, delta, likelihood_base, ...)
 
 get_bounds_maximal(tmle_task, likelihood_base)
 }
@@ -27,6 +27,8 @@ observed value of the treatment node "A".}
 implementing guards that ensure that the shifted treatment does not violate
 the bounds induced by the support of the intervention, conditional on the
 covariates.}
+
+\item{...}{Additional arguments (currently unused).}
 
 \item{tmle_task}{A \code{tmle3_Task} object containing data and nodes, as
 described and implemented in the \code{tmle3} package. Please refer to the

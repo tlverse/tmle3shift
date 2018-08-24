@@ -12,6 +12,7 @@
 #'  implementing guards that ensure that the shifted treatment does not violate
 #'  the bounds induced by the support of the intervention, conditional on the
 #'  covariates.
+#' @param ... Additional arguments (currently unused).
 #'
 #' @family shifting_interventions
 #'
@@ -19,7 +20,7 @@
 #'
 #' @export
 #
-shift_additive_guard <- function(tmle_task, delta = 0, likelihood_base) {
+shift_additive_guard <- function(tmle_task, delta, likelihood_base, ...) {
   # compute upper and lower bounds of treatment from observed data likelihood
   bounds_a <- get_bounds_maximal(tmle_task, likelihood_base)
 
@@ -43,7 +44,7 @@ shift_additive_guard <- function(tmle_task, delta = 0, likelihood_base) {
 #'
 #' @export
 #
-shift_additive_guard_inv <- function(tmle_task, delta = 0, likelihood_base) {
+shift_additive_guard_inv <- function(tmle_task, delta, likelihood_base, ...) {
   # compute upper and lower bounds of treatment from observed data likelihood
   bounds_a <- get_bounds_maximal(tmle_task, likelihood_base)
 

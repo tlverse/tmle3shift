@@ -17,6 +17,7 @@
 #'  particular, the shifted value of the intervention is assigned to a given
 #'  observational unit when the ratio of the counterfactual intervention density
 #'  to the observed intervention density is below this value.
+#' @param ... Additional arguments (currently unused).
 #'
 #' @family shifting_interventions
 #'
@@ -25,22 +26,15 @@
 #' @export
 #
 shift_additive_bounded <- function(tmle_task, delta, likelihood_base,
-                                   max_gn_ratio = 2) {
+                                   max_gn_ratio = 2, ...) {
   # ratio of observed and shifted intervention densities
   gn_ratio <- get_density_ratio(tmle_task, delta, likelihood_base)
 
-  # who do we shift?
-  shift_eligibility <- gn_ratio < max_gn_ratio
-
   # compute realistic value of intervention
   observed_a <- tmle_task$get_tmle_node("A")
+  shift <- ifelse(gn_ratio < max_gn_ratio, delta, 0)
   shifted_a <- observed_a + delta
-  shift_or_not <- cbind(observed_a, shifted_a, shift_eligibility)
-  assigned_a <- apply(shift_or_not, 1,
-                      function(x) {
-                        ifelse(x[3] == 1, x[2], x[1])
-                      })
-  return(assigned_a)
+  return(shifted_a)
 }
 
 #' @family shifting_interventions
@@ -50,22 +44,15 @@ shift_additive_bounded <- function(tmle_task, delta, likelihood_base,
 #' @export
 #
 shift_additive_bounded_inv <- function(tmle_task, delta, likelihood_base,
-                                       max_gn_ratio = 2) {
+                                       max_gn_ratio = 2, ...) {
   # ratio of observed and shifted intervention densities
-  ratio_gn <- get_density_ratio(tmle_task, delta, likelihood_base)
-
-  # who do we shift?
-  shift_eligibility <- gn_ratio < max_gn_ratio
+  gn_ratio <- get_density_ratio(tmle_task, delta, likelihood_base)
 
   # compute realistic value of intervention
   observed_a <- tmle_task$get_tmle_node("A")
+  shift <- ifelse(gn_ratio < max_gn_ratio, delta, 0)
   shifted_a <- observed_a - delta
-  shift_or_not <- cbind(observed_a, shifted_a, shift_eligibility)
-  assigned_a <- apply(shift_or_not, 1,
-                      function(x) {
-                        ifelse(x[3] == 1, x[2], x[1])
-                      })
-  return(assigned_a)
+  return(shifted_a)
 }
 
 
@@ -93,7 +80,7 @@ shift_additive_bounded_inv <- function(tmle_task, delta, likelihood_base,
 get_density_ratio <- function(tmle_task, delta, likelihood_base) {
   # first, extract observed natural value of treatment and find shifted values
   obs_a <- tmle_task$get_tmle_node("A")
-  shifted_a <- (obs_a - delta)
+  shifted_a <- obs_a - delta
 
   # generate counterfactual task from shifted values
   cf_task <- tmle_task$generate_counterfactual_task(UUIDgenerate(),

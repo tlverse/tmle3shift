@@ -6,13 +6,13 @@
 \alias{get_density_ratio}
 \title{Additive Shifts of Continuous-Valued Interventions based on Bounded Densities}
 \usage{
-shift_additive_bounded(tmle_task, delta = 0, max_gn_ratio,
-  likelihood_base)
+shift_additive_bounded(tmle_task, delta, likelihood_base,
+  max_gn_ratio = 2, ...)
 
-shift_additive_bounded_inv(tmle_task, delta = 0, max_ratio,
-  likelihood_base)
+shift_additive_bounded_inv(tmle_task, delta, likelihood_base,
+  max_gn_ratio = 2, ...)
 
-get_density_ratio(tmle_task, delta = 0, likelihood_base)
+get_density_ratio(tmle_task, delta, likelihood_base)
 }
 \arguments{
 \item{tmle_task}{A \code{tmle3_Task} object containing data and nodes, as
@@ -25,20 +25,28 @@ added to the observed value of the treatment node "A". In the case of the
 inverse additive shift, the specified value will be subtracted from the
 observed value of the treatment node "A".}
 
+\item{likelihood_base}{The base observed data likelihood, to be used in
+implementing guards that ensure that the shifted treatment does not violate
+the bounds induced by the support of the intervention, conditional on the
+covariates.}
+
 \item{max_gn_ratio}{A \code{numeric} value indicating the maximum tolerance
 for the ratio of the counterfactual and observed intervention densities. In
 particular, the shifted value of the intervention is assigned to a given
 observational unit when the ratio of the counterfactual intervention density
 to the observed intervention density is below this value.}
 
-\item{likelihood_base}{The base observed data likelihood, to be used in
-implementing guards that ensure that the shifted treatment does not violate
-the bounds induced by the support of the intervention, conditional on the
-covariates.}
+\item{...}{Additional arguments (currently unused).}
 
 \item{tmle_task}{A \code{tmle3_Task} object containing data and nodes, as
 described and implemented in the \code{tmle3} package. Please refer to the
 documentation and supporting materials of that package for details.}
+
+\item{delta}{A \code{numeric} value giving a value of the shift to be applied
+to the treatment. This is an additive shift so the value is merely to be
+added to the observed value of the treatment node "A". In the case of the
+inverse additive shift, the specified value will be subtracted from the
+observed value of the treatment node "A".}
 
 \item{likelihood_base}{The base observed data likelihood, to be used in
 implementing guards that ensure that the shifted treatment does not violate

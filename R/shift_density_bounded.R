@@ -26,14 +26,14 @@
 #' @export
 #
 shift_additive_bounded <- function(tmle_task, delta, likelihood_base,
-                                   max_gn_ratio = 2, ...) {
+                                   max_gn_ratio, ...) {
   # ratio of observed and shifted intervention densities
   gn_ratio <- get_density_ratio(tmle_task, delta, likelihood_base)
 
   # compute realistic value of intervention
   observed_a <- tmle_task$get_tmle_node("A")
-  shift <- ifelse(gn_ratio < max_gn_ratio, delta, 0)
-  shifted_a <- observed_a + delta
+  do_shift <- ifelse(gn_ratio < max_gn_ratio, delta, 0)
+  shifted_a <- observed_a + do_shift
   return(shifted_a)
 }
 
@@ -44,14 +44,14 @@ shift_additive_bounded <- function(tmle_task, delta, likelihood_base,
 #' @export
 #
 shift_additive_bounded_inv <- function(tmle_task, delta, likelihood_base,
-                                       max_gn_ratio = 2, ...) {
+                                       max_gn_ratio, ...) {
   # ratio of observed and shifted intervention densities
   gn_ratio <- get_density_ratio(tmle_task, delta, likelihood_base)
 
   # compute realistic value of intervention
   observed_a <- tmle_task$get_tmle_node("A")
-  shift <- ifelse(gn_ratio < max_gn_ratio, delta, 0)
-  shifted_a <- observed_a - delta
+  do_shift <- ifelse(gn_ratio < max_gn_ratio, delta, 0)
+  shifted_a <- observed_a - do_shift
   return(shifted_a)
 }
 

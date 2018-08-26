@@ -73,7 +73,7 @@ learner_list <- list(Y = Q_learner, A = g_learner)
 tmle_spec <- tmle_shift(shift_val = 0.5,
                         shift_fxn = shift_additive_bounded,
                         shift_fxn_inv = shift_additive_bounded_inv,
-                        max_intervention_ratio = 1.5)
+                        max_intervention_ratio = 2)
 
 ## define data (from tmle3_Spec base class)
 tmle_task <- tmle_spec$make_tmle_task(data, node_list)

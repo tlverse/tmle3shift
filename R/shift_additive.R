@@ -1,4 +1,4 @@
-#' Additive Shifts of Continuous-Valued Interventions
+#' Additive Shifts of Continuous-Valued Interventions Without Bounds
 #'
 #' @param tmle_task A \code{tmle3_Task} object containing data and nodes, as
 #'  described and implemented in the \code{tmle3} package. Please refer to the

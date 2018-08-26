@@ -3,7 +3,7 @@
 \name{shift_additive}
 \alias{shift_additive}
 \alias{shift_additive_inv}
-\title{Additive Shifts of Continuous-Valued Interventions}
+\title{Additive Shifts of Continuous-Valued Interventions Without Bounds}
 \usage{
 shift_additive(tmle_task, delta = 0, ...)
 
@@ -23,7 +23,7 @@ observed value of the treatment node "A".}
 \item{...}{Additional arguments (currently unused).}
 }
 \description{
-Additive Shifts of Continuous-Valued Interventions
+Additive Shifts of Continuous-Valued Interventions Without Bounds
 }
 \seealso{
 Other shifting_interventions: \code{\link{shift_additive_bounded}},

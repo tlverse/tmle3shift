@@ -8,12 +8,12 @@
 #'
 #' @references
 #' \describe{
-#'   \item{"Stochastic Treatment Regimes."}{Díaz, Iván, and van der Laan, Mark
-#'         J (2017). In Targeted Learning in Data Science: Causal Inference for
+#'   \item{"Stochastic Treatment Regimes."}{Díaz, Iván and van der Laan, Mark J
+#'         (2018). In Targeted Learning in Data Science: Causal Inference for
 #'         Complex Longitudinal Studies, 167–80. Springer Science & Business
 #'         Media.}
 #'   \item{"Population Intervention Causal Effects Based on Stochastic
-#'         Interventions."}{Muñoz, Iván Díaz, and van der Laan, Mark J (2012).
+#'         Interventions."}{Díaz, Iván and van der Laan, Mark J (2012).
 #'         Biometrics 68 (2). Wiley Online Library: 541–49.}
 #' }
 #'
@@ -93,8 +93,7 @@ LF_shift <- R6Class(
   public = list(
     initialize = function(name, original_lf, likelihood_base,
                           shift_function, shift_inverse, shift_delta,
-                          max_gn_ratio = 2,
-                          ...) {
+                          max_gn_ratio, ...) {
       super$initialize(name, ..., type = "density")
       private$.original_lf <- original_lf
       private$.likelihood_base <- likelihood_base
@@ -108,9 +107,11 @@ LF_shift <- R6Class(
     },
     get_density = function(tmle_task) {
       # get shifted data
-      shifted_values <- self$shift_inverse(tmle_task, self$shift_delta,
-                                           self$likelihood_base,
-                                           self$max_gn_ratio)
+      shifted_values <- self$shift_inverse(tmle_task = tmle_task,
+                                           delta = self$shift_delta,
+                                           likelihood_base =
+                                             self$likelihood_base,
+                                           max_gn_ratio = self$max_gn_ratio)
 
       # generate cf_task data
       cf_data <- data.table(shifted_values)
@@ -125,9 +126,11 @@ LF_shift <- R6Class(
       return(cf_likelihood)
     },
     cf_values = function(tmle_task) {
-      cf_values <- self$shift_function(tmle_task, self$shift_delta,
-                                       self$likelihood_base,
-                                       self$max_gn_ratio)
+      cf_values <- self$shift_function(tmle_task = tmle_task,
+                                       delta = self$shift_delta,
+                                       likelihood_base =
+                                         self$likelihood_base,
+                                       max_gn_ratio = self$max_gn_ratio)
       return(cf_values)
     }
   ),
@@ -146,6 +149,9 @@ LF_shift <- R6Class(
     },
     shift_delta = function() {
       return(private$.shift_delta)
+    },
+    max_ratio = function() {
+      return(private$.max_gn_ratio)
     }
   ),
   private = list(
@@ -154,6 +160,7 @@ LF_shift <- R6Class(
     .likelihood_base = NULL,
     .shift_function = NULL,
     .shift_inverse = NULL,
-    .shift_delta = NULL
+    .shift_delta = NULL,
+    .max_gn_ratio = NULL
   )
 )

@@ -78,12 +78,12 @@ likelihood from the \code{original_lf}, but a for shifted value
 
 \references{
 \describe{
-  \item{"Stochastic Treatment Regimes."}{Díaz, Iván, and van der Laan, Mark
-        J (2017). In Targeted Learning in Data Science: Causal Inference for
+  \item{"Stochastic Treatment Regimes."}{Díaz, Iván and van der Laan, Mark J
+        (2018). In Targeted Learning in Data Science: Causal Inference for
         Complex Longitudinal Studies, 167–80. Springer Science & Business
         Media.}
   \item{"Population Intervention Causal Effects Based on Stochastic
-        Interventions."}{Muñoz, Iván Díaz, and van der Laan, Mark J (2012).
+        Interventions."}{Díaz, Iván and van der Laan, Mark J (2012).
         Biometrics 68 (2). Wiley Online Library: 541–49.}
 }
 }

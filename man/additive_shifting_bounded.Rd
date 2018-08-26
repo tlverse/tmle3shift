@@ -6,11 +6,11 @@
 \alias{get_density_ratio}
 \title{Additive Shifts of Continuous-Valued Interventions based on Bounded Densities}
 \usage{
-shift_additive_bounded(tmle_task, delta, likelihood_base,
-  max_gn_ratio = 2, ...)
+shift_additive_bounded(tmle_task, delta, likelihood_base, max_gn_ratio,
+  ...)
 
-shift_additive_bounded_inv(tmle_task, delta, likelihood_base,
-  max_gn_ratio = 2, ...)
+shift_additive_bounded_inv(tmle_task, delta, likelihood_base, max_gn_ratio,
+  ...)
 
 get_density_ratio(tmle_task, delta, likelihood_base)
 }

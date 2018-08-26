@@ -6,11 +6,11 @@
 \alias{get_density_ratio}
 \title{Additive Shifts of Continuous-Valued Interventions based on Bounded Densities}
 \usage{
-shift_additive_bounded(tmle_task, delta, likelihood_base, max_gn_ratio,
-  ...)
+shift_additive_bounded(tmle_task, delta, likelihood_base,
+  max_shifted_ratio, ...)
 
-shift_additive_bounded_inv(tmle_task, delta, likelihood_base, max_gn_ratio,
-  ...)
+shift_additive_bounded_inv(tmle_task, delta, likelihood_base,
+  max_shifted_ratio, ...)
 
 get_density_ratio(tmle_task, delta, likelihood_base)
 }
@@ -30,7 +30,7 @@ implementing guards that ensure that the shifted treatment does not violate
 the bounds induced by the support of the intervention, conditional on the
 covariates.}
 
-\item{max_gn_ratio}{A \code{numeric} value indicating the maximum tolerance
+\item{max_shifted_ratio}{A \code{numeric} value indicating maximum tolerance
 for the ratio of the counterfactual and observed intervention densities. In
 particular, the shifted value of the intervention is assigned to a given
 observational unit when the ratio of the counterfactual intervention density

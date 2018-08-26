@@ -12,7 +12,7 @@
 #'  implementing guards that ensure that the shifted treatment does not violate
 #'  the bounds induced by the support of the intervention, conditional on the
 #'  covariates.
-#' @param max_gn_ratio A \code{numeric} value indicating the maximum tolerance
+#' @param max_shifted_ratio A \code{numeric} value indicating maximum tolerance
 #'  for the ratio of the counterfactual and observed intervention densities. In
 #'  particular, the shifted value of the intervention is assigned to a given
 #'  observational unit when the ratio of the counterfactual intervention density
@@ -26,14 +26,15 @@
 #' @export
 #
 shift_additive_bounded <- function(tmle_task, delta, likelihood_base,
-                                   max_gn_ratio, ...) {
+                                   max_shifted_ratio, ...) {
   # ratio of observed and shifted intervention densities
-  gn_ratio <- get_density_ratio(tmle_task, delta, likelihood_base)
+  intervention_density_ratio <- get_density_ratio(tmle_task, delta,
+                                                  likelihood_base)
 
   # compute realistic value of intervention
   observed_a <- tmle_task$get_tmle_node("A")
-  do_shift <- ifelse(gn_ratio < max_gn_ratio, delta, 0)
-  shifted_a <- observed_a + do_shift
+  shift_amt <- ifelse(intervention_density_ratio < max_shifted_ratio, delta, 0)
+  shifted_a <- observed_a + shift_amt
   return(shifted_a)
 }
 
@@ -44,15 +45,16 @@ shift_additive_bounded <- function(tmle_task, delta, likelihood_base,
 #' @export
 #
 shift_additive_bounded_inv <- function(tmle_task, delta, likelihood_base,
-                                       max_gn_ratio, ...) {
+                                       max_shifted_ratio, ...) {
   # ratio of observed and shifted intervention densities
-  gn_ratio <- get_density_ratio(tmle_task, delta, likelihood_base)
+  intervention_density_ratio <- get_density_ratio(tmle_task, delta,
+                                                  likelihood_base)
 
   # compute realistic value of intervention
   observed_a <- tmle_task$get_tmle_node("A")
-  do_shift <- ifelse(gn_ratio < max_gn_ratio, delta, 0)
-  shifted_a <- observed_a - do_shift
-  return(shifted_a)
+  shift_amt <- ifelse(intervention_density_ratio < max_shifted_ratio, delta, 0)
+  shifted_inv_a <- observed_a - shift_amt
+  return(shifted_inv_a)
 }
 
 
@@ -87,10 +89,13 @@ get_density_ratio <- function(tmle_task, delta, likelihood_base) {
                                                     data.table(A = shifted_a))
 
   # find densities associated with tasks with observed and shifted intervention
-  gn_a_obs <- likelihood_base$get_likelihoods(tmle_task, "A")
-  gn_star_a_cf <- likelihood_base$get_likelihoods(cf_task, "A")
-  gn_ratio <- gn_star_a_cf / gn_a_obs
-  names(gn_ratio) <- NULL
-  return(gn_ratio)
+  emp_intervention_density <- likelihood_base$get_likelihoods(tmle_task, "A")
+  cf_intervention_density <- likelihood_base$get_likelihoods(cf_task, "A")
+
+  # compute ratio of counterfactual and empirical intervention densities
+  intervention_density_ratio <-
+    cf_intervention_density / emp_intervention_density
+  names(intervention_density_ratio) <- NULL
+  return(intervention_density_ratio)
 }
 

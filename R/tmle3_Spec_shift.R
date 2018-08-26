@@ -18,13 +18,13 @@ tmle3_Spec_shift <- R6Class(
     initialize = function(shift_fxn = additive_shift,
                           shift_fxn_inv = additive_shift_inv,
                           shift_val = 0,
-                          max_shift_ratio = 2,
+                          max_shifted_ratio = 2,
                           ...) {
       options <- list(
         shift_fxn = shift_fxn,
         shift_fxn_inv = shift_fxn_inv,
-        shift_val = shift_val,
-        max_gn_ratio = max_shift_ratio
+        delta_shift = shift_val,
+        max_shifted_ratio = max_shifted_ratio
       )
       do.call(super$initialize, options)
     },
@@ -42,8 +42,8 @@ tmle3_Spec_shift <- R6Class(
       # unwrap internalized arguments
       shift_fxn <- self$options$shift_fxn
       shift_fxn_inv <- self$options$shift_fxn_inv
-      delta_shift <- self$options$shift_val
-      max_shift_ratio <- self$options$max_gn_ratio
+      delta_shift <- self$options$delta_shift
+      max_shifted_ratio <- self$options$max_shifted_ratio
 
       # define shift intervention (additive only for now)
       intervention <- tmle3::define_lf(LF_shift,
@@ -52,7 +52,7 @@ tmle3_Spec_shift <- R6Class(
         likelihood_base = likelihood,                # initialized likelihood
         shift_fxn, shift_fxn_inv,                    # shift fxns (from user)
         shift_delta = delta_shift,                   # shift magnitude
-        max_gn_ratio = max_shift_ratio               # max ratio difference
+        max_shifted_ratio = max_shifted_ratio        # max ratio difference
       )
 
       shifted_mean <- tmle3::Param_TSM$new(likelihood, intervention)
@@ -81,7 +81,7 @@ tmle3_Spec_shift <- R6Class(
 #' @param shift_val A \code{numeric}, specification of the magnitude of the
 #'  desired shift (on the level of the treatment). This is a value passed to
 #'  the \code{function}s above for modulating the treatment.
-#' @param max_shift_ratio A \code{numeric} value indicating the maximum
+#' @param max_shifted_ratio A \code{numeric} value indicating the maximum
 #'  tolerance for the ratio of the counterfactual and observed intervention
 #'  densities. In particular, the shifted value of the intervention is assigned
 #'  to a given observational unit when the ratio of counterfactual intervention
@@ -94,9 +94,9 @@ tmle3_Spec_shift <- R6Class(
 #
 tmle_shift <- function(shift_fxn = shift_additive,
                        shift_fxn_inv = shift_additive_inv,
-                       shift_val = 1, max_shift_ratio = 2, ...) {
+                       shift_val = 1, max_shifted_ratio = 2, ...) {
   # TODO: unclear why this has to be in a factory function
   tmle3_Spec_shift$new(shift_fxn, shift_fxn_inv, shift_val,
-                       max_shift_ratio, ...)
+                       max_shifted_ratio, ...)
 }
 

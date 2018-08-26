@@ -48,7 +48,7 @@
 #'     \item{\code{shift_delta}}{\code{numeric}, specification of the magnitude
 #'           of the desired shift (on the level of the treatment)
 #'     }
-#'     \item{\code{max_gn_ratio}}{A \code{numeric} value indicating the maximum
+#'     \item{\code{max_shifted_ratio}}{A \code{numeric} value indicating the maximum
 #'           tolerance for the ratio of the counterfactual and observed
 #'           intervention densities. In particular, the shifted value of the
 #'           intervention is assigned to a given observational unit when the
@@ -72,7 +72,7 @@
 #'     \item{\code{shift_delta}}{\code{numeric}, specification of the magnitude
 #'           of the desired shift (on the level of the treatment)
 ##'    }
-#'     \item{\code{max_gn_ratio}}{A \code{numeric} value indicating the maximum
+#'     \item{\code{max_shifted_ratio}}{A \code{numeric} value indicating the maximum
 #'           tolerance for the ratio of the counterfactual and observed
 #'           intervention densities. In particular, the shifted value of the
 #'           intervention is assigned to a given observational unit when the
@@ -93,14 +93,14 @@ LF_shift <- R6Class(
   public = list(
     initialize = function(name, original_lf, likelihood_base,
                           shift_function, shift_inverse, shift_delta,
-                          max_gn_ratio, ...) {
+                          max_shifted_ratio, ...) {
       super$initialize(name, ..., type = "density")
       private$.original_lf <- original_lf
       private$.likelihood_base <- likelihood_base
       private$.shift_function <- shift_function
       private$.shift_inverse <- shift_inverse
       private$.shift_delta <- shift_delta
-      private$.max_gn_ratio <- max_gn_ratio
+      private$.max_shifted_ratio <- max_shifted_ratio
     },
     get_mean = function(tmle_task) {
       stop("get_mean not supported for LF_shift")
@@ -111,7 +111,8 @@ LF_shift <- R6Class(
                                            delta = self$shift_delta,
                                            likelihood_base =
                                              self$likelihood_base,
-                                           max_gn_ratio = self$max_gn_ratio)
+                                           max_shifted_ratio =
+                                             self$max_shifted_ratio)
 
       # generate cf_task data
       cf_data <- data.table(shifted_values)
@@ -130,7 +131,8 @@ LF_shift <- R6Class(
                                        delta = self$shift_delta,
                                        likelihood_base =
                                          self$likelihood_base,
-                                       max_gn_ratio = self$max_gn_ratio)
+                                       max_shifted_ratio =
+                                         self$max_shifted_ratio)
       return(cf_values)
     }
   ),
@@ -150,8 +152,8 @@ LF_shift <- R6Class(
     shift_delta = function() {
       return(private$.shift_delta)
     },
-    max_ratio = function() {
-      return(private$.max_gn_ratio)
+    max_shifted_ratio = function() {
+      return(private$.max_shifted_ratio)
     }
   ),
   private = list(
@@ -161,6 +163,6 @@ LF_shift <- R6Class(
     .shift_function = NULL,
     .shift_inverse = NULL,
     .shift_delta = NULL,
-    .max_gn_ratio = NULL
+    .max_shifted_ratio = NULL
   )
 )

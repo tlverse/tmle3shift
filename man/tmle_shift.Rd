@@ -6,7 +6,7 @@
 \usage{
 tmle_shift(shift_fxn = shift_additive,
   shift_fxn_inv = shift_additive_inv, shift_val = 1,
-  max_shift_ratio = 2, ...)
+  max_shifted_ratio = 2, ...)
 }
 \arguments{
 \item{shift_fxn}{A \code{function} defining the type of shift to be applied
@@ -20,7 +20,7 @@ shift to be applied to the treatment. For an example, see
 desired shift (on the level of the treatment). This is a value passed to
 the \code{function}s above for modulating the treatment.}
 
-\item{max_shift_ratio}{A \code{numeric} value indicating the maximum
+\item{max_shifted_ratio}{A \code{numeric} value indicating the maximum
 tolerance for the ratio of the counterfactual and observed intervention
 densities. In particular, the shifted value of the intervention is assigned
 to a given observational unit when the ratio of counterfactual intervention

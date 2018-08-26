@@ -38,7 +38,7 @@ likelihood from the \code{original_lf}, but a for shifted value
     \item{\code{shift_delta}}{\code{numeric}, specification of the magnitude
           of the desired shift (on the level of the treatment)
     }
-    \item{\code{max_gn_ratio}}{A \code{numeric} value indicating the maximum
+    \item{\code{max_shifted_ratio}}{A \code{numeric} value indicating the maximum
           tolerance for the ratio of the counterfactual and observed
           intervention densities. In particular, the shifted value of the
           intervention is assigned to a given observational unit when the
@@ -64,7 +64,7 @@ likelihood from the \code{original_lf}, but a for shifted value
     \item{\code{shift_delta}}{\code{numeric}, specification of the magnitude
           of the desired shift (on the level of the treatment)
    }
-    \item{\code{max_gn_ratio}}{A \code{numeric} value indicating the maximum
+    \item{\code{max_shifted_ratio}}{A \code{numeric} value indicating the maximum
           tolerance for the ratio of the counterfactual and observed
           intervention densities. In particular, the shifted value of the
           intervention is assigned to a given observational unit when the

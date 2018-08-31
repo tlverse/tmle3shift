@@ -15,11 +15,12 @@ developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repo
 [![License: GPL
 v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 
-> Targeted Learning of Stochastic Intervention Effects, done
-> `tlverse`-style
+> Targeted Learning and Variable Importance with Stochastic
+> Interventions
 
-**Authors:** [Nima Hejazi](https://nimahejazi.org) and [Jeremy
-Coyle](https://github.com/jeremyrcoyle)
+**Authors:** [Nima Hejazi](https://nimahejazi.org), [Jeremy
+Coyle](https://github.com/jeremyrcoyle), and [Mark van der
+Laan](https://vanderlaan-lab.org)
 
 -----
 
@@ -33,8 +34,30 @@ builds upon the core `tlverse` grammar introduced by `tmle3`, a general
 framework that supports the implementation of a range of TMLE parameters
 through a unified interface. For a detailed description of the target
 parameter, TML estimator, and algorithm implemented in `tmle3shift`, the
-interested reader is invited to consult Muñoz and van der Laan (2012)
+interested reader is invited to consult
+(<span class="citeproc-not-found" data-reference-id="munoz2012population">**???**</span>)
 and Díaz and van der Laan (2018).
+
+For a general discussion of the framework of targeted minimum loss-based
+estimation and the role this methodology plays in statistical and causal
+inference, the canonical references are van der Laan and Rose (2011) and
+van der Laan and Rose (2018).
+
+`vimshift` is an R package in the `tlverse` ecosystem that implements a
+strategy for assessing variable importance measures (VIMs) based on a
+parameter defined as the mean counterfactual outcome under a specified
+set of shifts of a given set of continuous-valued variables of interest.
+The parameter at the heart of the proposed VIM is defined through
+stochastic treatment regimes. For a detailed description of the target
+parameter, as well as the corresponding TML estimator, the interested
+reader is invited to consult Díaz and van der Laan (2012) and Díaz and
+van der Laan (2018) (n.b., the `tlverse` implementation of the relevant
+TML estimator is available throught the [`tmle3shift` R
+package](https://tmle3shift.tlverse.org)). The `vimshift` package builds
+upon the core `tlverse` grammar introduced by `tmle3`, a general
+framework that supports the implementation of a range of TMLE parameters
+through a unified interface, building upon this framework to introduce
+an end-to-end methodology for variable importance.
 
 For a general discussion of the framework of targeted minimum loss-based
 estimation and the role this methodology plays in statistical and causal
@@ -64,7 +87,7 @@ If you encounter any bugs or have any specific feature requests, please
 ## Related
 
   - [R/`txshift`](https://github.com/nhejazi/txshift) - An R package
-    providing an independent implementation of the same TML estimation
+    providing an independent implementation of the TML estimation
     procedure and statistical methodology as is made available here,
     without reliance on the `tlverse` grammar provided by `tmle3`.
 
@@ -89,20 +112,19 @@ See file `LICENSE` for details.
 
 <div id="refs" class="references">
 
-<div id="ref-diaz2018stochastic">
+<div id="ref-diaz2012population">
 
-Díaz, Iván, and Mark J van der Laan. 2018. “Stochastic Treatment
-Regimes.” In *Targeted Learning in Data Science: Causal Inference for
-Complex Longitudinal Studies*, 167–80. Springer Science & Business
-Media.
+Díaz, Iván, and Mark J van der Laan. 2012. “Population Intervention
+Causal Effects Based on Stochastic Interventions.” *Biometrics* 68 (2).
+Wiley Online Library: 541–49.
 
 </div>
 
-<div id="ref-munoz2012population">
+<div id="ref-diaz2018stochastic">
 
-Muñoz, Iván Díaz, and Mark J van der Laan. 2012. “Population
-Intervention Causal Effects Based on Stochastic Interventions.”
-*Biometrics* 68 (2). Wiley Online Library: 541–49.
+———. 2018. “Stochastic Treatment Regimes.” In *Targeted Learning in Data
+Science: Causal Inference for Complex Longitudinal Studies*, 167–80.
+Springer Science & Business Media.
 
 </div>
 

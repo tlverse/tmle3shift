@@ -9,7 +9,7 @@
 #'
 #' @export
 #
-tmle3_Spec_shift <- R6Class(
+tmle3_Spec_shift <- R6::R6Class(
   classname = "tmle3_Spec_shift",
   portable = TRUE,
   class = TRUE,

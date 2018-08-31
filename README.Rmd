@@ -24,10 +24,11 @@ is being actively
 developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 
-> Targeted Learning of Stochastic Intervention Effects, done `tlverse`-style
+> Targeted Learning and Variable Importance with Stochastic Interventions
 
-__Authors:__ [Nima Hejazi](https://nimahejazi.org) and [Jeremy
-Coyle](https://github.com/jeremyrcoyle)
+__Authors:__ [Nima Hejazi](https://nimahejazi.org), [Jeremy
+Coyle](https://github.com/jeremyrcoyle), and [Mark van der
+Laan](https://vanderlaan-lab.org)
 
 ---
 
@@ -42,6 +43,25 @@ implementation of a range of TMLE parameters through a unified interface. For a
 detailed description of the target parameter, TML estimator, and algorithm
 implemented in `tmle3shift`, the interested reader is invited to consult
 @munoz2012population and @diaz2018stochastic.
+
+For a general discussion of the framework of targeted minimum loss-based
+estimation and the role this methodology plays in statistical and causal
+inference, the canonical references are @vdl2011targeted and @vdl2018targeted.
+
+`vimshift` is an R package in the `tlverse` ecosystem that implements a strategy
+for assessing variable importance measures (VIMs) based on a parameter defined
+as the mean counterfactual outcome under a specified set of shifts of a given
+set of continuous-valued variables of interest. The parameter at the heart of
+the proposed VIM is defined through stochastic treatment regimes. For a detailed
+description of the target parameter, as well as the corresponding TML estimator,
+the interested reader is invited to consult @diaz2012population and
+@diaz2018stochastic (n.b., the `tlverse` implementation of the relevant TML
+estimator is available throught the [`tmle3shift` R
+package](https://tmle3shift.tlverse.org)). The `vimshift` package builds upon
+the core `tlverse` grammar introduced by `tmle3`, a general framework that
+supports the implementation of a range of TMLE parameters through a unified
+interface, building upon this framework to introduce an end-to-end methodology
+for variable importance.
 
 For a general discussion of the framework of targeted minimum loss-based
 estimation and the role this methodology plays in statistical and causal
@@ -70,7 +90,7 @@ issue](https://github.com/tlverse/tmle3shift/issues).
 ## Related
 
 * [R/`txshift`](https://github.com/nhejazi/txshift) - An R package providing an
-  independent implementation of the same TML estimation procedure and
+  independent implementation of the TML estimation procedure and
   statistical methodology as is made available here, without reliance on the
   `tlverse` grammar provided by `tmle3`.
 

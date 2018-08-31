@@ -27,7 +27,7 @@ defined based on a shifting function $d(A,W)$. For a technical presentation of
 the algorithm, the interested reader is invited to consult @diaz2018stochastic.
 For additional background on Targeted Learning and previous work on stochastic
 treatment regimes, please consider consulting @vdl2011targeted,
-@vdl2018targeted, and @munoz2012population.
+@vdl2018targeted, and @diaz2012population.
 
 To start, let's load the packages we'll use and set a seed for simulation:
 

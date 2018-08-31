@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Outcome under Delta-Shifted Treatment — tmle_shift • tmle3shift</title>
+<title>Outcome under Shifted Treatment — tmle_shift • tmle3shift</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -21,20 +21,23 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
 
 
 
-<meta property="og:title" content="Outcome under Delta-Shifted Treatment — tmle_shift" />
+<meta property="og:title" content="Outcome under Shifted Treatment — tmle_shift" />
 
 <meta property="og:description" content="O = (W, A, Y)
 W = Covariates
 A = Treatment (binary or categorical)
 Y = Outcome (binary or bounded continuous)" />
 <meta name="twitter:card" content="summary" />
+
 
 
 <!-- mathjax -->
@@ -110,7 +113,7 @@ Y = Outcome (binary or bounded continuous)" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Outcome under Delta-Shifted Treatment</h1>
+    <h1>Outcome under Shifted Treatment</h1>
     
     <div class="hidden name"><code>tmle_shift.Rd</code></div>
     </div>
@@ -124,8 +127,9 @@ Y = Outcome (binary or bounded continuous)</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>tmle_shift</span>(<span class='kw'>shift_fxn</span> <span class='kw'>=</span> <span class='no'>shift_additive</span>, <span class='kw'>shift_fxn_inv</span> <span class='kw'>=</span> <span class='no'>shift_additive_inv</span>,
-  <span class='kw'>shift_val</span> <span class='kw'>=</span> <span class='fl'>0</span>)</pre>
+    <pre class="usage"><span class='fu'>tmle_shift</span>(<span class='kw'>shift_fxn</span> <span class='kw'>=</span> <span class='no'>shift_additive</span>,
+  <span class='kw'>shift_fxn_inv</span> <span class='kw'>=</span> <span class='no'>shift_additive_inv</span>, <span class='kw'>shift_val</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>max_shifted_ratio</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -146,6 +150,18 @@ shift to be applied to the treatment. For an example, see
       <td><p>A <code>numeric</code>, specification of the magnitude of the
 desired shift (on the level of the treatment). This is a value passed to
 the <code>function</code>s above for modulating the treatment.</p></td>
+    </tr>
+    <tr>
+      <th>max_shifted_ratio</th>
+      <td><p>A <code>numeric</code> value indicating the maximum
+tolerance for the ratio of the counterfactual and observed intervention
+densities. In particular, the shifted value of the intervention is assigned
+to a given observational unit when the ratio of counterfactual intervention
+density to the observed intervention density is below this value.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Additional arguments (currently unused).</p></td>
     </tr>
     </table>
     

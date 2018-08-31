@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Additive Shifts of Continuous-Valued Interventions Without Bounds — shift_additive • tmle3shift</title>
+<title>Outcome Under a Grid of Delta-Shifted Interventions — tmle_vimshift • tmle3shift</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,12 @@
 
 
 
-<meta property="og:title" content="Additive Shifts of Continuous-Valued Interventions Without Bounds — shift_additive" />
+<meta property="og:title" content="Outcome Under a Grid of Delta-Shifted Interventions — tmle_vimshift" />
 
-<meta property="og:description" content="Additive Shifts of Continuous-Valued Interventions Without Bounds" />
+<meta property="og:description" content="O = (W, A, Y)
+W = Covariates
+A = Treatment (binary or categorical)
+Y = Outcome (binary or bounded continuous)" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -110,50 +113,50 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Additive Shifts of Continuous-Valued Interventions Without Bounds</h1>
+    <h1>Outcome Under a Grid of Delta-Shifted Interventions</h1>
     
-    <div class="hidden name"><code>additive_shifting.Rd</code></div>
+    <div class="hidden name"><code>tmle_vimshift.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Additive Shifts of Continuous-Valued Interventions Without Bounds</p>
+    <p>O = (W, A, Y)
+W = Covariates
+A = Treatment (binary or categorical)
+Y = Outcome (binary or bounded continuous)</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>shift_additive</span>(<span class='no'>tmle_task</span>, <span class='kw'>delta</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='no'>...</span>)
-
-<span class='fu'>shift_additive_inv</span>(<span class='no'>tmle_task</span>, <span class='kw'>delta</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>tmle_vimshift</span>(<span class='kw'>shift_fxn</span> <span class='kw'>=</span> <span class='no'>shift_additive_bounded</span>,
+  <span class='kw'>shift_fxn_inv</span> <span class='kw'>=</span> <span class='no'>shift_additive_bounded_inv</span>, <span class='kw'>shift_grid</span> <span class='kw'>=</span> <span class='fu'>seq</span>(-<span class='fl'>1</span>, <span class='fl'>1</span>,
+  <span class='kw'>by</span> <span class='kw'>=</span> <span class='fl'>0.5</span>), <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>tmle_task</th>
-      <td><p>A <code>tmle3_Task</code> object containing data and nodes, as
-described and implemented in the <code>tmle3</code> package. Please refer to the
-documentation and supporting materials of that package for details.</p></td>
+      <th>shift_fxn</th>
+      <td><p>A <code>function</code> defining the type of shift to be applied
+to the treatment. For an example, see <code>shift_additive</code>.</p></td>
     </tr>
     <tr>
-      <th>delta</th>
-      <td><p>A <code>numeric</code> value giving a value of the shift to be applied
-to the treatment. This is an additive shift so the value is merely to be
-added to the observed value of the treatment node "A". In the case of the
-inverse additive shift, the specified value will be subtracted from the
-observed value of the treatment node "A".</p></td>
+      <th>shift_fxn_inv</th>
+      <td><p>A <code>function</code> defining the inverse of the type of
+shift to be applied to the treatment. For an example, see
+<code>shift_additive_inv</code>.</p></td>
+    </tr>
+    <tr>
+      <th>shift_grid</th>
+      <td><p>A <code>numeric</code> vector, specification of a selection of
+shifts (on the level of the treatment) to be applied to the intervention.
+This is a value passed to the <code>function</code>s above for computing various
+values of the outcome under modulated values of the treatment.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Additional arguments (currently unused).</p></td>
+      <td><p>Additional arguments, passed to shift functions.</p></td>
     </tr>
     </table>
-    
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p>Other shifting_interventions: <code><a href='additive_shifting_bounded.html'>shift_additive_bounded</a></code>,
-  <code><a href='additive_shifting_guard.html'>shift_additive_guard</a></code></p>
-<p>Other shifting_interventions: <code><a href='additive_shifting_bounded.html'>shift_additive_bounded</a></code>,
-  <code><a href='additive_shifting_guard.html'>shift_additive_guard</a></code></p></div>
     
 
   </div>
@@ -161,9 +164,7 @@ observed value of the treatment node "A".</p></td>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#see-also">See also</a></li>
-          </ul>
+                </ul>
 
   </div>
 </div>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Additive Shifts of Continuous-Valued Interventions Without Bounds — shift_additive • tmle3shift</title>
+<title>Defines a TML Estimator for Variable Importance for Continuous Interventions — tmle3_Spec_vimshift • tmle3shift</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,10 @@
 
 
 
-<meta property="og:title" content="Additive Shifts of Continuous-Valued Interventions Without Bounds — shift_additive" />
+<meta property="og:title" content="Defines a TML Estimator for Variable Importance for Continuous Interventions — tmle3_Spec_vimshift" />
 
-<meta property="og:description" content="Additive Shifts of Continuous-Valued Interventions Without Bounds" />
+<meta property="og:description" content="Current limitations: pretty much tailored to Param_TSM
+See TODO notes for places generalization can be added" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -110,59 +111,31 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Additive Shifts of Continuous-Valued Interventions Without Bounds</h1>
+    <h1>Defines a TML Estimator for Variable Importance for Continuous Interventions</h1>
     
-    <div class="hidden name"><code>additive_shifting.Rd</code></div>
+    <div class="hidden name"><code>tmle3_Spec_vimshift.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Additive Shifts of Continuous-Valued Interventions Without Bounds</p>
+    <p>Current limitations: pretty much tailored to <code>Param_TSM</code>
+See TODO notes for places generalization can be added</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>shift_additive</span>(<span class='no'>tmle_task</span>, <span class='kw'>delta</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='no'>tmle3_Spec_vimshift</span></pre>
+        
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-<span class='fu'>shift_additive_inv</span>(<span class='no'>tmle_task</span>, <span class='kw'>delta</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='no'>...</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>tmle_task</th>
-      <td><p>A <code>tmle3_Task</code> object containing data and nodes, as
-described and implemented in the <code>tmle3</code> package. Please refer to the
-documentation and supporting materials of that package for details.</p></td>
-    </tr>
-    <tr>
-      <th>delta</th>
-      <td><p>A <code>numeric</code> value giving a value of the shift to be applied
-to the treatment. This is an additive shift so the value is merely to be
-added to the observed value of the treatment node "A". In the case of the
-inverse additive shift, the specified value will be subtracted from the
-observed value of the treatment node "A".</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Additional arguments (currently unused).</p></td>
-    </tr>
-    </table>
-    
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p>Other shifting_interventions: <code><a href='additive_shifting_bounded.html'>shift_additive_bounded</a></code>,
-  <code><a href='additive_shifting_guard.html'>shift_additive_guard</a></code></p>
-<p>Other shifting_interventions: <code><a href='additive_shifting_bounded.html'>shift_additive_bounded</a></code>,
-  <code><a href='additive_shifting_guard.html'>shift_additive_guard</a></code></p></div>
+    <p>An object of class <code>R6ClassGenerator</code> of length 24.</p>
     
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#see-also">See also</a></li>
+      <li><a href="#format">Format</a></li>
           </ul>
 
   </div>

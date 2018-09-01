@@ -59,14 +59,11 @@ Additive Shifts of Continuous-Valued Interventions based on Bounded Densities
 Compute Ratio of Observed and Counterfactual Intervention Densities
 }
 \seealso{
-Other shifting_interventions: \code{\link{shift_additive_guard}},
-  \code{\link{shift_additive}}
+Other shifting_interventions: \code{\link{shift_additive}}
 
-Other shifting_interventions: \code{\link{shift_additive_guard}},
-  \code{\link{shift_additive}}
+Other shifting_interventions: \code{\link{shift_additive}}
 
-Other shifting_interventions: \code{\link{shift_additive_guard}},
-  \code{\link{shift_additive}}
+Other shifting_interventions: \code{\link{shift_additive}}
 }
 \concept{shifting_interventions}
 \keyword{internal}

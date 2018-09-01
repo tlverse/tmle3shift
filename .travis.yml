@@ -36,6 +36,7 @@ r_github_packages:
   - tlverse/origami
   - tlverse/tmle3
   - tlverse/sl3@devel
+  - osofr/simcausal
   - osofr/condensier
   - jeremyrcoyle/hal9001
   - nhejazi/txshift

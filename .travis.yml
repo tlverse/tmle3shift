@@ -30,6 +30,7 @@ r_packages:
 
 r_github_packages:
   - r-lib/devtools
+  - r-lib/sessioninfo
   - Rdatatable/data.table
   - jimhester/covr
   - tlverse/delayed

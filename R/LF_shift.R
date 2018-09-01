@@ -85,7 +85,7 @@
 #'
 #' @export
 #
-LF_shift <- R6Class(
+LF_shift <- R6::R6Class(
   classname = "LF_shift",
   portable = TRUE,
   class = TRUE,

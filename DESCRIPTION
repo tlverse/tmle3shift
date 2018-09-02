@@ -34,9 +34,7 @@ Imports:
     uuid,
     methods,
     sl3,
-    tmle3,
-    origami,
-    delayed
+    tmle3
 Suggests:
     testthat,
     knitr,

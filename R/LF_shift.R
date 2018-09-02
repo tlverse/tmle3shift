@@ -8,12 +8,12 @@
 #'
 #' @references
 #' \describe{
-#'   \item{"Stochastic Treatment Regimes."}{Díaz, Iván, and van der Laan, Mark
-#'         J (2017). In Targeted Learning in Data Science: Causal Inference for
+#'   \item{"Stochastic Treatment Regimes."}{Díaz, Iván and van der Laan, Mark J
+#'         (2018). In Targeted Learning in Data Science: Causal Inference for
 #'         Complex Longitudinal Studies, 167–80. Springer Science & Business
 #'         Media.}
 #'   \item{"Population Intervention Causal Effects Based on Stochastic
-#'         Interventions."}{Muñoz, Iván Díaz, and van der Laan, Mark J (2012).
+#'         Interventions."}{Díaz, Iván and van der Laan, Mark J (2012).
 #'         Biometrics 68 (2). Wiley Online Library: 541–49.}
 #' }
 #'
@@ -48,6 +48,13 @@
 #'     \item{\code{shift_delta}}{\code{numeric}, specification of the magnitude
 #'           of the desired shift (on the level of the treatment)
 #'     }
+#'     \item{\code{max_shifted_ratio}}{A \code{numeric} value indicating the maximum
+#'           tolerance for the ratio of the counterfactual and observed
+#'           intervention densities. In particular, the shifted value of the
+#'           intervention is assigned to a given observational unit when the
+#'           ratio of the counterfactual intervention density to the observed
+#'           intervention density is below this value
+##'    }
 #'     \item{\code{...}}{Not currently used.
 #'     }
 #'   }
@@ -64,37 +71,55 @@
 #'     }
 #'     \item{\code{shift_delta}}{\code{numeric}, specification of the magnitude
 #'           of the desired shift (on the level of the treatment)
+##'    }
+#'     \item{\code{max_shifted_ratio}}{A \code{numeric} value indicating the maximum
+#'           tolerance for the ratio of the counterfactual and observed
+#'           intervention densities. In particular, the shifted value of the
+#'           intervention is assigned to a given observational unit when the
+#'           ratio of the counterfactual intervention density to the observed
+#'           intervention density is below this value
+##'    }
+#'     \item{\code{...}}{Not currently used.
 #'     }
 #'   }
 #'
 #' @export
 #
-LF_shift <- R6Class(
+LF_shift <- R6::R6Class(
   classname = "LF_shift",
   portable = TRUE,
   class = TRUE,
   inherit = LF_base,
   public = list(
-    initialize = function(name, original_lf, shift_function, shift_inverse,
-                              shift_delta, ...) {
+    initialize = function(name, original_lf, likelihood_base,
+                          shift_function, shift_inverse, shift_delta,
+                          max_shifted_ratio, ...) {
       super$initialize(name, ..., type = "density")
       private$.original_lf <- original_lf
+      private$.likelihood_base <- likelihood_base
       private$.shift_function <- shift_function
       private$.shift_inverse <- shift_inverse
       private$.shift_delta <- shift_delta
+      private$.max_shifted_ratio <- max_shifted_ratio
     },
     get_mean = function(tmle_task) {
       stop("get_mean not supported for LF_shift")
     },
     get_density = function(tmle_task) {
       # get shifted data
-      shifted_values <- self$shift_inverse(tmle_task, self$shift_delta)
+      shifted_values <- self$shift_inverse(tmle_task = tmle_task,
+                                           delta = self$shift_delta,
+                                           likelihood_base =
+                                             self$likelihood_base,
+                                           max_shifted_ratio =
+                                             self$max_shifted_ratio)
 
       # generate cf_task data
       cf_data <- data.table(shifted_values)
       setnames(cf_data, self$name)
 
-      cf_task <- tmle_task$generate_counterfactual_task(UUIDgenerate(), cf_data)
+      cf_task <- tmle_task$generate_counterfactual_task(UUIDgenerate(),
+                                                        cf_data)
 
       # get original likelihood for shifted data
       cf_likelihood <- self$original_lf$get_likelihood(cf_task)
@@ -102,13 +127,21 @@ LF_shift <- R6Class(
       return(cf_likelihood)
     },
     cf_values = function(tmle_task) {
-      cf_values <- self$shift_function(tmle_task, self$shift_delta)
+      cf_values <- self$shift_function(tmle_task = tmle_task,
+                                       delta = self$shift_delta,
+                                       likelihood_base =
+                                         self$likelihood_base,
+                                       max_shifted_ratio =
+                                         self$max_shifted_ratio)
       return(cf_values)
     }
   ),
   active = list(
     original_lf = function() {
       return(private$.original_lf)
+    },
+    likelihood_base = function() {
+      return(private$.likelihood_base)
     },
     shift_function = function() {
       return(private$.shift_function)
@@ -118,13 +151,18 @@ LF_shift <- R6Class(
     },
     shift_delta = function() {
       return(private$.shift_delta)
+    },
+    max_shifted_ratio = function() {
+      return(private$.max_shifted_ratio)
     }
   ),
   private = list(
     .name = NULL,
     .original_lf = NULL,
+    .likelihood_base = NULL,
     .shift_function = NULL,
     .shift_inverse = NULL,
-    .shift_delta = NULL
+    .shift_delta = NULL,
+    .max_shifted_ratio = NULL
   )
 )

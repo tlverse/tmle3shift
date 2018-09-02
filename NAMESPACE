@@ -2,10 +2,13 @@
 
 export(LF_shift)
 export(shift_additive)
+export(shift_additive_bounded)
+export(shift_additive_bounded_inv)
 export(shift_additive_inv)
 export(tmle3_Spec_shift)
 export(tmle_shift)
 importFrom(R6,R6Class)
+importFrom(data.table,data.table)
 importFrom(methods,is)
 importFrom(sl3,Lrnr_mean)
 importFrom(sl3,make_learner)

@@ -3,7 +3,7 @@
 \docType{data}
 \name{tmle3_Spec_shift}
 \alias{tmle3_Spec_shift}
-\title{Defines a TML Estimator for the Outcome under a Delta-Shifted Treatment}
+\title{Defines a TML Estimator for the Outcome under a Shifted Treatment}
 \format{An object of class \code{R6ClassGenerator} of length 24.}
 \usage{
 tmle3_Spec_shift

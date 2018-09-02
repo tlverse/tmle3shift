@@ -30,12 +30,14 @@ r_packages:
 
 r_github_packages:
   - r-lib/devtools
+  - r-lib/sessioninfo
   - Rdatatable/data.table
   - jimhester/covr
   - tlverse/delayed
   - tlverse/origami
   - tlverse/tmle3
   - tlverse/sl3@devel
+  - osofr/simcausal
   - osofr/condensier
   - jeremyrcoyle/hal9001
   - nhejazi/txshift

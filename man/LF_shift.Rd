@@ -38,6 +38,13 @@ likelihood from the \code{original_lf}, but a for shifted value
     \item{\code{shift_delta}}{\code{numeric}, specification of the magnitude
           of the desired shift (on the level of the treatment)
     }
+    \item{\code{max_shifted_ratio}}{A \code{numeric} value indicating the maximum
+          tolerance for the ratio of the counterfactual and observed
+          intervention densities. In particular, the shifted value of the
+          intervention is assigned to a given observational unit when the
+          ratio of the counterfactual intervention density to the observed
+          intervention density is below this value
+   }
     \item{\code{...}}{Not currently used.
     }
   }
@@ -56,18 +63,27 @@ likelihood from the \code{original_lf}, but a for shifted value
     }
     \item{\code{shift_delta}}{\code{numeric}, specification of the magnitude
           of the desired shift (on the level of the treatment)
+   }
+    \item{\code{max_shifted_ratio}}{A \code{numeric} value indicating the maximum
+          tolerance for the ratio of the counterfactual and observed
+          intervention densities. In particular, the shifted value of the
+          intervention is assigned to a given observational unit when the
+          ratio of the counterfactual intervention density to the observed
+          intervention density is below this value
+   }
+    \item{\code{...}}{Not currently used.
     }
   }
 }
 
 \references{
 \describe{
-  \item{"Stochastic Treatment Regimes."}{Díaz, Iván, and van der Laan, Mark
-        J (2017). In Targeted Learning in Data Science: Causal Inference for
+  \item{"Stochastic Treatment Regimes."}{Díaz, Iván and van der Laan, Mark J
+        (2018). In Targeted Learning in Data Science: Causal Inference for
         Complex Longitudinal Studies, 167–80. Springer Science & Business
         Media.}
   \item{"Population Intervention Causal Effects Based on Stochastic
-        Interventions."}{Muñoz, Iván Díaz, and van der Laan, Mark J (2012).
+        Interventions."}{Díaz, Iván and van der Laan, Mark J (2012).
         Biometrics 68 (2). Wiley Online Library: 541–49.}
 }
 }

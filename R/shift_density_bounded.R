@@ -73,6 +73,8 @@ shift_additive_bounded_inv <- function(tmle_task, delta, likelihood_base,
 #'  the bounds induced by the support of the intervention, conditional on the
 #'  covariates.
 #'
+#' @importFrom data.table data.table
+#'
 #' @family shifting_interventions
 #'
 #' @rdname additive_shifting_bounded
@@ -86,7 +88,7 @@ get_density_ratio <- function(tmle_task, delta, likelihood_base) {
 
   # generate counterfactual task from shifted values
   cf_task <- tmle_task$generate_counterfactual_task(UUIDgenerate(),
-                                                    data.table(A = shifted_a))
+                                                    data.table::data.table(A = shifted_a))
 
   # find densities associated with tasks with observed and shifted intervention
   emp_intervention_density <- likelihood_base$get_likelihoods(tmle_task, "A")

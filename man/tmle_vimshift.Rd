@@ -6,7 +6,7 @@
 \usage{
 tmle_vimshift(shift_fxn = shift_additive_bounded,
   shift_fxn_inv = shift_additive_bounded_inv, shift_grid = seq(-1, 1,
-  by = 0.5), ...)
+  by = 0.5), max_shifted_ratio = 2, ...)
 }
 \arguments{
 \item{shift_fxn}{A \code{function} defining the type of shift to be applied
@@ -20,6 +20,12 @@ shift to be applied to the treatment. For an example, see
 shifts (on the level of the treatment) to be applied to the intervention.
 This is a value passed to the \code{function}s above for computing various
 values of the outcome under modulated values of the treatment.}
+
+\item{max_shifted_ratio}{A \code{numeric} value indicating the maximum
+tolerance for the ratio of the counterfactual and observed intervention
+densities. In particular, the shifted value of the intervention is assigned
+to a given observational unit when the ratio of counterfactual intervention
+density to the observed intervention density is below this value.}
 
 \item{...}{Additional arguments, passed to shift functions.}
 }

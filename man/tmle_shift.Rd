@@ -4,8 +4,8 @@
 \alias{tmle_shift}
 \title{Outcome under Shifted Treatment}
 \usage{
-tmle_shift(shift_fxn = shift_additive,
-  shift_fxn_inv = shift_additive_inv, shift_val = 1,
+tmle_shift(shift_fxn = shift_additive_bounded,
+  shift_fxn_inv = shift_additive_bounded_inv, shift_val = 1,
   max_shifted_ratio = 2, ...)
 }
 \arguments{

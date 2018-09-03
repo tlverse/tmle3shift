@@ -33,6 +33,7 @@ Imports:
     R6,
     uuid,
     methods,
+    data.table,
     sl3,
     tmle3
 Suggests:
@@ -42,7 +43,6 @@ Suggests:
     stats,
     ggplot2,
     tidyverse,
-    data.table,
     condensier,
     txshift,
     Rsolnp,

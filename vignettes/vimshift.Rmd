@@ -38,7 +38,6 @@ library(condensier)
 library(sl3)
 library(tmle3)
 library(tmle3shift)
-library(vimshift)
 set.seed(429153)
 ```
 

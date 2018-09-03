@@ -15,8 +15,8 @@ tmle3_Spec_shift <- R6::R6Class(
   class = TRUE,
   inherit = tmle3_Spec,
   public = list(
-    initialize = function(shift_fxn = additive_shift,
-                          shift_fxn_inv = additive_shift_inv,
+    initialize = function(shift_fxn = shift_additive_bounded,
+                          shift_fxn_inv = shift_additive_bounded_inv,
                           shift_val = 0,
                           max_shifted_ratio = 2,
                           ...) {
@@ -56,6 +56,8 @@ tmle3_Spec_shift <- R6::R6Class(
       )
 
       shifted_mean <- tmle3::Param_TSM$new(likelihood, intervention)
+
+      # output should be a list
       tmle_params <- list(shifted_mean)
       return(tmle_params)
     }
@@ -92,11 +94,12 @@ tmle3_Spec_shift <- R6::R6Class(
 #'
 #' @export
 #
-tmle_shift <- function(shift_fxn = shift_additive,
-                       shift_fxn_inv = shift_additive_inv,
+tmle_shift <- function(shift_fxn = shift_additive_bounded,
+                       shift_fxn_inv = shift_additive_bounded_inv,
                        shift_val = 1, max_shifted_ratio = 2, ...) {
   # TODO: unclear why this has to be in a factory function
-  tmle3_Spec_shift$new(shift_fxn, shift_fxn_inv, shift_val,
-                       max_shifted_ratio, ...)
+  tmle3_Spec_shift$new(shift_fxn, shift_fxn_inv,
+                       shift_val, max_shifted_ratio,
+                       ...)
 }
 

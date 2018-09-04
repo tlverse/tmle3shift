@@ -28,8 +28,10 @@
 shift_additive_bounded <- function(tmle_task, delta, likelihood_base,
                                    max_shifted_ratio, ...) {
   # ratio of observed and shifted intervention densities
-  intervention_density_ratio <- get_density_ratio(tmle_task, delta,
-                                                  likelihood_base)
+  intervention_density_ratio <- get_density_ratio(
+    tmle_task, delta,
+    likelihood_base
+  )
 
   # compute realistic value of intervention
   observed_a <- tmle_task$get_tmle_node("A")
@@ -47,8 +49,10 @@ shift_additive_bounded <- function(tmle_task, delta, likelihood_base,
 shift_additive_bounded_inv <- function(tmle_task, delta, likelihood_base,
                                        max_shifted_ratio, ...) {
   # ratio of observed and shifted intervention densities
-  intervention_density_ratio <- get_density_ratio(tmle_task, delta,
-                                                  likelihood_base)
+  intervention_density_ratio <- get_density_ratio(
+    tmle_task, delta,
+    likelihood_base
+  )
 
   # compute realistic value of intervention
   observed_a <- tmle_task$get_tmle_node("A")
@@ -87,8 +91,10 @@ get_density_ratio <- function(tmle_task, delta, likelihood_base) {
   shifted_a <- obs_a - delta
 
   # generate counterfactual task from shifted values
-  cf_task <- tmle_task$generate_counterfactual_task(UUIDgenerate(),
-                                                    data.table::data.table(A = shifted_a))
+  cf_task <- tmle_task$generate_counterfactual_task(
+    UUIDgenerate(),
+    data.table::data.table(A = shifted_a)
+  )
 
   # find densities associated with tasks with observed and shifted intervention
   emp_intervention_density <- likelihood_base$get_likelihoods(tmle_task, "A")
@@ -100,4 +106,3 @@ get_density_ratio <- function(tmle_task, delta, likelihood_base) {
   names(intervention_density_ratio) <- NULL
   return(intervention_density_ratio)
 }
-

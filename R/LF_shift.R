@@ -92,8 +92,8 @@ LF_shift <- R6::R6Class(
   inherit = LF_base,
   public = list(
     initialize = function(name, original_lf, likelihood_base,
-                          shift_function, shift_inverse, shift_delta,
-                          max_shifted_ratio, ...) {
+                              shift_function, shift_inverse, shift_delta,
+                              max_shifted_ratio, ...) {
       super$initialize(name, ..., type = "density")
       private$.original_lf <- original_lf
       private$.likelihood_base <- likelihood_base
@@ -107,19 +107,23 @@ LF_shift <- R6::R6Class(
     },
     get_density = function(tmle_task) {
       # get shifted data
-      shifted_values <- self$shift_inverse(tmle_task = tmle_task,
-                                           delta = self$shift_delta,
-                                           likelihood_base =
-                                             self$likelihood_base,
-                                           max_shifted_ratio =
-                                             self$max_shifted_ratio)
+      shifted_values <- self$shift_inverse(
+        tmle_task = tmle_task,
+        delta = self$shift_delta,
+        likelihood_base =
+          self$likelihood_base,
+        max_shifted_ratio =
+          self$max_shifted_ratio
+      )
 
       # generate cf_task data
       cf_data <- data.table(shifted_values)
       setnames(cf_data, self$name)
 
-      cf_task <- tmle_task$generate_counterfactual_task(UUIDgenerate(),
-                                                        cf_data)
+      cf_task <- tmle_task$generate_counterfactual_task(
+        UUIDgenerate(),
+        cf_data
+      )
 
       # get original likelihood for shifted data
       cf_likelihood <- self$original_lf$get_likelihood(cf_task)
@@ -127,12 +131,14 @@ LF_shift <- R6::R6Class(
       return(cf_likelihood)
     },
     cf_values = function(tmle_task) {
-      cf_values <- self$shift_function(tmle_task = tmle_task,
-                                       delta = self$shift_delta,
-                                       likelihood_base =
-                                         self$likelihood_base,
-                                       max_shifted_ratio =
-                                         self$max_shifted_ratio)
+      cf_values <- self$shift_function(
+        tmle_task = tmle_task,
+        delta = self$shift_delta,
+        likelihood_base =
+          self$likelihood_base,
+        max_shifted_ratio =
+          self$max_shifted_ratio
+      )
       return(cf_values)
     }
   ),

@@ -16,10 +16,10 @@ tmle3_Spec_shift <- R6::R6Class(
   inherit = tmle3_Spec,
   public = list(
     initialize = function(shift_fxn = shift_additive_bounded,
-                          shift_fxn_inv = shift_additive_bounded_inv,
-                          shift_val = 0,
-                          max_shifted_ratio = 2,
-                          ...) {
+                              shift_fxn_inv = shift_additive_bounded_inv,
+                              shift_val = 0,
+                              max_shifted_ratio = 2,
+                              ...) {
       options <- list(
         shift_fxn = shift_fxn,
         shift_fxn_inv = shift_fxn_inv,
@@ -49,10 +49,10 @@ tmle3_Spec_shift <- R6::R6Class(
       intervention <- tmle3::define_lf(LF_shift,
         name = "A",
         original_lf = likelihood$factor_list[["A"]],
-        likelihood_base = likelihood,                # initialized likelihood
-        shift_fxn, shift_fxn_inv,                    # shift fxns (from user)
-        shift_delta = delta_shift,                   # shift magnitude
-        max_shifted_ratio = max_shifted_ratio        # max ratio difference
+        likelihood_base = likelihood, # initialized likelihood
+        shift_fxn, shift_fxn_inv, # shift fxns (from user)
+        shift_delta = delta_shift, # shift magnitude
+        max_shifted_ratio = max_shifted_ratio # max ratio difference
       )
 
       shifted_mean <- tmle3::Param_TSM$new(likelihood, intervention)
@@ -98,8 +98,9 @@ tmle_shift <- function(shift_fxn = shift_additive_bounded,
                        shift_fxn_inv = shift_additive_bounded_inv,
                        shift_val = 1, max_shifted_ratio = 2, ...) {
   # TODO: unclear why this has to be in a factory function
-  tmle3_Spec_shift$new(shift_fxn, shift_fxn_inv,
-                       shift_val, max_shifted_ratio,
-                       ...)
+  tmle3_Spec_shift$new(
+    shift_fxn, shift_fxn_inv,
+    shift_val, max_shifted_ratio,
+    ...
+  )
 }
-

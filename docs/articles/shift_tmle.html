@@ -78,7 +78,7 @@
 <a href="https://nimahejazi.org">Nima Hejazi</a>, <a href="https://www.benkeserstatistics.com/">David Benkeser</a>, and <a href="https://github.com/jeremyrcoyle">Jeremy Coyle</a>
 </h4>
             
-            <h4 class="date">2018-08-31</h4>
+            <h4 class="date">2018-09-03</h4>
       
       
       <div class="hidden name"><code>shift_tmle.Rmd</code></div>
@@ -187,17 +187,17 @@
 <a href="#targeted-estimation-of-stochastic-interventions-effects" class="anchor"></a>Targeted Estimation of Stochastic Interventions Effects</h3>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">tmle_fit &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/tmle3/topics/tmle3">tmle3</a></span>(tmle_spec, data, node_list, learner_list)</a></code></pre></div>
 <pre><code>## 
-## Iter: 1 fn: 1829.0370     Pars:  0.896094052 0.103900582 0.000005364
-## Iter: 2 fn: 1829.0370     Pars:  0.896095210 0.103903613 0.000001177
+## Iter: 1 fn: 1829.0370     Pars:  0.896093912 0.103900184 0.000005901
+## Iter: 2 fn: 1829.0370     Pars:  0.896095163 0.103903496 0.000001341
 ## solnp--&gt; Completed in 2 iterations
 ## 
 ## density meta-learner fit:
 ## Lrnr_condensier_dhist_25_20_FALSE_NA_FALSE_NULL 
-##                                  0.896095209935 
+##                                  0.896095163365 
 ## Lrnr_condensier_dhist_20_20_FALSE_NA_FALSE_NULL 
-##                                  0.103903613208 
+##                                  0.103903495648 
 ## Lrnr_condensier_dhist_15_20_FALSE_NA_FALSE_NULL 
-##                                  0.000001176856</code></pre>
+##                                  0.000001340988</code></pre>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">tmle_fit</a></code></pre></div>
 <pre><code>## A tmle3_Fit that took 1 step(s)
 ##    type         param init_est tmle_est         se    lower    upper

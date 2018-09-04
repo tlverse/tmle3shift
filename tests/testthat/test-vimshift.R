@@ -96,7 +96,3 @@ tmle_fit <- fit_tmle3(tmle_task, likelihood_targeted, tmle_params, updater)
 tmle_fit
 tmle3_psi <- tmle_fit$summary$tmle_est
 
-## fit MSM to summarize shifts and get inference
-msm_data <- data.table(delta = delta_grid, psi = tmle3_psi)
-msm_fit <- lm(psi ~ -1 + delta, msm_data)
-

@@ -16,17 +16,17 @@ tmle3_Spec_vimshift <- R6::R6Class(
   inherit = tmle3_Spec,
   public = list(
     initialize = function(shift_fxn = shift_additive_bounded,
-                          shift_fxn_inv = shift_additive_bounded_inv,
-                          shift_grid = seq(-1, 1, by = 0.5),
-                          max_shifted_ratio = 2,
-                          ...) {
+                              shift_fxn_inv = shift_additive_bounded_inv,
+                              shift_grid = seq(-1, 1, by = 0.5),
+                              max_shifted_ratio = 2,
+                              ...) {
       options <- list(
         shift_fxn = shift_fxn,
         shift_fxn_inv = shift_fxn_inv,
         shift_grid = shift_grid,
         max_shifted_ratio = max_shifted_ratio
       )
-      shift_args_extra = list(...)
+      shift_args_extra <- list(...)
       do.call(super$initialize, options)
     },
     make_params = function(tmle_task, likelihood) {
@@ -50,13 +50,13 @@ tmle3_Spec_vimshift <- R6::R6Class(
       interventions <-
         lapply(shift_grid, function(x) {
           tmle3::define_lf(LF_shift,
-                           name = "A",
-                           original_lf = likelihood$factor_list[["A"]],
-                           likelihood_base = likelihood,   # initial likelihood
-                           shift_fxn, shift_fxn_inv,       # shift fxns
-                           shift_delta = x,
-                           max_shifted_ratio = max_shifted_ratio
-                          )
+            name = "A",
+            original_lf = likelihood$factor_list[["A"]],
+            likelihood_base = likelihood, # initial likelihood
+            shift_fxn, shift_fxn_inv, # shift fxns
+            shift_delta = x,
+            max_shifted_ratio = max_shifted_ratio
+          )
         })
 
       # create list of counterfactual means (parameters)
@@ -108,8 +108,9 @@ tmle_vimshift <- function(shift_fxn = shift_additive_bounded,
                           max_shifted_ratio = 2,
                           ...) {
   # TODO: unclear why this has to be in a factory function
-  tmle3_Spec_vimshift$new(shift_fxn, shift_fxn_inv,
-                          shift_grid, max_shifted_ratio,
-                          ...)
+  tmle3_Spec_vimshift$new(
+    shift_fxn, shift_fxn_inv,
+    shift_grid, max_shifted_ratio,
+    ...
+  )
 }
-

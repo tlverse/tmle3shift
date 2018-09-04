@@ -25,7 +25,9 @@
 #'
 #' @export
 #
-trend_msm <- function(object, delta_grid, level = 0.95) {
+trend_msm <- function(object, delta_grid, level = 0.95,
+                      weights = rep(1, length(delta_grid)),
+                      intercept = TRUE) {
   # this trend test only works for tmle3_fit type objects
   stopifnot(is(object, "tmle3_Fit"))
 
@@ -33,12 +35,22 @@ trend_msm <- function(object, delta_grid, level = 0.95) {
   stopifnot(length(object$estimates) > 1)
 
   # matrix of EIF(O_i) values and estimates across each parameter estimated
-  D <- sapply(object$estimates, `[[`, "IC")
-  F <- sapply(object$estimates, `[[`, "psi")
-  n_obs <- nrow(D)
+  eif_mat <- sapply(object$estimates, `[[`, "IC")
+  psi_vec <- sapply(object$estimates, `[[`, "psi")
 
-  j_vec <- unique(as.numeric(unlist(lapply(strsplit(row.names(F), " "),"[[", 2))))
+  # compute the MSM parameters
+  if (intercept) {
+    x_mat <- cbind(rep(1, length(delta_grid)), delta_grid)
+    omega_mat <- diag(weights)
+    s_mat <- solve(t(x_mat) %*% omega_mat %*% x_mat) %*% t(x_mat) %*% omega_mat
+    msm_param <- as.vector(s_mat %*% psi_vec)
+    msm_alpha <- msm_param[1]
+    msm_beta <- msm_param[2]
+  } else {
+    stop("Not yet implemented. Open an issue to request this functionality.")
+  }
 
+  # construct point estimates
   # log ratios
   R_n <- g(F)
 

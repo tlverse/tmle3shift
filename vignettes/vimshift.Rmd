@@ -12,7 +12,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r options, echo=FALSE}
+```{r options, echo=FALSE, eval=FALSE}
 options(scipen=999)
 ```
 
@@ -35,6 +35,7 @@ To start, let's load the packages we'll use and set a seed for simulation:
 library(tidyverse)
 library(data.table)
 library(condensier)
+library(ranger)
 library(sl3)
 library(tmle3)
 library(tmle3shift)
@@ -48,8 +49,7 @@ set.seed(429153)
 1. Start with a simple additive shift -- i.e., $d(a,w) = a + \delta$ if
    $a < u(w) - \delta$ or $d(a, w) = a$ if $a \geq u(w) - \delta$.
 
-2. The additive shift will have support everywhere (i.e.,
-   $a < u(w)$ is true everywhere).
+2. The additive shift will have support everywhere (i.e., $a < u(w)$ is true everywhere).
 
 3. The data structure that we now observe is $O = (W, A, Y)$.
 
@@ -61,14 +61,18 @@ n_obs <- 1000 # number of observations
 n_w <- 1 # number of baseline covariates
 tx_mult <- 2 # multiplier for the effect of W = 1 on the treatment
 
-## baseline covariates -- simple, binary
+# baseline covariates -- simple, binary
 W <- as.numeric(replicate(n_w, rbinom(n_obs, 1, 0.5)))
 
-## create treatment based on baseline W
+# create treatment based on baseline W
 A <- as.numeric(rnorm(n_obs, mean = tx_mult * W, sd = 1))
 
-## create outcome as a linear function of A, W + white noise
+# create outcome as a linear function of A, W + white noise
 Y <- A + W + rnorm(n_obs, mean = 0, sd = 1)
+
+# organize data and nodes for tmle3
+data <- data.table(W, A, Y)
+node_list <- list(W = "W", A = "A", Y = "Y")
 ```
 
 The above composes our observed data structure $O = (W, A, Y)$. To formally
@@ -162,11 +166,15 @@ lrn1_dens <- Lrnr_condensier$new(
   bin_method = "dhist"
 )
 lrn2_dens <- Lrnr_condensier$new(
-  nbins = 15, bin_estimator = lrn3,
+  nbins = 15, bin_estimator = lrn2,
+  bin_method = "dhist"
+)
+lrn3_dens <- Lrnr_condensier$new(
+  nbins = 20, bin_estimator = lrn3,
   bin_method = "dhist"
 )
 sl_lrn_dens <- Lrnr_sl$new(
-  learners = list(lrn1_dens, lrn2_dens),
+  learners = list(lrn1_dens, lrn2_dens, lrn3_dens),
   metalearner = Lrnr_solnp_density$new()
 )
 ```
@@ -207,50 +215,15 @@ in assessing the mean counterfactual outcome over a grid of shifts `r seq(-0.5,
 0.5, by = 0.5)` on the scale of the treatment $A$ (note that the numerical
 choice of shift is an arbitrarily chosen set of values for this example).
 
-```{r manual_vims, eval=FALSE}
-# manually fit VIMs over grid using tmle3shift
-shift_grid <- seq(-1, 1, 0.5)
-shift_grid <- shift_grid[shift_grid != 0]  # don't need to include zero
+```{r vim_spec_init}
+# what's the grid of shifts we wish to consider?
+delta_grid <- seq(-1, 1, 0.5)
 
-shifted_vims <- list()
-for (this_shift in seq_along(shift_grid)) {
-  # initialize a tmle specification
-  tmle_spec <- tmle_shift(shift_val = shift_grid[this_shift],
-                          shift_fxn = shift_additive_bounded,
-                          shift_fxn_inv = shift_additive_bounded_inv,
-                          max_intervention_ratio = 2)
-
-  ## define data (from tmle3_Spec base class)
-  tmle_task <- tmle_spec$make_tmle_task(data, node_list)
-
-  ## define likelihood (from tmle3_Spec base class)
-  likelihood_init <- tmle_spec$make_initial_likelihood(tmle_task, learner_list)
-
-  ## define update method (submodel and loss function)
-  updater <- tmle_spec$make_updater()
-  likelihood_targeted <- Targeted_Likelihood$new(likelihood_init, updater)
-
-  ## define param
-  tmle_params <- tmle_spec$make_params(tmle_task, likelihood_targeted)
-  updater$tmle_params <- tmle_params
-
-  ## fit tmle update
-  tmle_fit <- fit_tmle3(tmle_task, likelihood_targeted, tmle_params, updater)
-
-  ## extract results from tmle3_Fit object
-  tmle_fit
-  tmle3_psi <- tmle_fit$summary$tmle_est
-  tmle3_se <- tmle_fit$summary$se
-  tmle3_eif <- as.numeric(sapply(tmle_fit$estimates, `[[`, "IC"))
-  tmle3_out <- list(psi = tmle3_psi, se = tmle3_se, eif = tmle3_eif,
-                    delta = shift_grid[this_shift])
-
-  ## store parameter estimates across grid delta
-  shifted_vims[[this_shift]] <- tmle3_out
-}
+# initialize a tmle specification
+tmle_spec <- tmle_vimshift(shift_grid = delta_grid, max_shifted_ratio = 2)
 ```
 
-As seen above, the `tmle_shift` specification object (like all `tmle3_Spec`
+As seen above, the `tmle_vimshift` specification object (like all `tmle3_Spec`
 objects) does _not_ store the data for our specific analysis of interest. Later,
 we'll see that passing a data object directly to the `tmle3` wrapper function,
 alongside the instantiated `tmle_spec`, will serve to construct a `tmle3_Task`
@@ -259,45 +232,48 @@ object internally (see the `tmle3` documentation for details).
 
 ### Targeted Estimation of Stochastic Interventions Effects
 
-To estimate VIMs based on the grid of shift interventions, one may walk through
-the procedure to compute TML estimators one function at a time:
+One may walk through the step-by-step procedure for  fitting the TML estimator
+of the mean counterfactual outcome under each shift in the grid, using the
+machinery exposed by the [`tmle3` R package](https://tmle3.tlverse.org/) (see
+below); however, the step-by-step procedure is often not of interest.
 
-```{r fit_tmle_manual, echo=FALSE, eval=FALSE}
-# pulls apart the call to tmle3 that follows
-start_time <- proc.time()
+```{r fit_tmle_manual, eval=FALSE}
+# NOT RUN -- SEE NEXT CODE CHUNK
 
+# define data (from tmle3_Spec base class)
 tmle_task <- tmle_spec$make_tmle_task(data, node_list)
-task_time <- proc.time()
 
-initial_likelihood <- tmle_spec$make_initial_likelihood(tmle_task,
-                                                        learner_list)
-likelihood_time <- proc.time()
+# define likelihood (from tmle3_Spec base class)
+likelihood_init <- tmle_spec$make_initial_likelihood(tmle_task, learner_list)
 
+# define update method (fluctuation submodel and loss function)
 updater <- tmle_spec$make_updater()
+likelihood_targeted <- Targeted_Likelihood$new(likelihood_init, updater)
 
-targeted_likelihood <- tmle_spec$make_targeted_likelihood(initial_likelihood,
-                                                          updater)
+# invoke params specified in spec
+tmle_params <- tmle_spec$make_params(tmle_task, likelihood_targeted)
+updater$tmle_params <- tmle_params
 
-tmle_params <- tmle_spec$make_params(tmle_task, targeted_likelihood)
+# fit TML estimator update
+tmle_fit <- fit_tmle3(tmle_task, likelihood_targeted, tmle_params, updater)
 
-initial_likelihood$get_likelihood(tmle_task,"A")
-
-tmle_params[[1]]$clever_covariates(tmle_task)
-
-fit1 <- fit_tmle3(tmle_task, targeted_likelihood, tmle_params[[1]],
-                  updater)
+# extract results from tmle3_Fit object
+tmle_fit
 ```
 
-Rather than walking through the TML estimation procedure manually, one may use
-the `fit_tmle3` convenience function:
+Instead, one may invoke the `tmle3` convenience function to fit the series of
+TML estimators (one for each parameter defined by the grid delta) in a single
+function call:
 
-```{r fit_tmle, eval=FALSE}
-#tmle_fit <- tmle3(tmle_spec, data, node_list, learner_list)
-#tmle_fit
+```{r fit_tmle_auto}
+# fit the TML estimator
+tmle_fit <- tmle3(tmle_spec, data, node_list, learner_list)
+tmle_fit
 ```
 
 _Remark_: The `print` method of the resultant `tmle_fit` object conveniently
 displays the results from computing our TML estimator.
+
 
 ### Inference with Marginal Structural Models
 
@@ -367,6 +343,16 @@ where $\beta_0$ solves the following
 $$
 \sum_{\delta} h(\delta) \frac{d}{d\beta} f_{\beta}(\delta) (\psi_{\delta}(P_0)
 - m_{\beta}(\delta)) = 0.$$
+
+Inference from a working MSM is rather straightforward. To wit, the limiting
+distribution for $m_{\beta}(\delta)$ may be expressed
+$$\sqrt{n}(\beta_n - \beta_0) \to N(0, \Sigma),$$
+where $\Sigma$ is the empirical covariance matrix of $\text{EIF}_{\beta}(O)$.
+
+```{r msm_fit}
+msm <- trend_msm(tmle_fit, delta_grid)
+msm
+```
 
 ## References
 

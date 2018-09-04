@@ -51,6 +51,9 @@
   <a href="../articles/shift_tmle.html">Overview</a>
 </li>
 <li>
+  <a href="../articles/index.html">Articles</a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
@@ -78,7 +81,7 @@
 <a href="https://nimahejazi.org">Nima S. Hejazi</a>, <a href="https://github.com/jeremyrcoyle">Jeremy R. Coyle</a>, and <a href="https://vanderlaan-lab.org">Mark J. van der Laan</a>
 </h4>
             
-            <h4 class="date">2018-09-03</h4>
+            <h4 class="date">2018-09-04</h4>
       
       
       <div class="hidden name"><code>vimshift.Rmd</code></div>
@@ -95,10 +98,11 @@
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
 <a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(data.table)</a>
 <a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">library</span>(condensier)</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw">library</span>(sl3)</a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw">library</span>(tmle3)</a>
-<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="kw">library</span>(tmle3shift)</a>
-<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="kw">set.seed</span>(<span class="dv">429153</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw">library</span>(ranger)</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw">library</span>(sl3)</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="kw">library</span>(tmle3)</a>
+<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="kw">library</span>(tmle3shift)</a>
+<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="kw">set.seed</span>(<span class="dv">429153</span>)</a></code></pre></div>
 <hr>
 </div>
 <div id="data-and-notation" class="section level2">
@@ -117,14 +121,18 @@
 <a class="sourceLine" id="cb2-3" data-line-number="3">n_w &lt;-<span class="st"> </span><span class="dv">1</span> <span class="co"># number of baseline covariates</span></a>
 <a class="sourceLine" id="cb2-4" data-line-number="4">tx_mult &lt;-<span class="st"> </span><span class="dv">2</span> <span class="co"># multiplier for the effect of W = 1 on the treatment</span></a>
 <a class="sourceLine" id="cb2-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb2-6" data-line-number="6">## baseline covariates -- simple, binary</a>
+<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="co"># baseline covariates -- simple, binary</span></a>
 <a class="sourceLine" id="cb2-7" data-line-number="7">W &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">replicate</span>(n_w, <span class="kw">rbinom</span>(n_obs, <span class="dv">1</span>, <span class="fl">0.5</span>)))</a>
 <a class="sourceLine" id="cb2-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb2-9" data-line-number="9">## create treatment based on baseline W</a>
+<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="co"># create treatment based on baseline W</span></a>
 <a class="sourceLine" id="cb2-10" data-line-number="10">A &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">rnorm</span>(n_obs, <span class="dt">mean =</span> tx_mult <span class="op">*</span><span class="st"> </span>W, <span class="dt">sd =</span> <span class="dv">1</span>))</a>
 <a class="sourceLine" id="cb2-11" data-line-number="11"></a>
-<a class="sourceLine" id="cb2-12" data-line-number="12">## create outcome as a linear function of A, W + white noise</a>
-<a class="sourceLine" id="cb2-13" data-line-number="13">Y &lt;-<span class="st"> </span>A <span class="op">+</span><span class="st"> </span>W <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n_obs, <span class="dt">mean =</span> <span class="dv">0</span>, <span class="dt">sd =</span> <span class="dv">1</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb2-12" data-line-number="12"><span class="co"># create outcome as a linear function of A, W + white noise</span></a>
+<a class="sourceLine" id="cb2-13" data-line-number="13">Y &lt;-<span class="st"> </span>A <span class="op">+</span><span class="st"> </span>W <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n_obs, <span class="dt">mean =</span> <span class="dv">0</span>, <span class="dt">sd =</span> <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb2-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb2-15" data-line-number="15"><span class="co"># organize data and nodes for tmle3</span></a>
+<a class="sourceLine" id="cb2-16" data-line-number="16">data &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/data.table/topics/data.table">data.table</a></span>(W, A, Y)</a>
+<a class="sourceLine" id="cb2-17" data-line-number="17">node_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">W =</span> <span class="st">"W"</span>, <span class="dt">A =</span> <span class="st">"A"</span>, <span class="dt">Y =</span> <span class="st">"Y"</span>)</a></code></pre></div>
 <p>The above composes our observed data structure <span class="math inline">\(O = (W, A, Y)\)</span>. To formally express this fact using the <code>tlverse</code> grammar introduced by the <code>tmle3</code> package, we create a single data object and specify the functional relationships between the nodes in the <em>directed acyclic graph</em> (DAG) via <em>nonparametric structural equation models</em> (NPSEMs), reflected in the node list that we set up:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># organize data and nodes for tmle3</span></a>
 <a class="sourceLine" id="cb3-2" data-line-number="2">data &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/data.table/topics/data.table">data.table</a></span>(W, A, Y)</a>
@@ -176,13 +184,17 @@
 <a class="sourceLine" id="cb4-13" data-line-number="13">  <span class="dt">bin_method =</span> <span class="st">"dhist"</span></a>
 <a class="sourceLine" id="cb4-14" data-line-number="14">)</a>
 <a class="sourceLine" id="cb4-15" data-line-number="15">lrn2_dens &lt;-<span class="st"> </span>Lrnr_condensier<span class="op">$</span><span class="kw">new</span>(</a>
-<a class="sourceLine" id="cb4-16" data-line-number="16">  <span class="dt">nbins =</span> <span class="dv">15</span>, <span class="dt">bin_estimator =</span> lrn3,</a>
+<a class="sourceLine" id="cb4-16" data-line-number="16">  <span class="dt">nbins =</span> <span class="dv">15</span>, <span class="dt">bin_estimator =</span> lrn2,</a>
 <a class="sourceLine" id="cb4-17" data-line-number="17">  <span class="dt">bin_method =</span> <span class="st">"dhist"</span></a>
 <a class="sourceLine" id="cb4-18" data-line-number="18">)</a>
-<a class="sourceLine" id="cb4-19" data-line-number="19">sl_lrn_dens &lt;-<span class="st"> </span>Lrnr_sl<span class="op">$</span><span class="kw">new</span>(</a>
-<a class="sourceLine" id="cb4-20" data-line-number="20">  <span class="dt">learners =</span> <span class="kw">list</span>(lrn1_dens, lrn2_dens),</a>
-<a class="sourceLine" id="cb4-21" data-line-number="21">  <span class="dt">metalearner =</span> Lrnr_solnp_density<span class="op">$</span><span class="kw">new</span>()</a>
-<a class="sourceLine" id="cb4-22" data-line-number="22">)</a></code></pre></div>
+<a class="sourceLine" id="cb4-19" data-line-number="19">lrn3_dens &lt;-<span class="st"> </span>Lrnr_condensier<span class="op">$</span><span class="kw">new</span>(</a>
+<a class="sourceLine" id="cb4-20" data-line-number="20">  <span class="dt">nbins =</span> <span class="dv">20</span>, <span class="dt">bin_estimator =</span> lrn3,</a>
+<a class="sourceLine" id="cb4-21" data-line-number="21">  <span class="dt">bin_method =</span> <span class="st">"dhist"</span></a>
+<a class="sourceLine" id="cb4-22" data-line-number="22">)</a>
+<a class="sourceLine" id="cb4-23" data-line-number="23">sl_lrn_dens &lt;-<span class="st"> </span>Lrnr_sl<span class="op">$</span><span class="kw">new</span>(</a>
+<a class="sourceLine" id="cb4-24" data-line-number="24">  <span class="dt">learners =</span> <span class="kw">list</span>(lrn1_dens, lrn2_dens, lrn3_dens),</a>
+<a class="sourceLine" id="cb4-25" data-line-number="25">  <span class="dt">metalearner =</span> Lrnr_solnp_density<span class="op">$</span><span class="kw">new</span>()</a>
+<a class="sourceLine" id="cb4-26" data-line-number="26">)</a></code></pre></div>
 <p>As seen above, we can generate two different ensemble learners for the two nuisance regressions that must be fit in the process of computing this TML estimator. In particular, we use a Super Learner composed of an intercept model, a GLM, and a random forest (as implemented in <a href="cran.r-project.org/package=ranger">the <code>ranger</code> R package</a>) for fitting the outcome regressions (often denoted “Q” in the literature) while we use variations of these learners, through <a href="https://github.com/osofr/condensier">the <code>condensier</code> R package</a>, for the conditional density estimation needed in fitting the treatment mechanism (often denoted “g” in the literature).</p>
 <p>We make the above explicit with respect to standard notation by bundling the ensemble learners into a list object below:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># specify outcome and treatment regressions and create learner list</span></a>
@@ -196,55 +208,81 @@
 <a href="#initializing-vimshift-through-its-tmle3_spec" class="anchor"></a>Initializing <code>vimshift</code> through its <code>tmle3_Spec</code>
 </h3>
 <p>To start, we will initialize a specification for the TMLE of our parameter of interest (called a <code>tmle3_Spec</code> in the <code>tlverse</code> nomenclature) simply by calling <code>tmle_shift</code>. We specify the argument <code>shift_grid = seq(-0.5, 0.5, by = 0.5)</code> when initializing the <code>tmle3_Spec</code> object to communicate that we’re interested in assessing the mean counterfactual outcome over a grid of shifts -0.5, 0, 0.5 on the scale of the treatment <span class="math inline">\(A\)</span> (note that the numerical choice of shift is an arbitrarily chosen set of values for this example).</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># manually fit VIMs over grid using tmle3shift</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">shift_grid &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="fl">0.5</span>)</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">shift_grid &lt;-<span class="st"> </span>shift_grid[shift_grid <span class="op">!=</span><span class="st"> </span><span class="dv">0</span>]  <span class="co"># don't need to include zero</span></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb6-5" data-line-number="5">shifted_vims &lt;-<span class="st"> </span><span class="kw">list</span>()</a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="cf">for</span> (this_shift <span class="cf">in</span> <span class="kw">seq_along</span>(shift_grid)) {</a>
-<a class="sourceLine" id="cb6-7" data-line-number="7">  <span class="co"># initialize a tmle specification</span></a>
-<a class="sourceLine" id="cb6-8" data-line-number="8">  tmle_spec &lt;-<span class="st"> </span><span class="kw"><a href="../reference/tmle_shift.html">tmle_shift</a></span>(<span class="dt">shift_val =</span> shift_grid[this_shift],</a>
-<a class="sourceLine" id="cb6-9" data-line-number="9">                          <span class="dt">shift_fxn =</span> shift_additive_bounded,</a>
-<a class="sourceLine" id="cb6-10" data-line-number="10">                          <span class="dt">shift_fxn_inv =</span> shift_additive_bounded_inv,</a>
-<a class="sourceLine" id="cb6-11" data-line-number="11">                          <span class="dt">max_intervention_ratio =</span> <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb6-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb6-13" data-line-number="13">  ## define data (from tmle3_Spec base class)</a>
-<a class="sourceLine" id="cb6-14" data-line-number="14">  tmle_task &lt;-<span class="st"> </span>tmle_spec<span class="op">$</span><span class="kw">make_tmle_task</span>(data, node_list)</a>
-<a class="sourceLine" id="cb6-15" data-line-number="15"></a>
-<a class="sourceLine" id="cb6-16" data-line-number="16">  ## define likelihood (from tmle3_Spec base class)</a>
-<a class="sourceLine" id="cb6-17" data-line-number="17">  likelihood_init &lt;-<span class="st"> </span>tmle_spec<span class="op">$</span><span class="kw">make_initial_likelihood</span>(tmle_task, learner_list)</a>
-<a class="sourceLine" id="cb6-18" data-line-number="18"></a>
-<a class="sourceLine" id="cb6-19" data-line-number="19">  ## define update method (submodel and loss function)</a>
-<a class="sourceLine" id="cb6-20" data-line-number="20">  updater &lt;-<span class="st"> </span>tmle_spec<span class="op">$</span><span class="kw">make_updater</span>()</a>
-<a class="sourceLine" id="cb6-21" data-line-number="21">  likelihood_targeted &lt;-<span class="st"> </span>Targeted_Likelihood<span class="op">$</span><span class="kw">new</span>(likelihood_init, updater)</a>
-<a class="sourceLine" id="cb6-22" data-line-number="22"></a>
-<a class="sourceLine" id="cb6-23" data-line-number="23">  ## define param</a>
-<a class="sourceLine" id="cb6-24" data-line-number="24">  tmle_params &lt;-<span class="st"> </span>tmle_spec<span class="op">$</span><span class="kw">make_params</span>(tmle_task, likelihood_targeted)</a>
-<a class="sourceLine" id="cb6-25" data-line-number="25">  updater<span class="op">$</span>tmle_params &lt;-<span class="st"> </span>tmle_params</a>
-<a class="sourceLine" id="cb6-26" data-line-number="26"></a>
-<a class="sourceLine" id="cb6-27" data-line-number="27">  ## fit tmle update</a>
-<a class="sourceLine" id="cb6-28" data-line-number="28">  tmle_fit &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/tmle3/topics/tmle3_Fit">fit_tmle3</a></span>(tmle_task, likelihood_targeted, tmle_params, updater)</a>
-<a class="sourceLine" id="cb6-29" data-line-number="29"></a>
-<a class="sourceLine" id="cb6-30" data-line-number="30">  ## extract results from tmle3_Fit object</a>
-<a class="sourceLine" id="cb6-31" data-line-number="31">  tmle_fit</a>
-<a class="sourceLine" id="cb6-32" data-line-number="32">  tmle3_psi &lt;-<span class="st"> </span>tmle_fit<span class="op">$</span>summary<span class="op">$</span>tmle_est</a>
-<a class="sourceLine" id="cb6-33" data-line-number="33">  tmle3_se &lt;-<span class="st"> </span>tmle_fit<span class="op">$</span>summary<span class="op">$</span>se</a>
-<a class="sourceLine" id="cb6-34" data-line-number="34">  tmle3_eif &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">sapply</span>(tmle_fit<span class="op">$</span>estimates, <span class="st">`</span><span class="dt">[[</span><span class="st">`</span>, <span class="st">"IC"</span>))</a>
-<a class="sourceLine" id="cb6-35" data-line-number="35">  tmle3_out &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">psi =</span> tmle3_psi, <span class="dt">se =</span> tmle3_se, <span class="dt">eif =</span> tmle3_eif,</a>
-<a class="sourceLine" id="cb6-36" data-line-number="36">                    <span class="dt">delta =</span> shift_grid[this_shift])</a>
-<a class="sourceLine" id="cb6-37" data-line-number="37"></a>
-<a class="sourceLine" id="cb6-38" data-line-number="38">  ## store parameter estimates across grid delta</a>
-<a class="sourceLine" id="cb6-39" data-line-number="39">  shifted_vims[[this_shift]] &lt;-<span class="st"> </span>tmle3_out</a>
-<a class="sourceLine" id="cb6-40" data-line-number="40">}</a></code></pre></div>
-<p>As seen above, the <code>tmle_shift</code> specification object (like all <code>tmle3_Spec</code> objects) does <em>not</em> store the data for our specific analysis of interest. Later, we’ll see that passing a data object directly to the <code>tmle3</code> wrapper function, alongside the instantiated <code>tmle_spec</code>, will serve to construct a <code>tmle3_Task</code> object internally (see the <code>tmle3</code> documentation for details).</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># what's the grid of shifts we wish to consider?</span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">delta_grid &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="fl">0.5</span>)</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co"># initialize a tmle specification</span></a>
+<a class="sourceLine" id="cb6-5" data-line-number="5">tmle_spec &lt;-<span class="st"> </span><span class="kw"><a href="../reference/tmle_vimshift.html">tmle_vimshift</a></span>(<span class="dt">shift_grid =</span> delta_grid, <span class="dt">max_shifted_ratio =</span> <span class="dv">2</span>)</a></code></pre></div>
+<p>As seen above, the <code>tmle_vimshift</code> specification object (like all <code>tmle3_Spec</code> objects) does <em>not</em> store the data for our specific analysis of interest. Later, we’ll see that passing a data object directly to the <code>tmle3</code> wrapper function, alongside the instantiated <code>tmle_spec</code>, will serve to construct a <code>tmle3_Task</code> object internally (see the <code>tmle3</code> documentation for details).</p>
 </div>
 <div id="targeted-estimation-of-stochastic-interventions-effects" class="section level3">
 <h3 class="hasAnchor">
 <a href="#targeted-estimation-of-stochastic-interventions-effects" class="anchor"></a>Targeted Estimation of Stochastic Interventions Effects</h3>
-<p>To estimate VIMs based on the grid of shift interventions, one may walk through the procedure to compute TML estimators one function at a time:</p>
-<p>Rather than walking through the TML estimation procedure manually, one may use the <code>fit_tmle3</code> convenience function:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co">#tmle_fit &lt;- tmle3(tmle_spec, data, node_list, learner_list)</span></a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="co">#tmle_fit</span></a></code></pre></div>
+<p>One may walk through the step-by-step procedure for fitting the TML estimator of the mean counterfactual outcome under each shift in the grid, using the machinery exposed by the <a href="https://tmle3.tlverse.org/"><code>tmle3</code> R package</a> (see below); however, the step-by-step procedure is often not of interest.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co"># NOT RUN -- SEE NEXT CODE CHUNK</span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co"># define data (from tmle3_Spec base class)</span></a>
+<a class="sourceLine" id="cb7-4" data-line-number="4">tmle_task &lt;-<span class="st"> </span>tmle_spec<span class="op">$</span><span class="kw">make_tmle_task</span>(data, node_list)</a>
+<a class="sourceLine" id="cb7-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co"># define likelihood (from tmle3_Spec base class)</span></a>
+<a class="sourceLine" id="cb7-7" data-line-number="7">likelihood_init &lt;-<span class="st"> </span>tmle_spec<span class="op">$</span><span class="kw">make_initial_likelihood</span>(tmle_task, learner_list)</a>
+<a class="sourceLine" id="cb7-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co"># define update method (fluctuation submodel and loss function)</span></a>
+<a class="sourceLine" id="cb7-10" data-line-number="10">updater &lt;-<span class="st"> </span>tmle_spec<span class="op">$</span><span class="kw">make_updater</span>()</a>
+<a class="sourceLine" id="cb7-11" data-line-number="11">likelihood_targeted &lt;-<span class="st"> </span>Targeted_Likelihood<span class="op">$</span><span class="kw">new</span>(likelihood_init, updater)</a>
+<a class="sourceLine" id="cb7-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="co"># invoke params specified in spec</span></a>
+<a class="sourceLine" id="cb7-14" data-line-number="14">tmle_params &lt;-<span class="st"> </span>tmle_spec<span class="op">$</span><span class="kw">make_params</span>(tmle_task, likelihood_targeted)</a>
+<a class="sourceLine" id="cb7-15" data-line-number="15">updater<span class="op">$</span>tmle_params &lt;-<span class="st"> </span>tmle_params</a>
+<a class="sourceLine" id="cb7-16" data-line-number="16"></a>
+<a class="sourceLine" id="cb7-17" data-line-number="17"><span class="co"># fit TML estimator update</span></a>
+<a class="sourceLine" id="cb7-18" data-line-number="18">tmle_fit &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/tmle3/topics/tmle3_Fit">fit_tmle3</a></span>(tmle_task, likelihood_targeted, tmle_params, updater)</a>
+<a class="sourceLine" id="cb7-19" data-line-number="19"></a>
+<a class="sourceLine" id="cb7-20" data-line-number="20"><span class="co"># extract results from tmle3_Fit object</span></a>
+<a class="sourceLine" id="cb7-21" data-line-number="21">tmle_fit</a></code></pre></div>
+<p>Instead, one may invoke the <code>tmle3</code> convenience function to fit the series of TML estimators (one for each parameter defined by the grid delta) in a single function call:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co"># fit the TML estimator</span></a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">tmle_fit &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/tmle3/topics/tmle3">tmle3</a></span>(tmle_spec, data, node_list, learner_list)</a></code></pre></div>
+<pre><code>## speedglm::speedglm.wfit failed, falling back on stats:glm.fit; Error in solve.default(XTX, XTz, tol = tol.solve) : 
+##   Lapack routine dgesv: system is exactly singular: U[2,2] = 0
+## 
+## speedglm::speedglm.wfit failed, falling back on stats:glm.fit; Error in solve.default(XTX, XTz, tol = tol.solve) : 
+##   Lapack routine dgesv: system is exactly singular: U[2,2] = 0
+## 
+## speedglm::speedglm.wfit failed, falling back on stats:glm.fit; Error in solve.default(XTX, XTz, tol = tol.solve) : 
+##   Lapack routine dgesv: system is exactly singular: U[2,2] = 0
+## 
+## speedglm::speedglm.wfit failed, falling back on stats:glm.fit; Error in solve.default(XTX, XTz, tol = tol.solve) : 
+##   Lapack routine dgesv: system is exactly singular: U[2,2] = 0
+## 
+## speedglm::speedglm.wfit failed, falling back on stats:glm.fit; Error in solve.default(XTX, XTz, tol = tol.solve) : 
+##   Lapack routine dgesv: system is exactly singular: U[2,2] = 0</code></pre>
+<pre><code>## 
+## Iter: 1 fn: 1827.3543     Pars:  0.8883760494 0.1116233443 0.0000006056
+## Iter: 2 fn: 1827.3543     Pars:  0.8883761942 0.1116236391 0.0000001667
+## solnp--&gt; Completed in 2 iterations
+## 
+## density meta-learner fit:
+## Lrnr_condensier_dhist_25_20_FALSE_NA_FALSE_NULL 
+##                                    8.883762e-01 
+## Lrnr_condensier_dhist_15_20_FALSE_NA_FALSE_NULL 
+##                                    1.116236e-01 
+## Lrnr_condensier_dhist_20_20_FALSE_NA_FALSE_NULL 
+##                                    1.667140e-07</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">tmle_fit</a></code></pre></div>
+<pre><code>## A tmle3_Fit that took 1 step(s)
+##    type         param  init_est tmle_est         se     lower     upper
+## 1:  TSM E[Y_{A=NULL}] 0.5999507 0.604834 0.06315805 0.4810465 0.7286215
+## 2:  TSM E[Y_{A=NULL}] 1.0481937 1.058459 0.06634296 0.9284288 1.1884885
+## 3:  TSM E[Y_{A=NULL}] 1.5427535 1.543276 0.06656993 1.4128016 1.6737509
+## 4:  TSM E[Y_{A=NULL}] 2.0352548 2.041327 0.06514262 1.9136494 2.1690037
+## 5:  TSM E[Y_{A=NULL}] 2.4907026 2.495396 0.06071568 2.3763950 2.6143961
+##    psi_transformed lower_transformed upper_transformed
+## 1:        0.604834         0.4810465         0.7286215
+## 2:        1.058459         0.9284288         1.1884885
+## 3:        1.543276         1.4128016         1.6737509
+## 4:        2.041327         1.9136494         2.1690037
+## 5:        2.495396         2.3763950         2.6143961</code></pre>
 <p><em>Remark</em>: The <code>print</code> method of the resultant <code>tmle_fit</code> object conveniently displays the results from computing our TML estimator.</p>
 </div>
 <div id="inference-with-marginal-structural-models" class="section level3">
@@ -271,6 +309,12 @@ m_{\beta}(\delta) \frac{d}{d\beta} m_{\beta}(\delta)^t \right)^{-1} \cdot
 m_{\beta}(\delta))\right)h(\delta),\]</span> where <span class="math inline">\(\beta_0\)</span> solves the following <span class="math display">\[
 \sum_{\delta} h(\delta) \frac{d}{d\beta} f_{\beta}(\delta) (\psi_{\delta}(P_0)
 - m_{\beta}(\delta)) = 0.\]</span></p>
+<p>Inference from a working MSM is rather straightforward. To wit, the limiting distribution for <span class="math inline">\(m_{\beta}(\delta)\)</span> may be expressed <span class="math display">\[\sqrt{n}(\beta_n - \beta_0) \to N(0, \Sigma),\]</span> where <span class="math inline">\(\Sigma\)</span> is the empirical covariance matrix of <span class="math inline">\(\text{EIF}_{\beta}(O)\)</span>.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">msm &lt;-<span class="st"> </span><span class="kw"><a href="../reference/trend_msm.html">trend_msm</a></span>(tmle_fit, delta_grid)</a>
+<a class="sourceLine" id="cb13-2" data-line-number="2">msm</a></code></pre></div>
+<pre><code>##               ci_low param_est   ci_high   param_se       p_value
+## intercept  1.4242016 1.5486582 1.6731148 0.06349942 2.262865e-131
+## delta_grid 0.9279261 0.9527982 0.9776703 0.01269010  0.000000e+00</code></pre>
 </div>
 </div>
 <div id="references" class="section level2 unnumbered">

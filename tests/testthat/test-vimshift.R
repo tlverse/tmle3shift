@@ -3,7 +3,6 @@ context("Variable importance for shift interventions works?")
 library(uuid)
 library(assertthat)
 library(data.table)
-library(future)
 library(sl3)
 library(tmle3)
 library(ranger)
@@ -94,5 +93,7 @@ tmle_fit <- fit_tmle3(tmle_task, likelihood_targeted, tmle_params, updater)
 
 ## extract results from tmle3_Fit object
 tmle_fit
-tmle3_psi <- tmle_fit$summary$tmle_est
 
+## use MSM to summarize results
+msm <- trend_msm(tmle_fit, delta_grid)
+msm

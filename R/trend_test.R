@@ -25,7 +25,7 @@
 #'
 #' @export
 #
-trend_test <- function(object, level = 0.95) {
+trend_msm <- function(object, delta_grid, level = 0.95) {
   # this trend test only works for tmle3_fit type objects
   stopifnot(is(object, "tmle3_Fit"))
 
@@ -35,14 +35,15 @@ trend_test <- function(object, level = 0.95) {
   # matrix of EIF(O_i) values and estimates across each parameter estimated
   D <- sapply(object$estimates, `[[`, "IC")
   F <- sapply(object$estimates, `[[`, "psi")
-  n <- nrow(D)
+  n_obs <- nrow(D)
+
   j_vec <- unique(as.numeric(unlist(lapply(strsplit(row.names(F), " "),"[[", 2))))
 
   # log ratios
   R_n <- g(F)
 
   # effect estimates
-  est <- h(F, D, j_vec)
+  est <- h(F, D, delta_grid)
   alpha_n <- est[1]
   beta_n <- est[2]
 
@@ -89,9 +90,9 @@ print.trend_test <- function(x, digits = 3, ...) {
 #'  treatment = 0 and treatment = 1 for each type.
 #' @param D A matrix of variance estimates corresponding with the vector
 #'  \code{F}.
-#' @param j_vec Vector of genetic distances
+#' @param grid Vector of posited shifts
 #
-h <- function(F, D, j_vec) {
+h <- function(F, D, grid) {
   R_n <- g(F)
   K <- length(F)/2
   nabla_g <- grad_g(F)
@@ -114,7 +115,7 @@ grad_h <- function(F, D, j_vec) {
   R_n <- g(F)
   K <- length(F)/2
   nabla_g <- grad_g(F)
-  Upsilon_n <- nabla_g %*% cov(D) %*% t(nabla_g) 
+  Upsilon_n <- as.matrix(F) %*% cov(D) %*% t(F)
   # design matrix
   X <- cbind(rep(1,length(j_vec)), j_vec)
   Upsilon_inv <- solve(Upsilon_n)
@@ -123,29 +124,4 @@ grad_h <- function(F, D, j_vec) {
   tmp2 <- S_n[2, sort(rep(1:K, 2))]
   matrix(tmp*tmp2, ncol = 1)
 } 
-
-#' Helper function to got log ratio of cumulative incidences
-#'
-#' @param F A vector of cumulative incidence estimates with alternating
-#'  treatment = 0 and treatment = 1 for each type.
-#
-g <- function(F) {
-  matrix(log(F[seq(1, length(F), 2)] / F[seq(2, length(F), 2)]), ncol = 1)
-}
-
-#' Helper function to compute the gradient for the log ratio
-#' transformation of the cumulative incidence estimates.
-#'
-#' @param F A vector of cumulative incidence estimates with alternating
-#'  treatment = 0 and treatment = 1 for each type.
-#
-grad_g <- function(F) {
-  K <- length(F) / 2
-  tmp_vec <- rep(0, 2*K^2)
-  ind <- as.numeric(paste0(sort(rep((1:K) - 1, 2)), 1:length(F)))
-  ind[length(ind)] <- 2*K^2
-  tmp_vec[ind] <- (-1)^(2:(length(F)+1)) * (1 / F)
-  tmp <- matrix(tmp_vec, nrow = K, byrow = TRUE)
-  tmp
-}
 

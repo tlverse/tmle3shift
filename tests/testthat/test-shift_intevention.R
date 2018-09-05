@@ -70,7 +70,11 @@ learner_list <- list(Y = Q_learner, A = g_learner)
 ################################################################################
 
 # initialize a tmle specification
-tmle_spec <- tmle_shift(shift_val = 0.5)
+tmle_spec <- tmle_shift(
+  shift_val = 0.5,
+  shift_fxn = shift_additive,
+  shift_fxn_inv = shift_additive_inv
+)
 
 ## define data (from tmle3_Spec base class)
 tmle_task <- tmle_spec$make_tmle_task(data, node_list)

@@ -4,8 +4,7 @@
 \alias{trend_msm}
 \title{Test for a trend in the effect of shift interventions}
 \usage{
-trend_msm(tmle_fit, delta_grid, level = 0.95, weights = rep(1,
-  length(delta_grid)))
+trend_msm(tmle_fit, delta_grid, level = 0.95, weights = NULL)
 }
 \arguments{
 \item{tmle_fit}{An object of class \code{tmle3_Fit}, containing estimates of
@@ -17,8 +16,10 @@ shift parameter used in computing each of the TML estimates.}
 \item{level}{The nominal coverage probability of the confidence interval.}
 
 \item{weights}{A \code{numeric} vector indicating the weights (if any) to be
-applied to each of the posited values of the shift parameter delta. The
-default is equal weighting across all shift values.}
+applied to each of the estimated mean counterfactual outcomes under posited
+values of the shift parameter delta. The default is to weight each estimate
+by the inverse of its variance, in order to improve stability; however, this
+may be changed depending on the exact choice of shift function.}
 }
 \description{
 Test for a trend in the effect of shift interventions

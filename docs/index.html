@@ -5,11 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Targeted Maximum Likelihood Estimation of Effects of Shift Interventions • tmle3shift</title>
+<title>Targeted Maximum Likelihood Estimation of the Effects of Stochastic Shift
+  Interventions • tmle3shift</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="jquery.sticky-kit.min.js"></script><script src="pkgdown.js"></script><meta property="og:title" content="Targeted Maximum Likelihood Estimation of Effects of Shift Interventions">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
+<script src="pkgdown.js"></script><meta property="og:title" content="Targeted Maximum Likelihood Estimation of the Effects of Stochastic Shift
+  Interventions">
 <meta property="og:description" content="Targeted maximum likelihood estimation (TMLE) of population-level
     causal effects under stochastic treatment regimes and related nonparametric
     variable importance analysis. Tools are provided for computing the TMLE of a
@@ -58,6 +60,9 @@
   <a href="articles/shift_tmle.html">Overview</a>
 </li>
 <li>
+  <a href="articles/index.html">Articles</a>
+</li>
+<li>
   <a href="reference/index.html">Reference</a>
 </li>
       </ul>
@@ -90,15 +95,15 @@
 </h1></div>
 
 <blockquote>
-<p>Targeted Learning of Stochastic Intervention Effects, done <code>tlverse</code>-style</p>
+<p>Targeted Learning and Variable Importance with Stochastic Interventions</p>
 </blockquote>
-<p><strong>Authors:</strong> <a href="https://nimahejazi.org">Nima Hejazi</a> and <a href="https://github.com/jeremyrcoyle">Jeremy Coyle</a></p>
+<p><strong>Authors:</strong> <a href="https://nimahejazi.org">Nima Hejazi</a>, <a href="https://github.com/jeremyrcoyle">Jeremy Coyle</a>, and <a href="https://vanderlaan-lab.org">Mark van der Laan</a></p>
 <hr>
 <div id="whats-tmle3shift" class="section level2">
 <h2 class="hasAnchor">
 <a href="#whats-tmle3shift" class="anchor"></a>What’s <code>tmle3shift</code>?</h2>
-<p><code>tmle3shift</code> is an adapter/extension R package in the <code>tlverse</code> ecosystem that exposes support for the estimation of target parameters defined as shifts of interventions of continuous-valued treatments by way of stochastic treatment regimes. As an adapter package, <code>tmle3shift</code> builds upon the core <code>tlverse</code> grammar introduced by <code>tmle3</code>, a general framework that supports the implementation of a range of TMLE parameters through a unified interface. For a detailed description of the target parameter, TML estimator, and algorithm implemented in <code>tmle3shift</code>, the interested reader is invited to consult <span class="citation">Muñoz and van der Laan (2012)</span> and <span class="citation">Díaz and van der Laan (2018)</span>.</p>
-<p>For a general discussion of the framework of targeted minimum loss-based estimation and the role this methodology plays in statistical and causal inference, the canonical references are <span class="citation">van der Laan and Rose (2011)</span> and <span class="citation">van der Laan and Rose (2018)</span>.</p>
+<p><code>tmle3shift</code> is an adapter/extension R package in the <code>tlverse</code> ecosystem that exposes support for the estimation of a target parameter defined as the mean counterfactual outcome under a posited shift of the natural value of a continuous-valued intervention, using the formalism of stochastic treatment regimes. As an adapter package, <code>tmle3shift</code> builds upon the core <code>tlverse</code> grammar introduced by <code>tmle3</code>, a general framework that supports the implementation of a range of TMLE parameters through a unified interface. For a detailed description of the target parameter, TML estimator, and algorithm implemented in <code>tmle3shift</code>, the interested reader is invited to consult <span class="citation">Díaz and van der Laan (2012)</span> and <span class="citation">Díaz and van der Laan (2018)</span>. For a general discussion of the framework of targeted minimum loss-based estimation and the role this methodology plays in statistical and causal inference, the canonical references are <span class="citation">van der Laan and Rose (2011)</span> and <span class="citation">van der Laan and Rose (2018)</span>.</p>
+<p>Building on the original work surrounding the TML estimator for the aforementioned target parameter, <code>tmle3shift</code> additionally implements a set of techniques for variable importance analysis, allowing for a sequence of mean counterfactual outcomes, estimated under a sequence of posited shifts, to be summarized via a working marginal structural model (MSM). The goal of this work is to build upon the <code>tlverse</code> framework and the estimation methodology implemented for a single mean counterfactual outcome in order to introduce an end-to-end methodology for variable importance analyses.</p>
 <hr>
 </div>
 <div id="installation" class="section level2">
@@ -119,7 +124,7 @@
 <a href="#related" class="anchor"></a>Related</h2>
 <ul>
 <li>
-<a href="https://github.com/nhejazi/txshift">R/<code>txshift</code></a> - An R package providing an independent implementation of the same TML estimation procedure and statistical methodology as is made available here, without reliance on the <code>tlverse</code> grammar provided by <code>tmle3</code>.</li>
+<a href="https://github.com/nhejazi/txshift">R/<code>txshift</code></a> - An R package providing an independent implementation of the TML estimation procedure and statistical methodology as is made available here, without reliance on the <code>tlverse</code> grammar provided by <code>tmle3</code>.</li>
 </ul>
 <hr>
 </div>
@@ -139,11 +144,11 @@
 <h2 class="hasAnchor">
 <a href="#references" class="anchor"></a>References</h2>
 <div id="refs" class="references">
-<div id="ref-diaz2018stochastic">
-<p>Díaz, Iván, and Mark J van der Laan. 2018. “Stochastic Treatment Regimes.” In <em>Targeted Learning in Data Science: Causal Inference for Complex Longitudinal Studies</em>, 167–80. Springer Science &amp; Business Media.</p>
+<div id="ref-diaz2012population">
+<p>Díaz, Iván, and Mark J van der Laan. 2012. “Population Intervention Causal Effects Based on Stochastic Interventions.” <em>Biometrics</em> 68 (2). Wiley Online Library: 541–49.</p>
 </div>
-<div id="ref-munoz2012population">
-<p>Muñoz, Iván Díaz, and Mark J van der Laan. 2012. “Population Intervention Causal Effects Based on Stochastic Interventions.” <em>Biometrics</em> 68 (2). Wiley Online Library: 541–49.</p>
+<div id="ref-diaz2018stochastic">
+<p>———. 2018. “Stochastic Treatment Regimes.” In <em>Targeted Learning in Data Science: Causal Inference for Complex Longitudinal Studies</em>, 167–80. Springer Science &amp; Business Media.</p>
 </div>
 <div id="ref-vdl2011targeted">
 <p>van der Laan, Mark J, and Sherri Rose. 2011. <em>Targeted Learning: Causal Inference for Observational and Experimental Data</em>. Springer Science &amp; Business Media.</p>
@@ -184,7 +189,7 @@
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://travis-ci.org/tlverse/tmle3shift"><img src="https://travis-ci.org/tlverse/tmle3shift.svg?branch=master" alt="Travis-CI Build Status"></a></li>
-<li><a href="https://ci.appveyor.com/project/tlverse/tmle3shift"><img src="https://ci.appveyor.com/api/projects/status/github/tlverse/tmle3shift?branch=master&amp;svg=true" alt="AppVeyor Build Status"></a></li>
+<li><a href="https://ci.appveyor.com/project/nhejazi/tmle3shift"><img src="https://ci.appveyor.com/api/projects/status/github/tlverse/tmle3shift?branch=master&amp;svg=true" alt="AppVeyor Build Status"></a></li>
 <li><a href="https://codecov.io/github/tlverse/tmle3shift?branch=master"><img src="https://img.shields.io/codecov/c/github/tlverse/tmle3shift/master.svg" alt="Coverage Status"></a></li>
 <li><a href="http://www.repostatus.org/#active"><img src="http://www.repostatus.org/badges/latest/active.svg" alt="Project Status: Active – The project has reached a stable, usable state and is being actively developed."></a></li>
 <li><a href="http://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/License-GPL%20v3-blue.svg" alt="License: GPL v3"></a></li>

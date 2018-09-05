@@ -21,14 +21,17 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
 
 
 
 <meta property="og:title" content="Function reference" />
+
 
 
 <!-- mathjax -->
@@ -81,6 +84,9 @@
   <a href="../articles/shift_tmle.html">Overview</a>
 </li>
 <li>
+  <a href="../articles/index.html">Articles</a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
@@ -110,6 +116,7 @@
     <table class="ref-index">
 
     <colgroup>
+      
       <col class="alias" />
       <col class="title" />
     </colgroup>
@@ -122,29 +129,47 @@
         </th>
       </tr>
       <tr>
-        <!--  -->
+        
         <td>
           <p><code><a href="LF_shift.html">LF_shift</a></code> </p>
         </td>
         <td><p>Shifted Likelihood Factor</p></td>
       </tr><tr>
-        <!--  -->
+        
         <td>
           <p><code><a href="additive_shifting.html">shift_additive()</a></code> <code><a href="additive_shifting.html">shift_additive_inv()</a></code> </p>
         </td>
-        <td><p>Additive Shifts of Continuous-Valued Interventions</p></td>
+        <td><p>Additive Shifts of Continuous-Valued Interventions Without Bounds</p></td>
       </tr><tr>
-        <!--  -->
+        
         <td>
           <p><code><a href="tmle3_Spec_shift.html">tmle3_Spec_shift</a></code> </p>
         </td>
-        <td><p>Defines a TML Estimator for the Outcome under a Delta-Shifted Treatment</p></td>
+        <td><p>Defines a TML Estimator for the Outcome under a Shifted Treatment</p></td>
       </tr><tr>
-        <!--  -->
+        
+        <td>
+          <p><code><a href="tmle3_Spec_vimshift.html">tmle3_Spec_vimshift</a></code> </p>
+        </td>
+        <td><p>Defines a TML Estimator for Variable Importance for Continuous Interventions</p></td>
+      </tr><tr>
+        
         <td>
           <p><code><a href="tmle_shift.html">tmle_shift()</a></code> </p>
         </td>
-        <td><p>Outcome under Delta-Shifted Treatment</p></td>
+        <td><p>Outcome under Shifted Treatment</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="tmle_vimshift.html">tmle_vimshift()</a></code> </p>
+        </td>
+        <td><p>Outcome Under a Grid of Delta-Shifted Interventions</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="trend_msm.html">trend_msm()</a></code> </p>
+        </td>
+        <td><p>Test for a trend in the effect of shift interventions</p></td>
       </tr>
     </tbody>
     </table>

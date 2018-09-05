@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Additive Shifts of Continuous-Valued Interventions Without Bounds — shift_additive • tmle3shift</title>
+<title>Additive Shifts of Continuous-Valued Interventions based on Bounded Densities — shift_additive_bounded • tmle3shift</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,10 @@
 
 
 
-<meta property="og:title" content="Additive Shifts of Continuous-Valued Interventions Without Bounds — shift_additive" />
+<meta property="og:title" content="Additive Shifts of Continuous-Valued Interventions based on Bounded Densities — shift_additive_bounded" />
 
-<meta property="og:description" content="Additive Shifts of Continuous-Valued Interventions Without Bounds" />
+<meta property="og:description" content="Additive Shifts of Continuous-Valued Interventions based on Bounded Densities
+Compute Ratio of Observed and Counterfactual Intervention Densities" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -113,20 +114,25 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Additive Shifts of Continuous-Valued Interventions Without Bounds</h1>
+    <h1>Additive Shifts of Continuous-Valued Interventions based on Bounded Densities</h1>
     
-    <div class="hidden name"><code>additive_shifting.Rd</code></div>
+    <div class="hidden name"><code>additive_shifting_bounded.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Additive Shifts of Continuous-Valued Interventions Without Bounds</p>
+    <p>Additive Shifts of Continuous-Valued Interventions based on Bounded Densities</p>
+<p>Compute Ratio of Observed and Counterfactual Intervention Densities</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>shift_additive</span>(<span class='no'>tmle_task</span>, <span class='kw'>delta</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>shift_additive_bounded</span>(<span class='no'>tmle_task</span>, <span class='no'>delta</span>, <span class='no'>likelihood_base</span>,
+  <span class='no'>max_shifted_ratio</span>, <span class='no'>...</span>)
 
-<span class='fu'>shift_additive_inv</span>(<span class='no'>tmle_task</span>, <span class='kw'>delta</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>shift_additive_bounded_inv</span>(<span class='no'>tmle_task</span>, <span class='no'>delta</span>, <span class='no'>likelihood_base</span>,
+  <span class='no'>max_shifted_ratio</span>, <span class='no'>...</span>)
+
+<span class='fu'>get_density_ratio</span>(<span class='no'>tmle_task</span>, <span class='no'>delta</span>, <span class='no'>likelihood_base</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -146,15 +152,52 @@ inverse additive shift, the specified value will be subtracted from the
 observed value of the treatment node "A".</p></td>
     </tr>
     <tr>
+      <th>likelihood_base</th>
+      <td><p>The base observed data likelihood, to be used in
+implementing guards that ensure that the shifted treatment does not violate
+the bounds induced by the support of the intervention, conditional on the
+covariates.</p></td>
+    </tr>
+    <tr>
+      <th>max_shifted_ratio</th>
+      <td><p>A <code>numeric</code> value indicating maximum tolerance
+for the ratio of the counterfactual and observed intervention densities. In
+particular, the shifted value of the intervention is assigned to a given
+observational unit when the ratio of the counterfactual intervention density
+to the observed intervention density is below this value.</p></td>
+    </tr>
+    <tr>
       <th>...</th>
       <td><p>Additional arguments (currently unused).</p></td>
+    </tr>
+    <tr>
+      <th>tmle_task</th>
+      <td><p>A <code>tmle3_Task</code> object containing data and nodes, as
+described and implemented in the <code>tmle3</code> package. Please refer to the
+documentation and supporting materials of that package for details.</p></td>
+    </tr>
+    <tr>
+      <th>delta</th>
+      <td><p>A <code>numeric</code> value giving a value of the shift to be applied
+to the treatment. This is an additive shift so the value is merely to be
+added to the observed value of the treatment node "A". In the case of the
+inverse additive shift, the specified value will be subtracted from the
+observed value of the treatment node "A".</p></td>
+    </tr>
+    <tr>
+      <th>likelihood_base</th>
+      <td><p>The base observed data likelihood, to be used in
+implementing guards that ensure that the shifted treatment does not violate
+the bounds induced by the support of the intervention, conditional on the
+covariates.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other shifting_interventions: <code><a href='additive_shifting_bounded.html'>shift_additive_bounded</a></code></p>
-<p>Other shifting_interventions: <code><a href='additive_shifting_bounded.html'>shift_additive_bounded</a></code></p></div>
+    <div class='dont-index'><p>Other shifting_interventions: <code><a href='additive_shifting.html'>shift_additive</a></code></p>
+<p>Other shifting_interventions: <code><a href='additive_shifting.html'>shift_additive</a></code></p>
+<p>Other shifting_interventions: <code><a href='additive_shifting.html'>shift_additive</a></code></p></div>
     
 
   </div>

@@ -10,12 +10,27 @@
     <loc>https://tmle3shift.tlverse.org/reference/additive_shifting.html</loc>
   </url>
   <url>
+    <loc>https://tmle3shift.tlverse.org/reference/additive_shifting_bounded.html</loc>
+  </url>
+  <url>
     <loc>https://tmle3shift.tlverse.org/reference/tmle3_Spec_shift.html</loc>
+  </url>
+  <url>
+    <loc>https://tmle3shift.tlverse.org/reference/tmle3_Spec_vimshift.html</loc>
   </url>
   <url>
     <loc>https://tmle3shift.tlverse.org/reference/tmle_shift.html</loc>
   </url>
   <url>
+    <loc>https://tmle3shift.tlverse.org/reference/tmle_vimshift.html</loc>
+  </url>
+  <url>
+    <loc>https://tmle3shift.tlverse.org/reference/trend_msm.html</loc>
+  </url>
+  <url>
     <loc>https://tmle3shift.tlverse.org/articles/shift_tmle.html</loc>
+  </url>
+  <url>
+    <loc>https://tmle3shift.tlverse.org/articles/vimshift.html</loc>
   </url>
 </urlset>

@@ -17,35 +17,43 @@ knitr::opts_chunk$set(
 # R/`tmle3shift`
 
 [![Travis-CI Build Status](https://travis-ci.org/tlverse/tmle3shift.svg?branch=master)](https://travis-ci.org/tlverse/tmle3shift)
-[![AppVeyor Build  Status](https://ci.appveyor.com/api/projects/status/github/tlverse/tmle3shift?branch=master&svg=true)](https://ci.appveyor.com/project/tlverse/tmle3shift)
+[![AppVeyor Build  Status](https://ci.appveyor.com/api/projects/status/github/tlverse/tmle3shift?branch=master&svg=true)](https://ci.appveyor.com/project/nhejazi/tmle3shift)
 [![Coverage Status](https://img.shields.io/codecov/c/github/tlverse/tmle3shift/master.svg)](https://codecov.io/github/tlverse/tmle3shift?branch=master)
-[![Project Status: Active – The project has reached a stable, usable state and
-is being actively
-developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 
-> Targeted Learning of Stochastic Intervention Effects, done `tlverse`-style
+> Targeted Learning and Variable Importance with Stochastic Interventions
 
-__Authors:__ [Nima Hejazi](https://nimahejazi.org) and [Jeremy
-Coyle](https://github.com/jeremyrcoyle)
+__Authors:__ [Nima Hejazi](https://nimahejazi.org), [Jeremy
+Coyle](https://github.com/jeremyrcoyle), and [Mark van der
+Laan](https://vanderlaan-lab.org)
 
 ---
 
 ## What's `tmle3shift`?
 
 `tmle3shift` is an adapter/extension R package in the `tlverse` ecosystem that
-exposes support for the estimation of target parameters defined as shifts of
-interventions of continuous-valued treatments by way of stochastic treatment
+exposes support for the estimation of a target parameter defined as the mean
+counterfactual outcome under a posited shift of the natural value of a
+continuous-valued intervention, using the formalism of stochastic treatment
 regimes. As an adapter package, `tmle3shift` builds upon the core `tlverse`
 grammar introduced by `tmle3`, a general framework that supports the
 implementation of a range of TMLE parameters through a unified interface. For a
 detailed description of the target parameter, TML estimator, and algorithm
 implemented in `tmle3shift`, the interested reader is invited to consult
-@munoz2012population and @diaz2018stochastic.
+@diaz2012population and @diaz2018stochastic. For a general discussion of the
+framework of targeted minimum loss-based estimation and the role this
+methodology plays in statistical and causal inference, the canonical references
+are @vdl2011targeted and @vdl2018targeted.
 
-For a general discussion of the framework of targeted minimum loss-based
-estimation and the role this methodology plays in statistical and causal
-inference, the canonical references are @vdl2011targeted and @vdl2018targeted.
+Building on the original work surrounding the TML estimator for the
+aforementioned target parameter, `tmle3shift` additionally implements a set of
+techniques for variable importance analysis, allowing for a sequence of mean
+counterfactual outcomes, estimated under a sequence of posited shifts, to be
+summarized via a working marginal structural model (MSM). The goal of this work
+is to build upon the `tlverse` framework and the estimation methodology
+implemented for a single mean counterfactual outcome in order to introduce an
+end-to-end methodology for variable importance analyses.
 
 ---
 
@@ -70,7 +78,7 @@ issue](https://github.com/tlverse/tmle3shift/issues).
 ## Related
 
 * [R/`txshift`](https://github.com/nhejazi/txshift) - An R package providing an
-  independent implementation of the same TML estimation procedure and
+  independent implementation of the TML estimation procedure and
   statistical methodology as is made available here, without reliance on the
   `tlverse` grammar provided by `tmle3`.
 

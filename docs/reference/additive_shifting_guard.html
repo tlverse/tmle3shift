@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Additive Shifts of Continuous-Valued Interventions Without Bounds — shift_additive • tmle3shift</title>
+<title>Additive Shifts of Continuous-Valued Interventions with Bound Guards — shift_additive_guard • tmle3shift</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,10 @@
 
 
 
-<meta property="og:title" content="Additive Shifts of Continuous-Valued Interventions Without Bounds — shift_additive" />
+<meta property="og:title" content="Additive Shifts of Continuous-Valued Interventions with Bound Guards — shift_additive_guard" />
 
-<meta property="og:description" content="Additive Shifts of Continuous-Valued Interventions Without Bounds" />
+<meta property="og:description" content="Additive Shifts of Continuous-Valued Interventions with Bound Guards
+Find Maximum Plausible Intervention Shifts from the Observed Data" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -87,9 +88,6 @@
   <a href="../articles/shift_tmle.html">Overview</a>
 </li>
 <li>
-  <a href="../articles/index.html">Articles</a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
@@ -113,20 +111,23 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Additive Shifts of Continuous-Valued Interventions Without Bounds</h1>
+    <h1>Additive Shifts of Continuous-Valued Interventions with Bound Guards</h1>
     
-    <div class="hidden name"><code>additive_shifting.Rd</code></div>
+    <div class="hidden name"><code>additive_shifting_guard.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Additive Shifts of Continuous-Valued Interventions Without Bounds</p>
+    <p>Additive Shifts of Continuous-Valued Interventions with Bound Guards</p>
+<p>Find Maximum Plausible Intervention Shifts from the Observed Data</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>shift_additive</span>(<span class='no'>tmle_task</span>, <span class='kw'>delta</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>shift_additive_guard</span>(<span class='no'>tmle_task</span>, <span class='no'>delta</span>, <span class='no'>likelihood_base</span>, <span class='no'>...</span>)
 
-<span class='fu'>shift_additive_inv</span>(<span class='no'>tmle_task</span>, <span class='kw'>delta</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>shift_additive_guard_inv</span>(<span class='no'>tmle_task</span>, <span class='no'>delta</span>, <span class='no'>likelihood_base</span>, <span class='no'>...</span>)
+
+<span class='fu'>get_bounds_maximal</span>(<span class='no'>tmle_task</span>, <span class='no'>likelihood_base</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -146,15 +147,39 @@ inverse additive shift, the specified value will be subtracted from the
 observed value of the treatment node "A".</p></td>
     </tr>
     <tr>
+      <th>likelihood_base</th>
+      <td><p>The base observed data likelihood, to be used in
+implementing guards that ensure that the shifted treatment does not violate
+the bounds induced by the support of the intervention, conditional on the
+covariates.</p></td>
+    </tr>
+    <tr>
       <th>...</th>
       <td><p>Additional arguments (currently unused).</p></td>
+    </tr>
+    <tr>
+      <th>tmle_task</th>
+      <td><p>A <code>tmle3_Task</code> object containing data and nodes, as
+described and implemented in the <code>tmle3</code> package. Please refer to the
+documentation and supporting materials of that package for details.</p></td>
+    </tr>
+    <tr>
+      <th>likelihood_base</th>
+      <td><p>The base observed data likelihood, to be used in
+implementing guards that ensure that the shifted treatment does not violate
+the bounds induced by the support of the intervention, conditional on the
+covariates.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other shifting_interventions: <code><a href='additive_shifting_bounded.html'>shift_additive_bounded</a></code></p>
-<p>Other shifting_interventions: <code><a href='additive_shifting_bounded.html'>shift_additive_bounded</a></code></p></div>
+    <div class='dont-index'><p>Other shifting_interventions: <code><a href='additive_shifting_bounded.html'>shift_additive_bounded</a></code>,
+  <code><a href='additive_shifting.html'>shift_additive</a></code></p>
+<p>Other shifting_interventions: <code><a href='additive_shifting_bounded.html'>shift_additive_bounded</a></code>,
+  <code><a href='additive_shifting.html'>shift_additive</a></code></p>
+<p>Other shifting_interventions: <code><a href='additive_shifting_bounded.html'>shift_additive_bounded</a></code>,
+  <code><a href='additive_shifting.html'>shift_additive</a></code></p></div>
     
 
   </div>

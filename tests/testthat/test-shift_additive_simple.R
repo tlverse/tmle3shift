@@ -72,9 +72,8 @@ learner_list <- list(Y = Q_learner, A = g_learner)
 # initialize a tmle specification
 tmle_spec <- tmle_shift(
   shift_val = 0.5,
-  shift_fxn = shift_additive_bounded,
-  shift_fxn_inv = shift_additive_bounded_inv,
-  max_intervention_ratio = 2
+  shift_fxn = shift_additive,
+  shift_fxn_inv = shift_additive_inv
 )
 
 ## define data (from tmle3_Spec base class)
@@ -98,3 +97,44 @@ tmle_fit <- fit_tmle3(tmle_task, likelihood_targeted, tmle_params, updater)
 tmle_fit
 tmle3_psi <- tmle_fit$summary$tmle_est
 tmle3_se <- tmle_fit$summary$se
+
+
+################################################################################
+# compute numerical result using classical implementation (txshift R package)
+################################################################################
+library(txshift)
+set.seed(429153)
+
+## TODO: validate that we're getting the same errors on g fitting
+tmle_sl_shift_classic <- tmle_txshift(
+  W = W, A = A, Y = Y, delta = 0.5,
+  fluc_method = "weighted",
+  g_fit_args = list(
+    fit_type = "sl",
+    sl_lrnrs = g_learner
+  ),
+  Q_fit_args = list(
+    fit_type = "sl",
+    sl_lrnrs = Q_learner
+  )
+)
+
+## extract results from fit object produced by classical package
+summary(tmle_sl_shift_classic)
+classic_psi <- tmle_sl_shift_classic$psi
+classic_se <- sqrt(tmle_sl_shift_classic$var)
+
+
+################################################################################
+# test numerical equivalence of tmle3 and classical implementations
+################################################################################
+
+## only approximately equal (although it's O(1/n))
+test_that("Parameter point estimate matches result from classic package", {
+  expect_equal(tmle3_psi, classic_psi, tol = 1 / n_obs, scale = classic_psi)
+})
+
+## only approximately equal (although it's O(1/n))
+test_that("Standard error matches result from classic package", {
+  expect_equal(tmle3_se, classic_se, tol = 1 / n_obs, scale = classic_se)
+})

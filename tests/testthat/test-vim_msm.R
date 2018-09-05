@@ -1,9 +1,8 @@
-context("Shift intervention results match those from classic implementation")
+context("Variable importance for shift interventions works?")
 
 library(uuid)
 library(assertthat)
 library(data.table)
-library(future)
 library(sl3)
 library(tmle3)
 library(ranger)
@@ -66,11 +65,14 @@ learner_list <- list(Y = Q_learner, A = g_learner)
 
 
 ################################################################################
-# setup and compute TMLE of shift intervention parameter with tmle3_shift
+# setup and compute TMLEs over a grid of shift interventions w/ tmle3_vimshift
 ################################################################################
 
+# what's the grid of shifts we wish to consider?
+delta_grid <- seq(-1, 1, 0.5)
+
 # initialize a tmle specification
-tmle_spec <- tmle_shift(shift_val = 0.5)
+tmle_spec <- tmle_vimshift(shift_grid = delta_grid, max_shifted_ratio = 2)
 
 ## define data (from tmle3_Spec base class)
 tmle_task <- tmle_spec$make_tmle_task(data, node_list)
@@ -78,59 +80,20 @@ tmle_task <- tmle_spec$make_tmle_task(data, node_list)
 ## define likelihood (from tmle3_Spec base class)
 likelihood_init <- tmle_spec$make_initial_likelihood(tmle_task, learner_list)
 
-## define update method (submodel and loss function)
+## define update method (fluctuation submodel and loss function)
 updater <- tmle_spec$make_updater()
 likelihood_targeted <- Targeted_Likelihood$new(likelihood_init, updater)
 
-## define param
+## invoke params specified in spec
 tmle_params <- tmle_spec$make_params(tmle_task, likelihood_targeted)
 updater$tmle_params <- tmle_params
 
-## fit tmle update
+## fit TML estimator update
 tmle_fit <- fit_tmle3(tmle_task, likelihood_targeted, tmle_params, updater)
 
 ## extract results from tmle3_Fit object
 tmle_fit
-tmle3_psi <- tmle_fit$summary$tmle_est
-tmle3_se <- tmle_fit$summary$se
 
-
-################################################################################
-# compute numerical result using classical implementation (txshift R package)
-################################################################################
-library(txshift)
-set.seed(429153)
-
-## TODO: validate that we're getting the same errors on g fitting
-tmle_sl_shift_classic <- tmle_txshift(
-  W = W, A = A, Y = Y, delta = 0.5,
-  fluc_method = "weighted",
-  g_fit_args = list(
-    fit_type = "sl",
-    sl_lrnrs = g_learner
-  ),
-  Q_fit_args = list(
-    fit_type = "sl",
-    sl_lrnrs = Q_learner
-  )
-)
-
-## extract results from fit object produced by classical package
-summary(tmle_sl_shift_classic)
-classic_psi <- tmle_sl_shift_classic$psi
-classic_se <- sqrt(tmle_sl_shift_classic$var)
-
-
-################################################################################
-# test numerical equivalence of tmle3 and classical implementations
-################################################################################
-
-## only approximately equal (although it's O(1/n))
-test_that("Parameter point estimate matches result from classic package", {
-  expect_equal(tmle3_psi, classic_psi, tol = 1 / n_obs, scale = classic_psi)
-})
-
-## only approximately equal (although it's O(1/n))
-test_that("Standard error matches result from classic package", {
-  expect_equal(tmle3_se, classic_se, tol = 1 / n_obs, scale = classic_se)
-})
+## use MSM to summarize results
+msm <- trend_msm(tmle_fit, delta_grid)
+msm

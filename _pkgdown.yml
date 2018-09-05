@@ -13,6 +13,8 @@ navbar:
       href: "index.html"
     - text: "Overview"
       href: "articles/shift_tmle.html"
+    - text: "Articles"
+      href: "articles/index.html"
     - text: "Reference"
       href: "reference/index.html"
   right:

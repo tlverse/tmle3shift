@@ -33,6 +33,7 @@ Imports:
     R6,
     uuid,
     methods,
+    data.table,
     sl3,
     tmle3
 Suggests:
@@ -42,7 +43,6 @@ Suggests:
     stats,
     ggplot2,
     tidyverse,
-    data.table,
     condensier,
     txshift,
     Rsolnp,
@@ -53,8 +53,8 @@ Remotes:
     github::nhejazi/txshift,
     github::tlverse/origami,
     github::tlverse/delayed,
-    github::tlverse/sl3@safe-set,
-    github::tlverse/tmle3@safe-set
+    github::tlverse/sl3,
+    github::tlverse/tmle3
 URL: https://tmle3shift.tlverse.com/
 BugReports: https://github.com/tlverse/tmle3shift/issues
 Encoding: UTF-8

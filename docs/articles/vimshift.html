@@ -81,7 +81,7 @@
 <a href="https://nimahejazi.org">Nima S. Hejazi</a>, <a href="https://github.com/jeremyrcoyle">Jeremy R. Coyle</a>, and <a href="https://vanderlaan-lab.org">Mark J. van der Laan</a>
 </h4>
             
-            <h4 class="date">2018-09-04</h4>
+            <h4 class="date">2018-09-05</h4>
       
       
       <div class="hidden name"><code>vimshift.Rmd</code></div>
@@ -258,17 +258,17 @@
 ## speedglm::speedglm.wfit failed, falling back on stats:glm.fit; Error in solve.default(XTX, XTz, tol = tol.solve) : 
 ##   Lapack routine dgesv: system is exactly singular: U[2,2] = 0</code></pre>
 <pre><code>## 
-## Iter: 1 fn: 1827.3543     Pars:  0.8883760581 0.1116233473 0.0000005939
-## Iter: 2 fn: 1827.3543     Pars:  0.8883762027 0.1116236328 0.0000001645
+## Iter: 1 fn: 1827.3543     Pars:  0.888375995 0.111622816 0.000001188
+## Iter: 2 fn: 1827.3543     Pars:  0.8883760454 0.1116233184 0.0000006362
 ## solnp--&gt; Completed in 2 iterations
 ## 
 ## density meta-learner fit:
 ## Lrnr_condensier_dhist_25_20_FALSE_NA_FALSE_NULL 
-##                                    8.883762e-01 
+##                                    8.883760e-01 
 ## Lrnr_condensier_dhist_15_20_FALSE_NA_FALSE_NULL 
-##                                    1.116236e-01 
+##                                    1.116233e-01 
 ## Lrnr_condensier_dhist_20_20_FALSE_NA_FALSE_NULL 
-##                                    1.645427e-07</code></pre>
+##                                    6.361514e-07</code></pre>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">tmle_fit</a></code></pre></div>
 <pre><code>## A tmle3_Fit that took 1 step(s)
 ##    type         param  init_est tmle_est         se     lower     upper
@@ -276,13 +276,13 @@
 ## 2:  TSM E[Y_{A=NULL}] 1.0481937 1.058459 0.06634296 0.9284288 1.1884885
 ## 3:  TSM E[Y_{A=NULL}] 1.5427535 1.543276 0.06656993 1.4128016 1.6737509
 ## 4:  TSM E[Y_{A=NULL}] 2.0352548 2.041327 0.06514262 1.9136494 2.1690037
-## 5:  TSM E[Y_{A=NULL}] 2.4907026 2.495396 0.06071568 2.3763950 2.6143961
+## 5:  TSM E[Y_{A=NULL}] 2.4907026 2.495396 0.06071568 2.3763950 2.6143960
 ##    psi_transformed lower_transformed upper_transformed
 ## 1:        0.604834         0.4810465         0.7286215
 ## 2:        1.058459         0.9284288         1.1884885
 ## 3:        1.543276         1.4128016         1.6737509
 ## 4:        2.041327         1.9136494         2.1690037
-## 5:        2.495396         2.3763950         2.6143961</code></pre>
+## 5:        2.495396         2.3763950         2.6143960</code></pre>
 <p><em>Remark</em>: The <code>print</code> method of the resultant <code>tmle_fit</code> object conveniently displays the results from computing our TML estimator.</p>
 </div>
 <div id="inference-with-marginal-structural-models" class="section level3">
@@ -312,9 +312,9 @@ m_{\beta}(\delta))\right)h(\delta),\]</span> where <span class="math inline">\(\
 <p>Inference from a working MSM is rather straightforward. To wit, the limiting distribution for <span class="math inline">\(m_{\beta}(\delta)\)</span> may be expressed <span class="math display">\[\sqrt{n}(\beta_n - \beta_0) \to N(0, \Sigma),\]</span> where <span class="math inline">\(\Sigma\)</span> is the empirical covariance matrix of <span class="math inline">\(\text{EIF}_{\beta}(O)\)</span>.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">msm &lt;-<span class="st"> </span><span class="kw"><a href="../reference/trend_msm.html">trend_msm</a></span>(tmle_fit, delta_grid)</a>
 <a class="sourceLine" id="cb13-2" data-line-number="2">msm</a></code></pre></div>
-<pre><code>##               ci_low param_est   ci_high   param_se       p_value
-## intercept  1.4242016 1.5486582 1.6731148 0.06349942 2.262865e-131
-## delta_grid 0.9279261 0.9527982 0.9776703 0.01269010  0.000000e+00</code></pre>
+<pre><code>##               ci_low param_est   ci_high   param_se      p_value
+## intercept  1.4242016 1.5486582 1.6731148 0.06349942 2.26287e-131
+## delta_grid 0.9279261 0.9527982 0.9776703 0.01269010  0.00000e+00</code></pre>
 </div>
 </div>
 <div id="references" class="section level2 unnumbered">

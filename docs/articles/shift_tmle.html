@@ -81,7 +81,7 @@
 <a href="https://nimahejazi.org">Nima Hejazi</a>, <a href="https://www.benkeserstatistics.com/">David Benkeser</a>, and <a href="https://github.com/jeremyrcoyle">Jeremy Coyle</a>
 </h4>
             
-            <h4 class="date">2018-09-04</h4>
+            <h4 class="date">2018-09-05</h4>
       
       
       <div class="hidden name"><code>shift_tmle.Rmd</code></div>
@@ -190,21 +190,21 @@
 <a href="#targeted-estimation-of-stochastic-interventions-effects" class="anchor"></a>Targeted Estimation of Stochastic Interventions Effects</h3>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">tmle_fit &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/tmle3/topics/tmle3">tmle3</a></span>(tmle_spec, data, node_list, learner_list)</a></code></pre></div>
 <pre><code>## 
-## Iter: 1 fn: 1829.0370     Pars:  0.896094023 0.103900492 0.000005485
-## Iter: 2 fn: 1829.0370     Pars:  0.896094531 0.103901824 0.000003645
+## Iter: 1 fn: 1829.0370     Pars:  0.89609444 0.10390159 0.00000397
+## Iter: 2 fn: 1829.0370     Pars:  0.89609552135 0.10390442914 0.00000004951
 ## solnp--&gt; Completed in 2 iterations
 ## 
 ## density meta-learner fit:
 ## Lrnr_condensier_dhist_25_20_FALSE_NA_FALSE_NULL 
-##                                  0.896094531053 
+##                                0.89609552134962 
 ## Lrnr_condensier_dhist_20_20_FALSE_NA_FALSE_NULL 
-##                                  0.103901824151 
+##                                0.10390442913831 
 ## Lrnr_condensier_dhist_15_20_FALSE_NA_FALSE_NULL 
-##                                  0.000003644795</code></pre>
+##                                0.00000004951192</code></pre>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">tmle_fit</a></code></pre></div>
 <pre><code>## A tmle3_Fit that took 1 step(s)
-##    type         param init_est tmle_est        se    lower    upper
-## 1:  TSM E[Y_{A=NULL}] 2.028565  2.03474 0.0648011 1.907733 2.161748
+##    type         param init_est tmle_est         se    lower    upper
+## 1:  TSM E[Y_{A=NULL}] 2.028565  2.03474 0.06480111 1.907733 2.161748
 ##    psi_transformed lower_transformed upper_transformed
 ## 1:         2.03474          1.907733          2.161748</code></pre>
 <p>The <code>print</code> method of the resultant <code>tmle_fit</code> object conveniently displays the results from computing our TML estimator.</p>
@@ -226,8 +226,8 @@
 <p>Having now re-examined these facts, let’s simply examine the results of computing our TML estimator:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">tmle_fit</a></code></pre></div>
 <pre><code>## A tmle3_Fit that took 1 step(s)
-##    type         param init_est tmle_est        se    lower    upper
-## 1:  TSM E[Y_{A=NULL}] 2.028565  2.03474 0.0648011 1.907733 2.161748
+##    type         param init_est tmle_est         se    lower    upper
+## 1:  TSM E[Y_{A=NULL}] 2.028565  2.03474 0.06480111 1.907733 2.161748
 ##    psi_transformed lower_transformed upper_transformed
 ## 1:         2.03474          1.907733          2.161748</code></pre>
 </div>

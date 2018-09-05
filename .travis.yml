@@ -33,14 +33,14 @@ r_github_packages:
   - r-lib/sessioninfo
   - Rdatatable/data.table
   - jimhester/covr
-  - tlverse/delayed
-  - tlverse/origami
-  - tlverse/tmle3@safe-set
-  - tlverse/sl3@safe-set
   - osofr/simcausal
   - osofr/condensier
   - jeremyrcoyle/hal9001
   - nhejazi/txshift
+  - tlverse/delayed
+  - tlverse/origami
+  - tlverse/sl3
+  - tlverse/tmle3
 
 after_success:
   - travis_wait 30 Rscript -e 'covr::codecov()'

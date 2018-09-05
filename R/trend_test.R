@@ -6,15 +6,16 @@
 #'  shift parameter used in computing each of the TML estimates.
 #' @param level The nominal coverage probability of the confidence interval.
 #' @param weights A \code{numeric} vector indicating the weights (if any) to be
-#'  applied to each of the posited values of the shift parameter delta. The
-#'  default is equal weighting across all shift values.
+#'  applied to each of the estimated mean counterfactual outcomes under posited
+#'  values of the shift parameter delta. The default is to weight each estimate
+#'  by the inverse of its variance, in order to improve stability; however, this
+#'  may be changed depending on the exact choice of shift function.
 #'
 #' @importFrom stats cov pnorm qnorm
 #'
 #' @export
 #
-trend_msm <- function(tmle_fit, delta_grid, level = 0.95,
-                      weights = rep(1, length(delta_grid))) {
+trend_msm <- function(tmle_fit, delta_grid, level = 0.95, weights = NULL) {
 
   # this trend test only works for tmle_fits produced by fit_tmle3
   stopifnot(is(tmle_fit, "tmle3_Fit"))
@@ -25,6 +26,12 @@ trend_msm <- function(tmle_fit, delta_grid, level = 0.95,
   # matrix of EIF(O_i) values and estimates across each parameter estimated
   eif_mat <- sapply(tmle_fit$estimates, `[[`, "IC")
   psi_vec <- sapply(tmle_fit$estimates, `[[`, "psi")
+
+  # set weights to be the inverse of the variance of each TML estimate
+  if (is.null(weights)) {
+    var_each_psi <- apply(eif_mat, 2, var)
+    weights <- as.numeric(1 / var_each_psi)
+  }
 
   # multiplier for CI construction
   ci_mult <- (c(1, -1) * stats::qnorm((1 - level) / 2))

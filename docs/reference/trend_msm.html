@@ -124,8 +124,7 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>trend_msm</span>(<span class='no'>tmle_fit</span>, <span class='no'>delta_grid</span>, <span class='kw'>level</span> <span class='kw'>=</span> <span class='fl'>0.95</span>, <span class='kw'>weights</span> <span class='kw'>=</span> <span class='fu'>rep</span>(<span class='fl'>1</span>,
-  <span class='fu'>length</span>(<span class='no'>delta_grid</span>)))</pre>
+    <pre class="usage"><span class='fu'>trend_msm</span>(<span class='no'>tmle_fit</span>, <span class='no'>delta_grid</span>, <span class='kw'>level</span> <span class='kw'>=</span> <span class='fl'>0.95</span>, <span class='kw'>weights</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -147,8 +146,10 @@ shift parameter used in computing each of the TML estimates.</p></td>
     <tr>
       <th>weights</th>
       <td><p>A <code>numeric</code> vector indicating the weights (if any) to be
-applied to each of the posited values of the shift parameter delta. The
-default is equal weighting across all shift values.</p></td>
+applied to each of the estimated mean counterfactual outcomes under posited
+values of the shift parameter delta. The default is to weight each estimate
+by the inverse of its variance, in order to improve stability; however, this
+may be changed depending on the exact choice of shift function.</p></td>
     </tr>
     </table>
     

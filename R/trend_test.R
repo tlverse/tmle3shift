@@ -11,7 +11,7 @@
 #'  by the inverse of its variance, in order to improve stability; however, this
 #'  may be changed depending on the exact choice of shift function.
 #'
-#' @importFrom stats cov var pnorm qnorm
+#' @importFrom stats cov qnorm pnorm
 #'
 #' @export
 #
@@ -29,8 +29,7 @@ trend_msm <- function(tmle_fit, delta_grid, level = 0.95, weights = NULL) {
 
   # set weights to be the inverse of the variance of each TML estimate
   if (is.null(weights)) {
-    var_each_psi <- apply(eif_mat, 2, stats::var)
-    weights <- as.numeric(1 / var_each_psi)
+    weights <- as.numeric(1 / diag(stats::cov(eif_mat)))
   }
 
   # multiplier for CI construction

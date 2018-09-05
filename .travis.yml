@@ -35,8 +35,8 @@ r_github_packages:
   - jimhester/covr
   - tlverse/delayed
   - tlverse/origami
-  - tlverse/tmle3
-  - tlverse/sl3@devel
+  - tlverse/tmle3@safe-set
+  - tlverse/sl3@safe-set
   - osofr/simcausal
   - osofr/condensier
   - jeremyrcoyle/hal9001

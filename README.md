@@ -27,42 +27,29 @@ Laan](https://vanderlaan-lab.org)
 ## What’s `tmle3shift`?
 
 `tmle3shift` is an adapter/extension R package in the `tlverse`
-ecosystem that exposes support for the estimation of target parameters
-defined as shifts of interventions of continuous-valued treatments by
-way of stochastic treatment regimes. As an adapter package, `tmle3shift`
+ecosystem that exposes support for the estimation of a target parameter
+defined as the mean counterfactual outcome under a posited shift of the
+natural value of a continuous-valued intervention, using the formalism
+of stochastic treatment regimes. As an adapter package, `tmle3shift`
 builds upon the core `tlverse` grammar introduced by `tmle3`, a general
 framework that supports the implementation of a range of TMLE parameters
 through a unified interface. For a detailed description of the target
 parameter, TML estimator, and algorithm implemented in `tmle3shift`, the
-interested reader is invited to consult
-(<span class="citeproc-not-found" data-reference-id="munoz2012population">**???**</span>)
-and Díaz and van der Laan (2018).
+interested reader is invited to consult Díaz and van der Laan (2012) and
+Díaz and van der Laan (2018). For a general discussion of the framework
+of targeted minimum loss-based estimation and the role this methodology
+plays in statistical and causal inference, the canonical references are
+van der Laan and Rose (2011) and van der Laan and Rose (2018).
 
-For a general discussion of the framework of targeted minimum loss-based
-estimation and the role this methodology plays in statistical and causal
-inference, the canonical references are van der Laan and Rose (2011) and
-van der Laan and Rose (2018).
-
-`vimshift` is an R package in the `tlverse` ecosystem that implements a
-strategy for assessing variable importance measures (VIMs) based on a
-parameter defined as the mean counterfactual outcome under a specified
-set of shifts of a given set of continuous-valued variables of interest.
-The parameter at the heart of the proposed VIM is defined through
-stochastic treatment regimes. For a detailed description of the target
-parameter, as well as the corresponding TML estimator, the interested
-reader is invited to consult Díaz and van der Laan (2012) and Díaz and
-van der Laan (2018) (n.b., the `tlverse` implementation of the relevant
-TML estimator is available throught the [`tmle3shift` R
-package](https://tmle3shift.tlverse.org)). The `vimshift` package builds
-upon the core `tlverse` grammar introduced by `tmle3`, a general
-framework that supports the implementation of a range of TMLE parameters
-through a unified interface, building upon this framework to introduce
-an end-to-end methodology for variable importance.
-
-For a general discussion of the framework of targeted minimum loss-based
-estimation and the role this methodology plays in statistical and causal
-inference, the canonical references are van der Laan and Rose (2011) and
-van der Laan and Rose (2018).
+Building on the original work surrounding the TML estimator for the
+aforementioned target parameter, `tmle3shift` additionally implements a
+set of techniques for variable importance analysis, allowing for a
+sequence of mean counterfactual outcomes, estimated under a sequence of
+posited shifts, to be summarized via a working marginal structural model
+(MSM). The goal of this work is to build upon the `tlverse` framework
+and the estimation methodology implemented for a single mean
+counterfactual outcome in order to introduce an end-to-end methodology
+for variable importance analyses.
 
 -----
 

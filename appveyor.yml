@@ -23,12 +23,13 @@ cache:
 build_script:
   - travis-tool.sh install_deps
   - travis-tool.sh install_github r-lib/devtools
+  - travis-tool.sh install_github r-lib/sessioninfo
   - travis-tool.sh install_github Rdatatable/data.table
   - travis-tool.sh install_github jimhester/covr
   - travis-tool.sh install_github tlverse/delayed
   - travis-tool.sh install_github tlverse/origami
-  - travis-tool.sh install_github tlverse/tmle3
-  - travis-tool.sh install_github tlverse/sl3@devel
+  - travis-tool.sh install_github tlverse/tmle3@safe-set
+  - travis-tool.sh install_github tlverse/sl3@safe-set
   - travis-tool.sh install_github jeremyrcoyle/hal9001
   - travis-tool.sh install_github osofr/simcausal
   - travis-tool.sh install_github osofr/condensier

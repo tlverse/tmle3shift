@@ -9,8 +9,8 @@
 #'
 #' @export
 #
-tmle3_Spec_vimshift <- R6::R6Class(
-  classname = "tmle3_Spec_vimshift",
+tmle3_Spec_vimshift_msm <- R6::R6Class(
+  classname = "tmle3_Spec_vimshift_msm",
   portable = TRUE,
   class = TRUE,
   inherit = tmle3_Spec,
@@ -59,14 +59,13 @@ tmle3_Spec_vimshift <- R6::R6Class(
           )
         })
 
-      # create list of counterfactual means (parameters)
-      tmle_params <-
-        lapply(interventions, function(x) {
-          tmle3::Param_TSM$new(likelihood, x)
-        })
+      # instantiate linear working MSM
+      msm_param <- Param_MSM_linear$new(observed_likelihood = likelihood,
+                                        intervention_list = interventions,
+                                        shift_grid = shift_grid)
 
       # output should be a list
-      return(tmle_params)
+      return(msm_param)
     }
   ),
   active = list(),
@@ -102,13 +101,13 @@ tmle3_Spec_vimshift <- R6::R6Class(
 #'
 #' @export
 #
-tmle_vimshift <- function(shift_fxn = shift_additive_bounded,
+tmle_vimshift_msm <- function(shift_fxn = shift_additive_bounded,
                           shift_fxn_inv = shift_additive_bounded_inv,
                           shift_grid = seq(-1, 1, by = 0.5),
                           max_shifted_ratio = 2,
                           ...) {
   # TODO: unclear why this has to be in a factory function
-  tmle3_Spec_vimshift$new(
+  tmle3_Spec_vimshift_msm$new(
     shift_fxn, shift_fxn_inv,
     shift_grid, max_shifted_ratio,
     ...

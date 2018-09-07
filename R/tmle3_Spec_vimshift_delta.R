@@ -60,10 +60,15 @@ tmle3_Spec_vimshift_delta <- R6::R6Class(
         })
 
       # create list of counterfactual means (parameters)
-      tmle_params <-
+      tsm_params_list <-
         lapply(interventions, function(x) {
           tmle3::Param_TSM$new(likelihood, x)
         })
+      tmle_params <- tsm_params_list
+
+      # create MSM via delta method
+      #msm <- Param_delta$new(likelihood, delta_param_MSM, tsm_params_list)
+      #tmle_params <- list(unlist(tsm_params_list, recursive = FALSE), msm)
 
       # output should be a list
       return(tmle_params)
@@ -114,3 +119,4 @@ tmle_vimshift_delta <- function(shift_fxn = shift_additive_bounded,
     ...
   )
 }
+

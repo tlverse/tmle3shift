@@ -13,7 +13,7 @@ Param_MSM_linear
 }
 \description{
 Parameter definition for targeting the parameters of a linear working
-marginal structural model (MSM): $EY = \beta_0 + \beta_1 \delta$, to
+marginal structural model (MSM): EY = beta0 + beta1 delta, to
 summarize the variable importance results of a grid of shift interventions.
 }
 \section{Constructor}{

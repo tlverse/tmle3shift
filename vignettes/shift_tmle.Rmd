@@ -181,7 +181,7 @@ while our `g_learner` is used in fitting our treatment mechanism regression.
 
 ### Targeted Estimation of Stochastic Interventions Effects
 
-```{r fit_tmle}
+```{r fit_tmle, eval=FALSE}
 tmle_fit <- tmle3(tmle_spec, data, node_list, learner_list)
 tmle_fit
 ```
@@ -229,7 +229,7 @@ $$\sigma_n^2 = \frac{1}{n} \sum_{i = 1}^{n} D^2(\bar{Q}_n^*, g_n)(O_i)$$
 Having now re-examined these facts, let's simply examine the results of
 computing our TML estimator:
 
-```{r tmle_inference}
+```{r tmle_inference, eval=FALSE}
 tmle_fit
 ```
 

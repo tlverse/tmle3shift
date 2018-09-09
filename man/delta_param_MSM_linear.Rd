@@ -3,12 +3,12 @@
 \docType{data}
 \name{delta_param_MSM_linear}
 \alias{delta_param_MSM_linear}
-\title{Linear Marginal Structural Models}
+\title{Linear Working Marginal Structural Models}
 \format{An object of class \code{list} of length 4.}
 \usage{
 delta_param_MSM_linear
 }
 \description{
-Linear Marginal Structural Models
+Linear Working Marginal Structural Models
 }
 \keyword{datasets}

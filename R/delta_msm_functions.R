@@ -2,9 +2,9 @@
 # MARGINAL STRUCTURAL MODELS
 ################################################################################
 
-f_msm_linear <- function(psis, eifs, x) {
-  # matrix of EIF(O_i) values and estimates across each parameter estimated
-  eif_mat <- do.call(cbind, eifs)
+# compute parameters of working MSM via delta method
+f_msm_linear <- function(psis, weights = NULL, delta_grid, ...) {
+  # vector of parameter estimates
   psi_vec <- do.call(cbind, psis)
 
   # set weights to be the inverse of the variance of each TML estimate
@@ -21,6 +21,7 @@ f_msm_linear <- function(psis, eifs, x) {
   return(msm_param)
 }
 
+# compute EIFs of parameters of working MSM via delta method
 df_msm_linear <- function(psis, eifs) {
   # matrix of EIF(O_i) values and estimates across each parameter estimated
   eif_mat <- do.call(cbind, eifs)
@@ -42,11 +43,11 @@ df_msm_linear <- function(psis, eifs) {
   return(msm_eif)
 }
 
-#' Linear Marginal Structural Models
+#' Linear Working Marginal Structural Models
 #' @export
 delta_param_MSM_linear <- list(type = "MSM_linear",
                                name = function(names) {
-                                 sprintf("RR(%s/%s)", names[[2]], names[[1]])
+                                 sprintf("MSM(%s/%s)", names[[2]], names[[1]])
                                 },
                                f = f_msm_linear,
                                df = df_msm_linear

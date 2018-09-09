@@ -1,7 +1,7 @@
 #' Linear Working Marginal Structural Models
 #'
 #' Parameter definition for targeting the parameters of a linear working
-#' marginal structural model (MSM): $EY = \beta_0 + \beta_1 \delta$, to
+#' marginal structural model (MSM): EY = beta0 + beta1 delta, to
 #' summarize the variable importance results of a grid of shift interventions.
 #'
 #' @importFrom R6 R6Class
@@ -67,8 +67,7 @@ Param_MSM_linear <- R6Class(
       tsm_aux_covars <- list()
       for (i in seq_along(self$tsm_params)) {
         tsm_aux_covars[[i]] <-
-          as.numeric(self$tsm_params[[i]]$clever_covariates(tmle_task,
-                                                            cv_fold)$Y)
+          as.numeric(self$tsm_params[[i]]$clever_covariates(tmle_task)$Y)
       }
       tsm_aux_covars_mat <- do.call(cbind, tsm_aux_covars)
 
@@ -105,7 +104,7 @@ Param_MSM_linear <- R6Class(
       tsm_eif_vals <- list()
       for (i in seq_along(self$tsm_params)) {
         tsm_eif_vals[[i]] <-
-          as.numeric(self$tsm_params[[i]]$estimates(tmle_task, cv_fold)$IC)
+          as.numeric(self$tsm_params[[i]]$estimates(tmle_task)$IC)
       }
       tsm_eif_mat <- do.call(cbind, tsm_eif_vals)
 

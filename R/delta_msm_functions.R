@@ -2,6 +2,34 @@
 # MARGINAL STRUCTURAL MODELS
 ################################################################################
 
+# function factory for linear MSMs
+msm_linear_factory <- function(params_list, design_matrix) {
+  # bookkeeping
+
+  psis <- lapply(estimates, `[[`, "psi")
+  ICs <- lapply(estimates, `[[`, "IC")
+
+  # ...
+  f_msm_linear <- function(...) {
+    ...
+  }
+
+  # ...
+  df_msm_linear <- function(...) {
+    ...
+  }
+
+  # create list with the f and df functions for delta method
+  delta_param_MSM_linear <- list(type = "MSM_linear",
+                                 name = "linear MSM via delta method",
+                                 f = f_msm_linear,
+                                 df = df_msm_linear
+                                )
+
+  # output the list containing the f and df functions
+  return(delta_param_MSM_linear)
+}
+
 # compute parameters of working MSM via delta method
 f_msm_linear <- function(psis, weights = NULL, delta_grid, ...) {
   # vector of parameter estimates

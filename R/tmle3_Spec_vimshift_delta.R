@@ -67,6 +67,7 @@ tmle3_Spec_vimshift_delta <- R6::R6Class(
 
       # MSM function factory
       design_matrix <- cbind(rep(1, length(shift_grid)), shift_grid)
+      colnames(design_matrix) <- c("intercept","slope")
       delta_param_MSM_linear <- msm_linear_factory(design_matrix)
 
       # create MSM via delta method

@@ -50,7 +50,7 @@ msm_linear_factory <- function(design_matrix) {
 
   # create list with the f and df functions for delta method
   delta_param_MSM_linear <- list(type = "MSM_linear",
-                                 name = function(names) print("MSM"), #sprintf("MSM(%s)", names[[1]]),
+                                 name = function(names) {sprintf("MSM(%s)", colnames(design_matrix))},
                                  f = f_msm_linear,
                                  df = df_msm_linear
                                 )

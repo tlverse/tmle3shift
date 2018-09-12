@@ -91,6 +91,9 @@ updater$tmle_params <- tmle_params
 
 ## fit TML estimator update
 tmle_fit <- fit_tmle3(tmle_task, likelihood_targeted, tmle_params, updater)
+debugonce(summary_from_estimates)
+tmle_fit$summary
+summary_from_estimates(tmle_task,list(estimates))
 
 ## extract results from tmle3_Fit object
 tmle_fit

@@ -13,10 +13,10 @@
 msm_linear_factory <- function(design_matrix) {
 
   # function for fitting parameter estimates of MSMs
-  f_msm_linear <- function(x, ...) {
+  f_msm_linear <- function(x, dx) {
     # vector of parameter estimates and matrix of EIF values
-    psi_vec <- do.call(cbind, x)
-    eif_mat <- do.call(cbind, ...)
+    psi_vec <- do.call(c, x)
+    eif_mat <- do.call(cbind, dx)
 
     # set weights to be the inverse of the variance of each TML estimate
     weights <- as.numeric(1 / diag(stats::cov(eif_mat)))
@@ -32,7 +32,7 @@ msm_linear_factory <- function(design_matrix) {
   # function for computing EIF values of parameters from MSM
   df_msm_linear <- function(x, dx) {
     # vector of parameter estimates and matrix of EIF values
-    psi_vec <- do.call(cbind, x)
+    psi_vec <- do.call(c, x)
     eif_mat <- do.call(cbind, dx)
 
     # set weights to be the inverse of the variance of each TML estimate
@@ -50,7 +50,7 @@ msm_linear_factory <- function(design_matrix) {
 
   # create list with the f and df functions for delta method
   delta_param_MSM_linear <- list(type = "MSM_linear",
-                                 name = "linear working MSM via delta method",
+                                 name = function(names) print("MSM"), #sprintf("MSM(%s)", names[[1]]),
                                  f = f_msm_linear,
                                  df = df_msm_linear
                                 )

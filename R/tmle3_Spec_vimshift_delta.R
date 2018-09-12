@@ -74,6 +74,7 @@ tmle3_Spec_vimshift_delta <- R6::R6Class(
                              tsm_params_list)
       #tmle_params <- list(unlist(tsm_params_list, recursive = FALSE), msm)
       tmle_params <- list(msm)
+      #tmle_params <- tsm_params_list
 
       # output should be a list
       return(tmle_params)

@@ -11,4 +11,4 @@ delta_param_MSM_linear
 \description{
 Linear Working Marginal Structural Models
 }
-\keyword{datasets}
+\keyword{internal}

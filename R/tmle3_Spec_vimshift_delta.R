@@ -64,19 +64,16 @@ tmle3_Spec_vimshift_delta <- R6::R6Class(
         lapply(interventions, function(x) {
           tmle3::Param_TSM$new(likelihood, x)
         })
-      tmle_params <- tsm_params_list
 
-      browser()
       # MSM function factory
       design_matrix <- cbind(rep(1, length(shift_grid)), shift_grid)
-      delta_param_MSM_linear <- msm_linear_factory(tsm_params_list,
-                                                   design_matrix)
+      delta_param_MSM_linear <- msm_linear_factory(design_matrix)
 
       # create MSM via delta method
       msm <- Param_delta$new(likelihood, delta_param_MSM_linear,
                              tsm_params_list)
-      browser()
-      tmle_params <- list(unlist(tsm_params_list, recursive = FALSE), msm)
+      #tmle_params <- list(unlist(tsm_params_list, recursive = FALSE), msm)
+      tmle_params <- list(msm)
 
       # output should be a list
       return(tmle_params)

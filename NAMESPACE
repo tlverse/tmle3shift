@@ -2,7 +2,6 @@
 
 export(LF_shift)
 export(Param_MSM_linear)
-export(delta_param_MSM_linear)
 export(shift_additive)
 export(shift_additive_bounded)
 export(shift_additive_bounded_inv)

@@ -62,4 +62,3 @@ trend_msm <- function(tmle_fit, delta_grid, level = 0.95, weights = NULL) {
   rownames(out) <- names(msm_se)
   return(out)
 }
-

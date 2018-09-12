@@ -60,9 +60,11 @@ tmle3_Spec_vimshift_msm <- R6::R6Class(
         })
 
       # instantiate linear working MSM
-      msm_param <- Param_MSM_linear$new(observed_likelihood = likelihood,
-                                        intervention_list = interventions,
-                                        shift_grid = shift_grid)
+      msm_param <- Param_MSM_linear$new(
+        observed_likelihood = likelihood,
+        intervention_list = interventions,
+        shift_grid = shift_grid
+      )
 
       # output should be a list
       return(msm_param)
@@ -102,10 +104,10 @@ tmle3_Spec_vimshift_msm <- R6::R6Class(
 #' @export
 #
 tmle_vimshift_msm <- function(shift_fxn = shift_additive_bounded,
-                          shift_fxn_inv = shift_additive_bounded_inv,
-                          shift_grid = seq(-1, 1, by = 0.5),
-                          max_shifted_ratio = 2,
-                          ...) {
+                              shift_fxn_inv = shift_additive_bounded_inv,
+                              shift_grid = seq(-1, 1, by = 0.5),
+                              max_shifted_ratio = 2,
+                              ...) {
   # TODO: unclear why this has to be in a factory function
   tmle3_Spec_vimshift_msm$new(
     shift_fxn, shift_fxn_inv,

@@ -45,7 +45,7 @@ Param_MSM_linear <- R6Class(
   inherit = tmle3::Param_base,
   public = list(
     initialize = function(observed_likelihood, intervention_list, ...,
-                          outcome_node = "Y", shift_grid) {
+                              outcome_node = "Y", shift_grid) {
       # initial
       super$initialize(observed_likelihood, ..., outcome_node = outcome_node)
       private$.intervention_list <- intervention_list
@@ -126,8 +126,10 @@ Param_MSM_linear <- R6Class(
   ),
   active = list(
     name = function() {
-      param_form <- sprintf("E[%s_{%s}]", self$outcome_node,
-                            self$cf_likelihood$name)
+      param_form <- sprintf(
+        "E[%s_{%s}]", self$outcome_node,
+        self$cf_likelihood$name
+      )
       return(param_form)
     },
     intervention_list = function() {

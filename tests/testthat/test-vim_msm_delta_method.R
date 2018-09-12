@@ -72,8 +72,10 @@ learner_list <- list(Y = Q_learner, A = g_learner)
 delta_grid <- seq(-1, 1, 0.5)
 
 # initialize a tmle specification
-tmle_spec <- tmle_vimshift_delta(shift_grid = delta_grid,
-                                 max_shifted_ratio = 2)
+tmle_spec <- tmle_vimshift_delta(
+  shift_grid = delta_grid,
+  max_shifted_ratio = 2
+)
 
 ## define data (from tmle3_Spec base class)
 tmle_task <- tmle_spec$make_tmle_task(data, node_list)
@@ -93,7 +95,7 @@ updater$tmle_params <- tmle_params
 tmle_fit <- fit_tmle3(tmle_task, likelihood_targeted, tmle_params, updater)
 debugonce(summary_from_estimates)
 tmle_fit$summary
-summary_from_estimates(tmle_task,list(estimates))
+summary_from_estimates(tmle_task, list(estimates))
 
 ## extract results from tmle3_Fit object
 tmle_fit
@@ -101,4 +103,3 @@ tmle_fit
 ## use MSM to summarize results
 msm <- trend_msm(tmle_fit, delta_grid)
 msm
-

@@ -40,7 +40,7 @@ r_github_packages:
   - tlverse/delayed
   - tlverse/origami
   - tlverse/sl3
-  - tlverse/tmle3
+  - tlverse/tmle3@update-delta-method
 
 after_success:
   - travis_wait 30 Rscript -e 'covr::codecov()'

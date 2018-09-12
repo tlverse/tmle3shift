@@ -72,9 +72,7 @@ tmle3_Spec_vimshift_delta <- R6::R6Class(
       # create MSM via delta method
       msm <- Param_delta$new(likelihood, delta_param_MSM_linear,
                              tsm_params_list)
-      #tmle_params <- list(unlist(tsm_params_list, recursive = FALSE), msm)
-      tmle_params <- list(msm)
-      #tmle_params <- tsm_params_list
+      tmle_params <- unlist(list(tsm_params_list, msm), recursive = FALSE)
 
       # output should be a list
       return(tmle_params)

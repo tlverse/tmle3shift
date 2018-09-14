@@ -93,13 +93,27 @@ updater$tmle_params <- tmle_params
 
 ## fit TML estimator update
 tmle_fit <- fit_tmle3(tmle_task, likelihood_targeted, tmle_params, updater)
-debugonce(summary_from_estimates)
 tmle_fit$summary
-summary_from_estimates(tmle_task, list(estimates))
 
 ## extract results from tmle3_Fit object
 tmle_fit
 
+## get estimates from Params corresponding to non-MSM TMLEs
+tmle_fit_orig_est <- list(tmle_fit$estimates[[1]], tmle_fit$estimates[[2]],
+                          tmle_fit$estimates[[3]], tmle_fit$estimates[[4]],
+                          tmle_fit$estimates[[5]])
+
 ## use MSM to summarize results
-msm <- trend_msm(tmle_fit, delta_grid)
-msm
+msm_fit_table <- trend_msm(tmle_fit_orig_est, delta_grid)
+
+## extract relevant tmle3 results for test and re-format appropriately
+msm_tmle3_table <- tmle_fit$summary[6:7, c(6, 4, 7, 5)]
+msm_classic_table <- as.data.table(msm_fit_table[, -5])
+
+## set column names to be equal to avoid equivalency commplications
+setnames(msm_classic_table, names(msm_tmle3_table))
+
+test_that("Results from tmle3 MSM approach and classic MSM match exactly", {
+  expect_equal(msm_tmle3_table, msm_classic_table)
+})
+

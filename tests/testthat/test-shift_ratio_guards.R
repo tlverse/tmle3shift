@@ -1,4 +1,4 @@
-context("Shift intervention results match those from classic implementation")
+context("Shift intervention with positivity guards appears to work")
 
 library(uuid)
 library(assertthat)

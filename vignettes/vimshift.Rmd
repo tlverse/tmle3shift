@@ -355,8 +355,7 @@ $$\sqrt{n}(\beta_n - \beta_0) \to N(0, \Sigma),$$
 where $\Sigma$ is the empirical covariance matrix of $\text{EIF}_{\beta}(O)$.
 
 ```{r msm_fit}
-msm <- trend_msm(tmle_fit, delta_grid)
-msm
+tmle_fit$summar[6:7,]
 ```
 
 #### Directly Targeting the MSM Parameter $\beta$

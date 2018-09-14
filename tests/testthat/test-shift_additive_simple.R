@@ -1,4 +1,4 @@
-context("Shift intervention results match those from classic implementation")
+context("Additive shift intervention results match classic implementation")
 
 library(uuid)
 library(assertthat)

@@ -50,7 +50,6 @@ Suggests:
     nnls,
     ranger
 Remotes:
-    github::osofr/simcausal,
     github::osofr/condensier,
     github::nhejazi/txshift,
     github::tlverse/origami,

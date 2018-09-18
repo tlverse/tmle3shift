@@ -33,7 +33,7 @@ build_script:
   - travis-tool.sh install_github tlverse/delayed
   - travis-tool.sh install_github tlverse/origami
   - travis-tool.sh install_github tlverse/sl3
-  - travis-tool.sh install_github tlverse/tmle3@update-delta-method
+  - travis-tool.sh install_github tlverse/tmle3
 
 test_script:
   - travis-tool.sh run_tests

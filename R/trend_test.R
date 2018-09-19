@@ -1,7 +1,8 @@
 #' Test for a trend in the effect of shift interventions
 #'
-#' @param tmle_fit An object of class \code{tmle3_Fit}, containing estimates of
-#'  a grid of posited shift interventions.
+#' @param tmle_fit_estimates A \code{list} corresponding to the
+#'  \code{$estimates} slot of an object of class \code{tmle3_Fit}, containing
+#'  estimates of a grid of posited shift interventions.
 #' @param delta_grid A \code{numeric} vector giving the individual values of the
 #'  shift parameter used in computing each of the TML estimates.
 #' @param level The nominal coverage probability of the confidence interval.
@@ -12,20 +13,20 @@
 #'  may be changed depending on the exact choice of shift function.
 #'
 #' @importFrom stats cov qnorm pnorm
+#' @importFrom methods is
+#' @importFrom assertthat assert_that
 #'
 #' @export
 #
-trend_msm <- function(tmle_fit, delta_grid, level = 0.95, weights = NULL) {
-
-  # this trend test only works for tmle_fits produced by fit_tmle3
-  stopifnot(is(tmle_fit, "tmle3_Fit"))
+trend_msm <- function(tmle_fit_estimates, delta_grid, level = 0.95,
+                      weights = NULL) {
 
   # make sure more than one parameter has been estimated for trend
-  stopifnot(length(tmle_fit$estimates) > 1)
+  assert_that(length(tmle_fit_estimates) > 1)
 
   # matrix of EIF(O_i) values and estimates across each parameter estimated
-  eif_mat <- sapply(tmle_fit$estimates, `[[`, "IC")
-  psi_vec <- sapply(tmle_fit$estimates, `[[`, "psi")
+  eif_mat <- sapply(tmle_fit_estimates, `[[`, "IC")
+  psi_vec <- sapply(tmle_fit_estimates, `[[`, "psi")
 
   # set weights to be the inverse of the variance of each TML estimate
   if (is.null(weights)) {
@@ -38,8 +39,8 @@ trend_msm <- function(tmle_fit, delta_grid, level = 0.95, weights = NULL) {
   # compute the MSM parameters
   intercept <- rep(1, length(delta_grid))
   x_mat <- cbind(intercept, delta_grid)
-  omega_mat <- diag(weights)
-  s_mat <- solve(t(x_mat) %*% omega_mat %*% x_mat) %*% t(x_mat) %*% omega_mat
+  omega <- diag(weights)
+  s_mat <- solve(t(x_mat) %*% omega %*% x_mat) %*% t(x_mat) %*% omega
   msm_param <- as.vector(s_mat %*% psi_vec)
 
   # compute inference for MSM based on individual EIF(O_i) for each parameter

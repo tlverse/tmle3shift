@@ -151,30 +151,34 @@ using the cross-validation framework of the Super Learner algorithm of
 @vdl2007super.
 
 ```{r sl3_lrnrs}
-# learners used for conditional expectation regression (e.g., outcome)
+# learners used for outcome regression
 lrn1 <- Lrnr_mean$new()
-lrn2 <- Lrnr_glm_fast$new()
+lrn2 <- Lrnr_glm$new()
 lrn3 <- Lrnr_ranger$new()
 sl_lrn <- Lrnr_sl$new(
   learners = list(lrn1, lrn2, lrn3),
   metalearner = Lrnr_nnls$new()
 )
 
-# learners used for conditional density regression (e.g., propensity score)
+# learners used for intervention conditional density estimatoin
 lrn1_dens <- Lrnr_condensier$new(
-  nbins = 25, bin_estimator = lrn1,
+  nbins = 25, bin_estimator = lrn2,
   bin_method = "dhist"
 )
 lrn2_dens <- Lrnr_condensier$new(
-  nbins = 15, bin_estimator = lrn2,
+  nbins = 15, bin_estimator = lrn3,
   bin_method = "dhist"
 )
 lrn3_dens <- Lrnr_condensier$new(
-  nbins = 20, bin_estimator = lrn3,
+  nbins = 20, bin_estimator = lrn2,
+  bin_method = "dhist"
+)
+lrn4_dens <- Lrnr_condensier$new(
+  nbins = 40, bin_estimator = lrn1,
   bin_method = "dhist"
 )
 sl_lrn_dens <- Lrnr_sl$new(
-  learners = list(lrn1_dens, lrn2_dens, lrn3_dens),
+  learners = list(lrn1_dens, lrn2_dens, lrn3_dens, lrn4_dens),
   metalearner = Lrnr_solnp_density$new()
 )
 ```
@@ -220,7 +224,8 @@ choice of shift is an arbitrarily chosen set of values for this example).
 delta_grid <- seq(-1, 1, 0.5)
 
 # initialize a tmle specification
-tmle_spec <- tmle_vimshift(shift_grid = delta_grid, max_shifted_ratio = 2)
+tmle_spec <- tmle_vimshift_delta(shift_grid = delta_grid,
+                                 max_shifted_ratio = 2)
 ```
 
 As seen above, the `tmle_vimshift` specification object (like all `tmle3_Spec`
@@ -350,9 +355,33 @@ $$\sqrt{n}(\beta_n - \beta_0) \to N(0, \Sigma),$$
 where $\Sigma$ is the empirical covariance matrix of $\text{EIF}_{\beta}(O)$.
 
 ```{r msm_fit}
-msm <- trend_msm(tmle_fit, delta_grid)
-msm
+tmle_fit$summar[6:7,]
 ```
+
+#### Directly Targeting the MSM Parameter $\beta$
+
+Note that in the above, a working MSM is fit to the individual TML estimates of
+the mean counterfactual outcome under a given value of the shift $\delta$ in the
+supplied grid. The parameter of interest $\beta$ of the MSM is asymptotically
+linear (and, in fact, a TML estimator) as a consequence of its construction from
+individual TML estimators. In smaller samples, it may be prudent to perform a
+TML estimation procedure that targets the parameter $\beta$ directly, as opposed
+to constructing it from several independently targeted TML estimates. An
+approach for constructing such an estimator is proposed in the sequel.
+
+Let $C = \left(\sum_{\delta} h(\delta) \frac{d}{d\beta} m_{\beta}(\delta)
+\frac{d}{d\beta} m_{\beta}(\delta)^t \right)$, then
+$$\text{EIF}_{\beta}(O) = C^{-1} \cdot \sum_{\delta} h(\delta)
+\frac{d}{d\beta} m_{\beta}(\delta)(Y - \overline{Q}(A,W) + C^{-1} \sum_{\delta}
+h(\delta) \frac{d}{d\beta} m_{\beta}(\delta) \left(\int \overline{Q}(a,w)
+g_{\delta}^0(a \mid w) - \Psi_{\delta}\right).$$
+
+Suppose a simple working MSM $\mathbb{E}Y_{g^0_{\delta}} = \beta_0 + \beta_1
+\delta$, then a TML estimator targeting $\beta_0$ and $\beta_1$ may be
+constructed as
+$$\overline{Q}_{n, \epsilon}(A,W) = \overline{Q}_n(A,W) + \epsilon (H_1(g),
+H_2(g),$$ for all $\delta$, where $H_1(g)$ is the auxiliary covariate for
+$\beta_0$ and $H_2(g)$ is the auxiliary covariate for $\beta_1$.
 
 ## References
 

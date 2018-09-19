@@ -9,8 +9,8 @@
 #'
 #' @export
 #
-tmle3_Spec_vimshift <- R6::R6Class(
-  classname = "tmle3_Spec_vimshift",
+tmle3_Spec_vimshift_delta <- R6::R6Class(
+  classname = "tmle3_Spec_vimshift_delta",
   portable = TRUE,
   class = TRUE,
   inherit = tmle3_Spec,
@@ -60,10 +60,22 @@ tmle3_Spec_vimshift <- R6::R6Class(
         })
 
       # create list of counterfactual means (parameters)
-      tmle_params <-
+      tsm_params_list <-
         lapply(interventions, function(x) {
           tmle3::Param_TSM$new(likelihood, x)
         })
+
+      # MSM function factory
+      design_matrix <- cbind(rep(1, length(shift_grid)), shift_grid)
+      colnames(design_matrix) <- c("intercept", "slope")
+      delta_param_MSM_linear <- msm_linear_factory(design_matrix)
+
+      # create MSM via delta method
+      msm <- Param_delta$new(
+        likelihood, delta_param_MSM_linear,
+        tsm_params_list
+      )
+      tmle_params <- unlist(list(tsm_params_list, msm), recursive = FALSE)
 
       # output should be a list
       return(tmle_params)
@@ -102,13 +114,13 @@ tmle3_Spec_vimshift <- R6::R6Class(
 #'
 #' @export
 #
-tmle_vimshift <- function(shift_fxn = shift_additive_bounded,
-                          shift_fxn_inv = shift_additive_bounded_inv,
-                          shift_grid = seq(-1, 1, by = 0.5),
-                          max_shifted_ratio = 2,
-                          ...) {
+tmle_vimshift_delta <- function(shift_fxn = shift_additive_bounded,
+                                shift_fxn_inv = shift_additive_bounded_inv,
+                                shift_grid = seq(-1, 1, by = 0.5),
+                                max_shifted_ratio = 2,
+                                ...) {
   # TODO: unclear why this has to be in a factory function
-  tmle3_Spec_vimshift$new(
+  tmle3_Spec_vimshift_delta$new(
     shift_fxn, shift_fxn_inv,
     shift_grid, max_shifted_ratio,
     ...

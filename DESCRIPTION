@@ -34,6 +34,7 @@ Imports:
     uuid,
     methods,
     data.table,
+    assertthat,
     sl3,
     tmle3
 Suggests:

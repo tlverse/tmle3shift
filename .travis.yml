@@ -29,7 +29,7 @@ r_packages:
   - covr
 
 r_github_packages:
-  - r-lib/devtools
+  - r-lib/devtools@2d012d1
   - r-lib/sessioninfo
   - Rdatatable/data.table
   - jimhester/covr

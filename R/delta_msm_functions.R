@@ -61,4 +61,3 @@ msm_linear_factory <- function(design_matrix) {
   # output the list containing the f and df functions
   return(delta_param_MSM_linear)
 }
-

@@ -99,9 +99,11 @@ tmle_fit$summary
 tmle_fit
 
 ## get estimates from Params corresponding to non-MSM TMLEs
-tmle_fit_orig_est <- list(tmle_fit$estimates[[1]], tmle_fit$estimates[[2]],
-                          tmle_fit$estimates[[3]], tmle_fit$estimates[[4]],
-                          tmle_fit$estimates[[5]])
+tmle_fit_orig_est <- list(
+  tmle_fit$estimates[[1]], tmle_fit$estimates[[2]],
+  tmle_fit$estimates[[3]], tmle_fit$estimates[[4]],
+  tmle_fit$estimates[[5]]
+)
 
 ## use MSM to summarize results
 msm_fit_table <- trend_msm(tmle_fit_orig_est, delta_grid)
@@ -116,4 +118,3 @@ setnames(msm_classic_table, names(msm_tmle3_table))
 test_that("Results from tmle3 MSM approach and classic MSM match exactly", {
   expect_equal(msm_tmle3_table, msm_classic_table)
 })
-

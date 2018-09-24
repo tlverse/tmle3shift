@@ -59,15 +59,17 @@ tmle3_Spec_vimshift_msm <- R6::R6Class(
           )
         })
 
+      browser()
+
       # instantiate linear working MSM
-      msm_param <- Param_MSM_linear$new(
+      msm_linear_param <- Param_MSM_linear$new(
         observed_likelihood = likelihood,
         intervention_list = interventions,
         shift_grid = shift_grid
       )
 
       # output should be a list
-      return(msm_param)
+      return(msm_linear_param)
     }
   ),
   active = list(),

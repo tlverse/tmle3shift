@@ -48,41 +48,44 @@ Param_MSM_linear <- R6Class(
                               outcome_node = "Y", shift_grid) {
       # initial
       super$initialize(observed_likelihood, ..., outcome_node = outcome_node)
-      private$.intervention_list <- intervention_list
+      private$.cf_likelihood <- make_CF_Likelihood(
+        observed_likelihood,
+        intervention_list
+      )
       private$.shift_grid <- shift_grid
-
-      # create list of counterfactual means (parameters)
-      private$.tsm_params <-
-        lapply(intervention_list, function(x) {
-          tmle3::Param_TSM$new(observed_likelihood, x)
-        })
     },
     clever_covariates = function(tmle_task = NULL, cv_fold = -1) {
       # use training task if none provided
       if (is.null(tmle_task)) {
         tmle_task <- self$observed_likelihood$training_task
       }
+      intervention_nodes <- names(self$intervention_list)
 
-      # combine clever covariates from individual parameters to target MSM
-      tsm_aux_covars <- list()
-      for (i in seq_along(self$tsm_params)) {
-        tsm_aux_covars[[i]] <-
-          as.numeric(self$tsm_params[[i]]$clever_covariates(tmle_task)$Y)
-      }
-      tsm_aux_covars_mat <- do.call(cbind, tsm_aux_covars)
-
-      # extract estimates of EIF in observed data
-      tsm_eif_vals <- list()
-      for (i in seq_along(self$tsm_params)) {
-        tsm_eif_vals[[i]] <-
-          as.numeric(self$tsm_params[[i]]$estimates(tmle_task, cv_fold)$IC)
-      }
-      tsm_eif_mat <- do.call(cbind, tsm_eif_vals)
+      # create list of counterfactual means (parameters)
+      tsm_cf_params <-
+        lapply(self$intervention_list, function(x) {
+          tmle3::Param_TSM$new(self$observed_likelihood, x)
+        })
 
       browser()
 
+      # combine clever covariates from individual parameters to target MSM
+      tsm_aux_covars_Hn_list <-
+        lapply(seq_along(tsm_cf_params), function(x) {
+          as.numeric(tsm_cf_params[[x]]$clever_covariates(tmle_task)$Y)
+        })
+      tsm_aux_covars_Hn_mat <- do.call(cbind, tsm_aux_covars_Hn_list)
+
+      # extract estimates of EIF in observed data
+      tsm_eif_vals_list <-
+        lapply(seq_along(tsm_cf_params), function(x) {
+          as.numeric(tsm_cf_params[[x]]$estimates(tmle_task, cv_fold)$IC)
+        })
+      tsm_eif_vals_mat <- do.call(cbind, tsm_eif_vals_list)
+
+
       # set weights to be the inverse of the variance of each TML estimate
-      wts <- as.numeric(1 / diag(stats::cov(tsm_eif_mat)))
+      wts <- as.numeric(1 / diag(stats::cov(tsm_eif_vals_mat)))
       omega <- diag(wts)
 
       # compute the MSM parameters
@@ -91,8 +94,8 @@ Param_MSM_linear <- R6Class(
       s_mat <- solve(t(x_mat) %*% omega %*% x_mat) %*% t(x_mat) %*% omega
 
       # build auxiliary covariates for each MSM parameter
-      H_msm <- t(s_mat %*% t(tsm_aux_covars_mat))
-      return(list(Y = H_msm))
+      Hn_msm <- t(s_mat %*% t(tsm_aux_covars_Hn_mat))
+      return(list(Y = Hn_msm))
     },
     estimates = function(tmle_task = NULL, cv_fold = -1) {
       # use training task if none provided
@@ -100,22 +103,6 @@ Param_MSM_linear <- R6Class(
         tmle_task <- self$observed_likelihood$training_task
       }
 
-      # extract estimates of EIF in observed data
-      tsm_eif_vals <- list()
-      for (i in seq_along(self$tsm_params)) {
-        tsm_eif_vals[[i]] <-
-          as.numeric(self$tsm_params[[i]]$estimates(tmle_task)$IC)
-      }
-      tsm_eif_mat <- do.call(cbind, tsm_eif_vals)
-
-      # set weights to be the inverse of the variance of each TML estimate
-      wts <- as.numeric(1 / diag(stats::cov(tsm_eif_mat)))
-      omega <- diag(wts)
-
-      # compute the MSM parameters
-      intercept <- rep(1, length(self$shift_grid))
-      x_mat <- cbind(intercept, self$shift_grid)
-      s_mat <- solve(t(x_mat) %*% omega %*% x_mat) %*% t(x_mat) %*% omega
 
       # build auxiliary covariates for each MSM parameter
       eif_msm <- t(s_mat %*% t(tsm_eif_mat))
@@ -144,8 +131,7 @@ Param_MSM_linear <- R6Class(
   ),
   private = list(
     .type = "MSM_linear",
-    .intervention_list = NULL,
-    .shift_grid = NULL,
-    .tsm_params = NULL
+    .cf_likelihood = NULL,
+    .shift_grid = NULL
   )
 )

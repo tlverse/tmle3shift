@@ -29,7 +29,6 @@
 #'     }
 #'     }
 #'
-
 #' @section Fields:
 #' \describe{
 #'     \item{\code{cf_likelihood}}{the counterfactual likelihood for this treatment
@@ -42,17 +41,13 @@ Param_MSM_linear <- R6Class(
   classname = "Param_MSM_linear",
   portable = TRUE,
   class = TRUE,
-  inherit = tmle3::Param_base,
+  inherit = tmle3::Param_delta,
   public = list(
-    initialize = function(observed_likelihood, intervention_list, ...,
-                              outcome_node = "Y", shift_grid) {
-      # initial
+    initialize = function(observed_likelihood, delta_param, parent_parameters,
+                              ..., outcome_node = NA) {
       super$initialize(observed_likelihood, ..., outcome_node = outcome_node)
-      private$.cf_likelihood <- make_CF_Likelihood(
-        observed_likelihood,
-        intervention_list
-      )
-      private$.shift_grid <- shift_grid
+      private$.delta_param <- delta_param
+      private$.parent_parameters <- parent_parameters
     },
     clever_covariates = function(tmle_task = NULL, cv_fold = -1) {
       # use training task if none provided
@@ -67,8 +62,6 @@ Param_MSM_linear <- R6Class(
           tmle3::Param_TSM$new(self$observed_likelihood, x)
         })
 
-      browser()
-
       # combine clever covariates from individual parameters to target MSM
       tsm_aux_covars_Hn_list <-
         lapply(seq_along(tsm_cf_params), function(x) {
@@ -82,7 +75,6 @@ Param_MSM_linear <- R6Class(
           as.numeric(tsm_cf_params[[x]]$estimates(tmle_task, cv_fold)$IC)
         })
       tsm_eif_vals_mat <- do.call(cbind, tsm_eif_vals_list)
-
 
       # set weights to be the inverse of the variance of each TML estimate
       wts <- as.numeric(1 / diag(stats::cov(tsm_eif_vals_mat)))
@@ -103,35 +95,12 @@ Param_MSM_linear <- R6Class(
         tmle_task <- self$observed_likelihood$training_task
       }
 
-
       # build auxiliary covariates for each MSM parameter
       eif_msm <- t(s_mat %*% t(tsm_eif_mat))
       psi_msm <- as.numeric(apply(eif_msm, 2, sum))
       result <- list(psi = psi_msm, IC = eif_msm)
       return(result)
     }
-  ),
-  active = list(
-    name = function() {
-      param_form <- sprintf(
-        "E[%s_{%s}]", self$outcome_node,
-        self$cf_likelihood$name
-      )
-      return(param_form)
-    },
-    intervention_list = function() {
-      return(self$intervention_list)
-    },
-    shift_grid = function() {
-      return(self$shift_grid)
-    },
-    update_nodes = function() {
-      return(self$outcome_node)
-    }
-  ),
-  private = list(
-    .type = "MSM_linear",
-    .cf_likelihood = NULL,
-    .shift_grid = NULL
   )
 )
+

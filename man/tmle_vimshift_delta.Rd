@@ -2,7 +2,7 @@
 % Please edit documentation in R/tmle3_Spec_vimshift_delta.R
 \name{tmle_vimshift_delta}
 \alias{tmle_vimshift_delta}
-\title{Outcome Under a Grid of Delta-Shifted Interventions}
+\title{Outcome Under a Grid of Shifted Interventions via Delta Method}
 \usage{
 tmle_vimshift_delta(shift_fxn = shift_additive_bounded,
   shift_fxn_inv = shift_additive_bounded_inv, shift_grid = seq(-1, 1,

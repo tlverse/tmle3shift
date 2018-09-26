@@ -87,7 +87,7 @@ tmle3_Spec_vimshift_delta <- R6::R6Class(
 
 ################################################################################
 
-#' Outcome Under a Grid of Delta-Shifted Interventions
+#' Outcome Under a Grid of Shifted Interventions via Delta Method
 #'
 #' O = (W, A, Y)
 #' W = Covariates

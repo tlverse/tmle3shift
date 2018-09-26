@@ -2,7 +2,7 @@
 % Please edit documentation in R/tmle3_Spec_vimshift_msm.R
 \name{tmle_vimshift_msm}
 \alias{tmle_vimshift_msm}
-\title{Outcome Under a Grid of Delta-Shifted Interventions}
+\title{Outcome Under a Grid of Shifted Interventions via Targeted Working MSM}
 \usage{
 tmle_vimshift_msm(shift_fxn = shift_additive_bounded,
   shift_fxn_inv = shift_additive_bounded_inv, shift_grid = seq(-1, 1,

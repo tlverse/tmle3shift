@@ -48,6 +48,25 @@ msm_linear_factory <- function(design_matrix) {
     return(msm_eif)
   }
 
+  # function to return the auxiliary ("clever") covariates of MSM parameters
+  hn_msm_linear <- function(x, dx) {
+    # vector of parameter estimates and matrix of EIF values
+    psi_vec <- do.call(c, x)
+    eif_mat <- do.call(cbind, dx)
+
+    # set weights to be the inverse of the variance of each TML estimate
+    weights <- as.numeric(1 / diag(stats::cov(eif_mat)))
+
+    # compute the MSM parameters
+    x_mat <- as.matrix(design_matrix)
+    omega <- diag(weights)
+    s_mat <- solve(t(x_mat) %*% omega %*% x_mat) %*% t(x_mat) %*% omega
+
+    # compute inference for MSM based on individual EIF(O_i) for each parameter
+    msm_hn_coef <- s_mat
+    return(msm_hn_coef)
+  }
+
   # create list with the f and df functions for delta method
   delta_param_MSM_linear <- list(
     type = "MSM_linear",
@@ -55,7 +74,8 @@ msm_linear_factory <- function(design_matrix) {
       sprintf("MSM(%s)", colnames(design_matrix))
     },
     f = f_msm_linear,
-    df = df_msm_linear
+    df = df_msm_linear,
+    hn = hn_msm_linear
   )
 
   # output the list containing the f and df functions

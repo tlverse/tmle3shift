@@ -3,7 +3,7 @@
 \docType{data}
 \name{Param_MSM_linear}
 \alias{Param_MSM_linear}
-\title{Linear Working Marginal Structural Models}
+\title{Parameter for Linear Working Marginal Structural Model}
 \format{\code{\link{R6Class}} object.}
 \usage{
 Param_MSM_linear

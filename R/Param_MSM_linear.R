@@ -1,4 +1,4 @@
-#' Linear Working Marginal Structural Models
+#' Parameter for Linear Working Marginal Structural Model
 #'
 #' Parameter definition for targeting the parameters of a linear working
 #' marginal structural model (MSM): EY = beta0 + beta1 delta, to
@@ -50,60 +50,27 @@ Param_MSM_linear <- R6Class(
       }
       intervention_nodes <- names(self$intervention_list)
 
+      estimates <- lapply(
+        self$parent_parameters,
+        function(tmle_param) {
+          tmle_param$estimates(tmle_task, cv_fold)
+        }
+      )
+
+      psis <- lapply(estimates, `[[`, "psi")
+      eifs <- lapply(estimates, `[[`, "IC")
+      hn_msm_coef <- self$delta_param$hn(x = psis, dx = eifs)
+
       # combine clever covariates from individual parameters to target MSM
-      tsm_aux_covars_Hn_list <-
-        lapply(seq_along(self$parent_parameters), function(x) {
-          as.numeric(self$parent_parameters[[x]]$clever_covariates(tmle_task)$Y)
+      hn_params_list <-
+        lapply(self$parent_parameters, function(tmle_param) {
+          as.numeric(tmle_param$clever_covariates(tmle_task, cv_fold)$Y)
         })
-      tsm_aux_covars_Hn_mat <- do.call(cbind, tsm_aux_covars_Hn_list)
-
-      # extract estimates of EIF in observed data
-      tsm_eif_vals_list <-
-        lapply(seq_along(self$parent_parameters), function(x) {
-          as.numeric(self$parent_parameters[[x]]$estimates(tmle_task, cv_fold)$IC)
-        })
-      tsm_eif_vals_mat <- do.call(cbind, tsm_eif_vals_list)
-      private$.eif_mat <- tsm_eif_vals_mat
-
-      # set weights to be the inverse of the variance of each TML estimate
-      wts <- as.numeric(1 / diag(stats::cov(tsm_eif_vals_mat)))
-      omega <- diag(wts)
-
-      # compute the MSM parameters
-      intercept <- rep(1, length(self$delta_param))
-      x_mat <- cbind(intercept, shift = self$delta_param)
-      s_mat <- solve(t(x_mat) %*% omega %*% x_mat) %*% t(x_mat) %*% omega
-      private$.beta_mat <- s_mat
+      hn_params_mat <- do.call(cbind, hn_params_list)
 
       # build auxiliary covariates for each MSM parameter
-      Hn_msm <- t(s_mat %*% t(tsm_aux_covars_Hn_mat))
-      return(list(Y = Hn_msm))
-    },
-    estimates = function(tmle_task = NULL, cv_fold = -1) {
-      # use training task if none provided
-      if (is.null(tmle_task)) {
-        tmle_task <- self$observed_likelihood$training_task
-      }
-
-      # build auxiliary covariates for each MSM parameter
-      eif_msm <- t(self$beta_mat %*% t(self$eif_mat))
-      psi_msm <- as.numeric(apply(eif_msm, 2, sum))
-
-      # output
-      list(psi = psi_msm, IC = eif_msm)
+      hn_msm <- t(hn_msm_coef %*% t(hn_params_mat))
+      return(list(Y = hn_msm))
     }
-  ),
-  active = list(
-    beta_mat = function() {
-      return(private$.beta_mat)
-    },
-    eif_mat = function() {
-      return(private$.eif_mat)
-    }
-  ),
-  private = list(
-    .beta_mat = matrix(),
-    .eif_mat = matrix()
   )
 )
-

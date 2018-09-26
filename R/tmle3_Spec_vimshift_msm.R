@@ -65,10 +65,15 @@ tmle3_Spec_vimshift_msm <- R6::R6Class(
           tmle3::Param_TSM$new(likelihood, x)
         })
 
+      # MSM function factory
+      design_matrix <- cbind(rep(1, length(shift_grid)), shift_grid)
+      colnames(design_matrix) <- c("intercept", "slope")
+      delta_param_MSM_linear <- msm_linear_factory(design_matrix)
+
       # instantiate linear working MSM
       msm_linear_param <- Param_MSM_linear$new(
         observed_likelihood = likelihood,
-        delta_param = shift_grid,
+        delta_param = delta_param_MSM_linear,
         parent_parameters = tsm_params_list,
       )
 
@@ -82,7 +87,7 @@ tmle3_Spec_vimshift_msm <- R6::R6Class(
 
 #################################################################################
 
-#' Outcome Under a Grid of Delta-Shifted Interventions
+#' Outcome Under a Grid of Shifted Interventions via Targeted Working MSM
 #'
 #' O = (W, A, Y)
 #' W = Covariates

@@ -71,7 +71,7 @@ learner_list <- list(Y = Q_learner, A = g_learner)
 # what's the grid of shifts we wish to consider?
 delta_grid <- seq(-1, 1, 0.5)
 
-# initialize a tmle specification
+# initialize a tmle specification for direct targeting of MSM parameters
 tmle_spec <- tmle_vimshift_msm(
   shift_grid = delta_grid,
   max_shifted_ratio = 2
@@ -92,8 +92,51 @@ tmle_params <- tmle_spec$make_params(tmle_task, likelihood_targeted)
 updater$tmle_params <- tmle_params
 
 ## fit TML estimator update
-tmle_fit <- fit_tmle3(tmle_task, likelihood_targeted, tmle_params, updater)
+tmle_fit_targeted_msm <- fit_tmle3(
+  tmle_task, likelihood_targeted, tmle_params,
+  updater
+)
 
-## extract results from tmle3_Fit object
-tmle_fit
 
+################################################################################
+# COMPUTE MSM PARAMETERS VIA DELTA METHOD
+################################################################################
+
+# initialize a tmle specification for delta method
+tmle_spec <- tmle_vimshift_delta(
+  shift_grid = delta_grid,
+  max_shifted_ratio = 2
+)
+
+## define data (from tmle3_Spec base class)
+tmle_task <- tmle_spec$make_tmle_task(data, node_list)
+
+## define likelihood (from tmle3_Spec base class)
+likelihood_init <- tmle_spec$make_initial_likelihood(tmle_task, learner_list)
+
+## define update method (fluctuation submodel and loss function)
+updater <- tmle_spec$make_updater()
+likelihood_targeted <- Targeted_Likelihood$new(likelihood_init, updater)
+
+## invoke params specified in spec
+tmle_params <- tmle_spec$make_params(tmle_task, likelihood_targeted)
+updater$tmle_params <- tmle_params
+
+## fit TML estimator update
+tmle_fit_delta_method <- fit_tmle3(
+  tmle_task, likelihood_targeted, tmle_params,
+  updater
+)
+
+
+################################################################################
+# TEST: Compare Targeted MSM Parameters to Estimates via Delta Method
+################################################################################
+
+## extract relevant tmle3 results for test and re-format appropriately
+msm_delta_summary <- tmle_fit_delta_method$summary[6:7, ]
+msm_targeted_summary <- tmle_fit_targeted_msm$summary
+
+test_that("Results from Targeted MSM approach and Delta Method MSM match", {
+  expect_equal(msm_delta_summary, msm_targeted_summary, tolerance = 0.005)
+})

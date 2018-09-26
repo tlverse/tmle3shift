@@ -43,12 +43,6 @@ Param_MSM_linear <- R6Class(
   class = TRUE,
   inherit = tmle3::Param_delta,
   public = list(
-    initialize = function(observed_likelihood, delta_param, parent_parameters,
-                              ..., outcome_node = NA) {
-      super$initialize(observed_likelihood, ..., outcome_node = outcome_node)
-      private$.delta_param <- delta_param
-      private$.parent_parameters <- parent_parameters
-    },
     clever_covariates = function(tmle_task = NULL, cv_fold = -1) {
       # use training task if none provided
       if (is.null(tmle_task)) {
@@ -56,34 +50,30 @@ Param_MSM_linear <- R6Class(
       }
       intervention_nodes <- names(self$intervention_list)
 
-      # create list of counterfactual means (parameters)
-      tsm_cf_params <-
-        lapply(self$intervention_list, function(x) {
-          tmle3::Param_TSM$new(self$observed_likelihood, x)
-        })
-
       # combine clever covariates from individual parameters to target MSM
       tsm_aux_covars_Hn_list <-
-        lapply(seq_along(tsm_cf_params), function(x) {
-          as.numeric(tsm_cf_params[[x]]$clever_covariates(tmle_task)$Y)
+        lapply(seq_along(self$parent_parameters), function(x) {
+          as.numeric(self$parent_parameters[[x]]$clever_covariates(tmle_task)$Y)
         })
       tsm_aux_covars_Hn_mat <- do.call(cbind, tsm_aux_covars_Hn_list)
 
       # extract estimates of EIF in observed data
       tsm_eif_vals_list <-
-        lapply(seq_along(tsm_cf_params), function(x) {
-          as.numeric(tsm_cf_params[[x]]$estimates(tmle_task, cv_fold)$IC)
+        lapply(seq_along(self$parent_parameters), function(x) {
+          as.numeric(self$parent_parameters[[x]]$estimates(tmle_task, cv_fold)$IC)
         })
       tsm_eif_vals_mat <- do.call(cbind, tsm_eif_vals_list)
+      private$.eif_mat <- tsm_eif_vals_mat
 
       # set weights to be the inverse of the variance of each TML estimate
       wts <- as.numeric(1 / diag(stats::cov(tsm_eif_vals_mat)))
       omega <- diag(wts)
 
       # compute the MSM parameters
-      intercept <- rep(1, length(self$shift_grid))
-      x_mat <- cbind(intercept, self$shift_grid)
+      intercept <- rep(1, length(self$delta_param))
+      x_mat <- cbind(intercept, shift = self$delta_param)
       s_mat <- solve(t(x_mat) %*% omega %*% x_mat) %*% t(x_mat) %*% omega
+      private$.beta_mat <- s_mat
 
       # build auxiliary covariates for each MSM parameter
       Hn_msm <- t(s_mat %*% t(tsm_aux_covars_Hn_mat))
@@ -96,11 +86,24 @@ Param_MSM_linear <- R6Class(
       }
 
       # build auxiliary covariates for each MSM parameter
-      eif_msm <- t(s_mat %*% t(tsm_eif_mat))
+      eif_msm <- t(self$beta_mat %*% t(self$eif_mat))
       psi_msm <- as.numeric(apply(eif_msm, 2, sum))
-      result <- list(psi = psi_msm, IC = eif_msm)
-      return(result)
+
+      # output
+      list(psi = psi_msm, IC = eif_msm)
     }
+  ),
+  active = list(
+    beta_mat = function() {
+      return(private$.beta_mat)
+    },
+    eif_mat = function() {
+      return(private$.eif_mat)
+    }
+  ),
+  private = list(
+    .beta_mat = matrix(),
+    .eif_mat = matrix()
   )
 )
 

@@ -59,13 +59,17 @@ tmle3_Spec_vimshift_msm <- R6::R6Class(
           )
         })
 
-      browser()
+      # create list of counterfactual means (parameters)
+      tsm_params_list <-
+        lapply(interventions, function(x) {
+          tmle3::Param_TSM$new(likelihood, x)
+        })
 
       # instantiate linear working MSM
       msm_linear_param <- Param_MSM_linear$new(
         observed_likelihood = likelihood,
-        intervention_list = interventions,
-        shift_grid = shift_grid
+        delta_param = shift_grid,
+        parent_parameters = tsm_params_list,
       )
 
       # output should be a list

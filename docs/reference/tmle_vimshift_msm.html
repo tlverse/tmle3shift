@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Outcome under Shifted Treatment — tmle_shift • tmle3shift</title>
+<title>Outcome Under a Grid of Shifted Interventions via Targeted Working MSM — tmle_vimshift_msm • tmle3shift</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,7 +30,7 @@
 
 
 
-<meta property="og:title" content="Outcome under Shifted Treatment — tmle_shift" />
+<meta property="og:title" content="Outcome Under a Grid of Shifted Interventions via Targeted Working MSM — tmle_vimshift_msm" />
 
 <meta property="og:description" content="O = (W, A, Y)
 W = Covariates
@@ -116,9 +116,9 @@ Y = Outcome (binary or bounded continuous)" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Outcome under Shifted Treatment</h1>
+    <h1>Outcome Under a Grid of Shifted Interventions via Targeted Working MSM</h1>
     
-    <div class="hidden name"><code>tmle_shift.Rd</code></div>
+    <div class="hidden name"><code>tmle_vimshift_msm.Rd</code></div>
     </div>
 
     <div class="ref-description">
@@ -130,9 +130,9 @@ Y = Outcome (binary or bounded continuous)</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>tmle_shift</span>(<span class='kw'>shift_fxn</span> <span class='kw'>=</span> <span class='no'>shift_additive_bounded</span>,
-  <span class='kw'>shift_fxn_inv</span> <span class='kw'>=</span> <span class='no'>shift_additive_bounded_inv</span>, <span class='kw'>shift_val</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>max_shifted_ratio</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>tmle_vimshift_msm</span>(<span class='kw'>shift_fxn</span> <span class='kw'>=</span> <span class='no'>shift_additive_bounded</span>,
+  <span class='kw'>shift_fxn_inv</span> <span class='kw'>=</span> <span class='no'>shift_additive_bounded_inv</span>, <span class='kw'>shift_grid</span> <span class='kw'>=</span> <span class='fu'>seq</span>(-<span class='fl'>1</span>, <span class='fl'>1</span>,
+  <span class='kw'>by</span> <span class='kw'>=</span> <span class='fl'>0.5</span>), <span class='kw'>max_shifted_ratio</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -149,10 +149,11 @@ shift to be applied to the treatment. For an example, see
 <code>shift_additive_inv</code>.</p></td>
     </tr>
     <tr>
-      <th>shift_val</th>
-      <td><p>A <code>numeric</code>, specification of the magnitude of the
-desired shift (on the level of the treatment). This is a value passed to
-the <code>function</code>s above for modulating the treatment.</p></td>
+      <th>shift_grid</th>
+      <td><p>A <code>numeric</code> vector, specification of a selection of
+shifts (on the level of the treatment) to be applied to the intervention.
+This is a value passed to the <code>function</code>s above for computing various
+values of the outcome under modulated values of the treatment.</p></td>
     </tr>
     <tr>
       <th>max_shifted_ratio</th>
@@ -164,7 +165,7 @@ density to the observed intervention density is below this value.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Additional arguments (currently unused).</p></td>
+      <td><p>Additional arguments, passed to shift functions.</p></td>
     </tr>
     </table>
     

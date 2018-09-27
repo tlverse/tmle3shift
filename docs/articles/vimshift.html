@@ -35,7 +35,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tmle3shift</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.5</span>
       </span>
     </div>
 
@@ -81,7 +81,7 @@
 <a href="https://nimahejazi.org">Nima S. Hejazi</a>, <a href="https://github.com/jeremyrcoyle">Jeremy R. Coyle</a>, and <a href="https://vanderlaan-lab.org">Mark J. van der Laan</a>
 </h4>
             
-            <h4 class="date">2018-09-05</h4>
+            <h4 class="date">2018-09-26</h4>
       
       
       <div class="hidden name"><code>vimshift.Rmd</code></div>
@@ -169,32 +169,36 @@
 </h3>
 <p>To easily incorporate ensemble machine learning into the estimation procedure, we rely on the facilities provided in the <a href="https://sl3.tlverse.org"><code>sl3</code> R package</a>. For a complete guide on using the <code>sl3</code> R package, consider consulting <a href="https://sl3.tlverse.org" class="uri">https://sl3.tlverse.org</a>, or <a href="https://tlverse.org" class="uri">https://tlverse.org</a> for the <a href="https://github.com/tlverse"><code>tlverse</code> ecosystem</a>, of which <code>sl3</code> is a major part.</p>
 <p>Using the framework provided by the <a href="https://sl3.tlverse.org"><code>sl3</code> package</a>, the nuisance parameters of the TML estimator may be fit with ensemble learning, using the cross-validation framework of the Super Learner algorithm of <span class="citation">van der Laan, Polley, and Hubbard (2007)</span>.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># learners used for conditional expectation regression (e.g., outcome)</span></a>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># learners used for outcome regression</span></a>
 <a class="sourceLine" id="cb4-2" data-line-number="2">lrn1 &lt;-<span class="st"> </span>Lrnr_mean<span class="op">$</span><span class="kw">new</span>()</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">lrn2 &lt;-<span class="st"> </span>Lrnr_glm_fast<span class="op">$</span><span class="kw">new</span>()</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">lrn2 &lt;-<span class="st"> </span>Lrnr_glm<span class="op">$</span><span class="kw">new</span>()</a>
 <a class="sourceLine" id="cb4-4" data-line-number="4">lrn3 &lt;-<span class="st"> </span>Lrnr_ranger<span class="op">$</span><span class="kw">new</span>()</a>
 <a class="sourceLine" id="cb4-5" data-line-number="5">sl_lrn &lt;-<span class="st"> </span>Lrnr_sl<span class="op">$</span><span class="kw">new</span>(</a>
 <a class="sourceLine" id="cb4-6" data-line-number="6">  <span class="dt">learners =</span> <span class="kw">list</span>(lrn1, lrn2, lrn3),</a>
 <a class="sourceLine" id="cb4-7" data-line-number="7">  <span class="dt">metalearner =</span> Lrnr_nnls<span class="op">$</span><span class="kw">new</span>()</a>
 <a class="sourceLine" id="cb4-8" data-line-number="8">)</a>
 <a class="sourceLine" id="cb4-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="co"># learners used for conditional density regression (e.g., propensity score)</span></a>
+<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="co"># learners used for intervention conditional density estimatoin</span></a>
 <a class="sourceLine" id="cb4-11" data-line-number="11">lrn1_dens &lt;-<span class="st"> </span>Lrnr_condensier<span class="op">$</span><span class="kw">new</span>(</a>
-<a class="sourceLine" id="cb4-12" data-line-number="12">  <span class="dt">nbins =</span> <span class="dv">25</span>, <span class="dt">bin_estimator =</span> lrn1,</a>
+<a class="sourceLine" id="cb4-12" data-line-number="12">  <span class="dt">nbins =</span> <span class="dv">25</span>, <span class="dt">bin_estimator =</span> lrn2,</a>
 <a class="sourceLine" id="cb4-13" data-line-number="13">  <span class="dt">bin_method =</span> <span class="st">"dhist"</span></a>
 <a class="sourceLine" id="cb4-14" data-line-number="14">)</a>
 <a class="sourceLine" id="cb4-15" data-line-number="15">lrn2_dens &lt;-<span class="st"> </span>Lrnr_condensier<span class="op">$</span><span class="kw">new</span>(</a>
-<a class="sourceLine" id="cb4-16" data-line-number="16">  <span class="dt">nbins =</span> <span class="dv">15</span>, <span class="dt">bin_estimator =</span> lrn2,</a>
+<a class="sourceLine" id="cb4-16" data-line-number="16">  <span class="dt">nbins =</span> <span class="dv">15</span>, <span class="dt">bin_estimator =</span> lrn3,</a>
 <a class="sourceLine" id="cb4-17" data-line-number="17">  <span class="dt">bin_method =</span> <span class="st">"dhist"</span></a>
 <a class="sourceLine" id="cb4-18" data-line-number="18">)</a>
 <a class="sourceLine" id="cb4-19" data-line-number="19">lrn3_dens &lt;-<span class="st"> </span>Lrnr_condensier<span class="op">$</span><span class="kw">new</span>(</a>
-<a class="sourceLine" id="cb4-20" data-line-number="20">  <span class="dt">nbins =</span> <span class="dv">20</span>, <span class="dt">bin_estimator =</span> lrn3,</a>
+<a class="sourceLine" id="cb4-20" data-line-number="20">  <span class="dt">nbins =</span> <span class="dv">20</span>, <span class="dt">bin_estimator =</span> lrn2,</a>
 <a class="sourceLine" id="cb4-21" data-line-number="21">  <span class="dt">bin_method =</span> <span class="st">"dhist"</span></a>
 <a class="sourceLine" id="cb4-22" data-line-number="22">)</a>
-<a class="sourceLine" id="cb4-23" data-line-number="23">sl_lrn_dens &lt;-<span class="st"> </span>Lrnr_sl<span class="op">$</span><span class="kw">new</span>(</a>
-<a class="sourceLine" id="cb4-24" data-line-number="24">  <span class="dt">learners =</span> <span class="kw">list</span>(lrn1_dens, lrn2_dens, lrn3_dens),</a>
-<a class="sourceLine" id="cb4-25" data-line-number="25">  <span class="dt">metalearner =</span> Lrnr_solnp_density<span class="op">$</span><span class="kw">new</span>()</a>
-<a class="sourceLine" id="cb4-26" data-line-number="26">)</a></code></pre></div>
+<a class="sourceLine" id="cb4-23" data-line-number="23">lrn4_dens &lt;-<span class="st"> </span>Lrnr_condensier<span class="op">$</span><span class="kw">new</span>(</a>
+<a class="sourceLine" id="cb4-24" data-line-number="24">  <span class="dt">nbins =</span> <span class="dv">40</span>, <span class="dt">bin_estimator =</span> lrn1,</a>
+<a class="sourceLine" id="cb4-25" data-line-number="25">  <span class="dt">bin_method =</span> <span class="st">"dhist"</span></a>
+<a class="sourceLine" id="cb4-26" data-line-number="26">)</a>
+<a class="sourceLine" id="cb4-27" data-line-number="27">sl_lrn_dens &lt;-<span class="st"> </span>Lrnr_sl<span class="op">$</span><span class="kw">new</span>(</a>
+<a class="sourceLine" id="cb4-28" data-line-number="28">  <span class="dt">learners =</span> <span class="kw">list</span>(lrn1_dens, lrn2_dens, lrn3_dens, lrn4_dens),</a>
+<a class="sourceLine" id="cb4-29" data-line-number="29">  <span class="dt">metalearner =</span> Lrnr_solnp_density<span class="op">$</span><span class="kw">new</span>()</a>
+<a class="sourceLine" id="cb4-30" data-line-number="30">)</a></code></pre></div>
 <p>As seen above, we can generate two different ensemble learners for the two nuisance regressions that must be fit in the process of computing this TML estimator. In particular, we use a Super Learner composed of an intercept model, a GLM, and a random forest (as implemented in <a href="cran.r-project.org/package=ranger">the <code>ranger</code> R package</a>) for fitting the outcome regressions (often denoted “Q” in the literature) while we use variations of these learners, through <a href="https://github.com/osofr/condensier">the <code>condensier</code> R package</a>, for the conditional density estimation needed in fitting the treatment mechanism (often denoted “g” in the literature).</p>
 <p>We make the above explicit with respect to standard notation by bundling the ensemble learners into a list object below:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># specify outcome and treatment regressions and create learner list</span></a>
@@ -212,7 +216,8 @@
 <a class="sourceLine" id="cb6-2" data-line-number="2">delta_grid &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="fl">0.5</span>)</a>
 <a class="sourceLine" id="cb6-3" data-line-number="3"></a>
 <a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co"># initialize a tmle specification</span></a>
-<a class="sourceLine" id="cb6-5" data-line-number="5">tmle_spec &lt;-<span class="st"> </span><span class="kw"><a href="../reference/tmle_vimshift.html">tmle_vimshift</a></span>(<span class="dt">shift_grid =</span> delta_grid, <span class="dt">max_shifted_ratio =</span> <span class="dv">2</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb6-5" data-line-number="5">tmle_spec &lt;-<span class="st"> </span><span class="kw"><a href="../reference/tmle_vimshift_delta.html">tmle_vimshift_delta</a></span>(<span class="dt">shift_grid =</span> delta_grid,</a>
+<a class="sourceLine" id="cb6-6" data-line-number="6">                                 <span class="dt">max_shifted_ratio =</span> <span class="dv">2</span>)</a></code></pre></div>
 <p>As seen above, the <code>tmle_vimshift</code> specification object (like all <code>tmle3_Spec</code> objects) does <em>not</em> store the data for our specific analysis of interest. Later, we’ll see that passing a data object directly to the <code>tmle3</code> wrapper function, alongside the instantiated <code>tmle_spec</code>, will serve to construct a <code>tmle3_Task</code> object internally (see the <code>tmle3</code> documentation for details).</p>
 </div>
 <div id="targeted-estimation-of-stochastic-interventions-effects" class="section level3">
@@ -243,46 +248,27 @@
 <p>Instead, one may invoke the <code>tmle3</code> convenience function to fit the series of TML estimators (one for each parameter defined by the grid delta) in a single function call:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co"># fit the TML estimator</span></a>
 <a class="sourceLine" id="cb8-2" data-line-number="2">tmle_fit &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/tmle3/topics/tmle3">tmle3</a></span>(tmle_spec, data, node_list, learner_list)</a></code></pre></div>
-<pre><code>## speedglm::speedglm.wfit failed, falling back on stats:glm.fit; Error in solve.default(XTX, XTz, tol = tol.solve) : 
-##   Lapack routine dgesv: system is exactly singular: U[2,2] = 0
-## 
-## speedglm::speedglm.wfit failed, falling back on stats:glm.fit; Error in solve.default(XTX, XTz, tol = tol.solve) : 
-##   Lapack routine dgesv: system is exactly singular: U[2,2] = 0
-## 
-## speedglm::speedglm.wfit failed, falling back on stats:glm.fit; Error in solve.default(XTX, XTz, tol = tol.solve) : 
-##   Lapack routine dgesv: system is exactly singular: U[2,2] = 0
-## 
-## speedglm::speedglm.wfit failed, falling back on stats:glm.fit; Error in solve.default(XTX, XTz, tol = tol.solve) : 
-##   Lapack routine dgesv: system is exactly singular: U[2,2] = 0
-## 
-## speedglm::speedglm.wfit failed, falling back on stats:glm.fit; Error in solve.default(XTX, XTz, tol = tol.solve) : 
-##   Lapack routine dgesv: system is exactly singular: U[2,2] = 0</code></pre>
 <pre><code>## 
-## Iter: 1 fn: 1827.3543     Pars:  0.888375995 0.111622816 0.000001188
-## Iter: 2 fn: 1827.3543     Pars:  0.8883760454 0.1116233184 0.0000006362
-## solnp--&gt; Completed in 2 iterations
-## 
-## density meta-learner fit:
-## Lrnr_condensier_dhist_25_20_FALSE_NA_FALSE_NULL 
-##                                    8.883760e-01 
-## Lrnr_condensier_dhist_15_20_FALSE_NA_FALSE_NULL 
-##                                    1.116233e-01 
-## Lrnr_condensier_dhist_20_20_FALSE_NA_FALSE_NULL 
-##                                    6.361514e-07</code></pre>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">tmle_fit</a></code></pre></div>
-<pre><code>## A tmle3_Fit that took 1 step(s)
-##    type         param  init_est tmle_est         se     lower     upper
-## 1:  TSM E[Y_{A=NULL}] 0.5999507 0.604834 0.06315805 0.4810465 0.7286215
-## 2:  TSM E[Y_{A=NULL}] 1.0481937 1.058459 0.06634296 0.9284288 1.1884885
-## 3:  TSM E[Y_{A=NULL}] 1.5427535 1.543276 0.06656993 1.4128016 1.6737509
-## 4:  TSM E[Y_{A=NULL}] 2.0352548 2.041327 0.06514262 1.9136494 2.1690037
-## 5:  TSM E[Y_{A=NULL}] 2.4907026 2.495396 0.06071568 2.3763950 2.6143960
-##    psi_transformed lower_transformed upper_transformed
-## 1:        0.604834         0.4810465         0.7286215
-## 2:        1.058459         0.9284288         1.1884885
-## 3:        1.543276         1.4128016         1.6737509
-## 4:        2.041327         1.9136494         2.1690037
-## 5:        2.495396         2.3763950         2.6143960</code></pre>
+## Iter: 1 fn: 1834.2829     Pars:  0.09304453 0.02273091 0.00002943 0.88419514
+## Iter: 2 fn: 1834.2829     Pars:  0.09307163 0.02271364 0.00000801 0.88420671
+## solnp--&gt; Completed in 2 iterations</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">tmle_fit</a></code></pre></div>
+<pre><code>##          type          param  init_est  tmle_est         se     lower
+## 1:        TSM  E[Y_{A=NULL}] 0.6011976 0.5992095 0.06323482 0.4752716
+## 2:        TSM  E[Y_{A=NULL}] 1.0377049 1.0328124 0.06722420 0.9010553
+## 3:        TSM  E[Y_{A=NULL}] 1.5431887 1.5432763 0.06656993 1.4128016
+## 4:        TSM  E[Y_{A=NULL}] 2.0347742 2.0305633 0.06505701 1.9030539
+## 5:        TSM  E[Y_{A=NULL}] 2.4944453 2.4869564 0.06083864 2.3677148
+## 6: MSM_linear MSM(intercept) 1.5427414 1.5388987 0.06343556 1.4145673
+## 7: MSM_linear     MSM(slope) 0.9556550 0.9536316 0.01305038 0.9280533
+##        upper psi_transformed lower_transformed upper_transformed
+## 1: 0.7231475       0.5992095         0.4752716         0.7231475
+## 2: 1.1645694       1.0328124         0.9010553         1.1645694
+## 3: 1.6737509       1.5432763         1.4128016         1.6737509
+## 4: 2.1580727       2.0305633         1.9030539         2.1580727
+## 5: 2.6061979       2.4869564         2.3677148         2.6061979
+## 6: 1.6632301       1.5388987         1.4145673         1.6632301
+## 7: 0.9792099       0.9536316         0.9280533         0.9792099</code></pre>
 <p><em>Remark</em>: The <code>print</code> method of the resultant <code>tmle_fit</code> object conveniently displays the results from computing our TML estimator.</p>
 </div>
 <div id="inference-with-marginal-structural-models" class="section level3">
@@ -310,11 +296,20 @@ m_{\beta}(\delta))\right)h(\delta),\]</span> where <span class="math inline">\(\
 \sum_{\delta} h(\delta) \frac{d}{d\beta} f_{\beta}(\delta) (\psi_{\delta}(P_0)
 - m_{\beta}(\delta)) = 0.\]</span></p>
 <p>Inference from a working MSM is rather straightforward. To wit, the limiting distribution for <span class="math inline">\(m_{\beta}(\delta)\)</span> may be expressed <span class="math display">\[\sqrt{n}(\beta_n - \beta_0) \to N(0, \Sigma),\]</span> where <span class="math inline">\(\Sigma\)</span> is the empirical covariance matrix of <span class="math inline">\(\text{EIF}_{\beta}(O)\)</span>.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">msm &lt;-<span class="st"> </span><span class="kw"><a href="../reference/trend_msm.html">trend_msm</a></span>(tmle_fit, delta_grid)</a>
-<a class="sourceLine" id="cb13-2" data-line-number="2">msm</a></code></pre></div>
-<pre><code>##               ci_low param_est   ci_high   param_se      p_value
-## intercept  1.4242016 1.5486582 1.6731148 0.06349942 2.26287e-131
-## delta_grid 0.9279261 0.9527982 0.9776703 0.01269010  0.00000e+00</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">tmle_fit<span class="op">$</span>summar[<span class="dv">6</span><span class="op">:</span><span class="dv">7</span>,]</a></code></pre></div>
+<pre><code>## NULL</code></pre>
+<div id="directly-targeting-the-msm-parameter-beta" class="section level4">
+<h4 class="hasAnchor">
+<a href="#directly-targeting-the-msm-parameter-beta" class="anchor"></a>Directly Targeting the MSM Parameter <span class="math inline">\(\beta\)</span>
+</h4>
+<p>Note that in the above, a working MSM is fit to the individual TML estimates of the mean counterfactual outcome under a given value of the shift <span class="math inline">\(\delta\)</span> in the supplied grid. The parameter of interest <span class="math inline">\(\beta\)</span> of the MSM is asymptotically linear (and, in fact, a TML estimator) as a consequence of its construction from individual TML estimators. In smaller samples, it may be prudent to perform a TML estimation procedure that targets the parameter <span class="math inline">\(\beta\)</span> directly, as opposed to constructing it from several independently targeted TML estimates. An approach for constructing such an estimator is proposed in the sequel.</p>
+<p>Let <span class="math inline">\(C = \left(\sum_{\delta} h(\delta) \frac{d}{d\beta} m_{\beta}(\delta) \frac{d}{d\beta} m_{\beta}(\delta)^t \right)\)</span>, then <span class="math display">\[\text{EIF}_{\beta}(O) = C^{-1} \cdot \sum_{\delta} h(\delta)
+\frac{d}{d\beta} m_{\beta}(\delta)(Y - \overline{Q}(A,W) + C^{-1} \sum_{\delta}
+h(\delta) \frac{d}{d\beta} m_{\beta}(\delta) \left(\int \overline{Q}(a,w)
+g_{\delta}^0(a \mid w) - \Psi_{\delta}\right).\]</span></p>
+<p>Suppose a simple working MSM <span class="math inline">\(\mathbb{E}Y_{g^0_{\delta}} = \beta_0 + \beta_1 \delta\)</span>, then a TML estimator targeting <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> may be constructed as <span class="math display">\[\overline{Q}_{n, \epsilon}(A,W) = \overline{Q}_n(A,W) + \epsilon (H_1(g),
+H_2(g),\]</span> for all <span class="math inline">\(\delta\)</span>, where <span class="math inline">\(H_1(g)\)</span> is the auxiliary covariate for <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(H_2(g)\)</span> is the auxiliary covariate for <span class="math inline">\(\beta_1\)</span>.</p>
+</div>
 </div>
 </div>
 <div id="references" class="section level2 unnumbered">

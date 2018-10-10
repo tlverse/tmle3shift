@@ -35,10 +35,10 @@ r_github_packages:
   - jimhester/covr
   - osofr/simcausal
   - osofr/condensier
-  - jeremyrcoyle/hal9001
   - nhejazi/txshift
   - tlverse/delayed
   - tlverse/origami
+  - tlverse/hal9001
   - tlverse/sl3
   - tlverse/tmle3
 

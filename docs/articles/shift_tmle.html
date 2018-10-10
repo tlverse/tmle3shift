@@ -81,7 +81,7 @@
 <a href="https://nimahejazi.org">Nima Hejazi</a>, <a href="https://www.benkeserstatistics.com/">David Benkeser</a>, and <a href="https://github.com/jeremyrcoyle">Jeremy Coyle</a>
 </h4>
             
-            <h4 class="date">2018-09-26</h4>
+            <h4 class="date">2018-10-10</h4>
       
       
       <div class="hidden name"><code>shift_tmle.Rmd</code></div>
@@ -108,8 +108,8 @@
 <h2 class="hasAnchor">
 <a href="#data-and-notation" class="anchor"></a>Data and Notation</h2>
 <ol style="list-style-type: decimal">
-<li><p>Start with a simple additive shift – i.e., <span class="math inline">\(d(a,w) = a + \delta\)</span> if <span class="math inline">\(a &lt; u(w) - \delta\)</span> or <span class="math inline">\(d(a, w) = a\)</span> if <span class="math inline">\(a \geq u(w) - \delta\)</span>.</p></li>
-<li><p>The additive shift will have support everywhere (i.e., <span class="math inline">\(a &lt; u(w)\)</span> is true everywhere).</p></li>
+<li><p>Start with a simple additive shift – i.e., <span class="math inline">\(d(a,w) = a + \delta\)</span> if <span class="math inline">\(a \leq u(w) - \delta\)</span> or <span class="math inline">\(d(a, w) = a\)</span> if <span class="math inline">\(a \geq u(w) - \delta\)</span>.</p></li>
+<li><p>The additive shift will have support everywhere (i.e., <span class="math inline">\(a \leq u(w)\)</span> is true everywhere).</p></li>
 <li><p>The data structure that we now observe is <span class="math inline">\(O = (W, A, Y)\)</span>.</p></li>
 </ol>
 <div id="simulate-data" class="section level3">
@@ -131,7 +131,15 @@
 <p>The above composes our observed data structure <span class="math inline">\(O = (W, A, Y)\)</span>. To formally express this fact using the <code>tlverse</code> grammar introduced by the <code>tmle3</code> package, we create a single data object and specify the functional relationships between the nodes in the <em>directed acyclic graph</em> (DAG) via <em>nonparametric structural equation models</em> (NPSEMs), reflected in the node list that we set up:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># organize data and nodes for tmle3</span></a>
 <a class="sourceLine" id="cb3-2" data-line-number="2">data &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/data.table/topics/data.table">data.table</a></span>(W, A, Y)</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">node_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">W =</span> <span class="st">"W"</span>, <span class="dt">A =</span> <span class="st">"A"</span>, <span class="dt">Y =</span> <span class="st">"Y"</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb3-3" data-line-number="3">node_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">W =</span> <span class="st">"W"</span>, <span class="dt">A =</span> <span class="st">"A"</span>, <span class="dt">Y =</span> <span class="st">"Y"</span>)</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="kw">head</span>(data)</a></code></pre></div>
+<pre><code>##    W          A          Y
+## 1: 1  2.4031607  4.0283549
+## 2: 1  4.4973744  6.4329477
+## 3: 1  2.0330871  1.4733069
+## 4: 0 -0.8089023 -0.9610039
+## 5: 1  1.8432067  2.5954114
+## 6: 1  1.3555863  2.7855801</code></pre>
 <p>We now have an observed data structure (<code>data</code>) and a specification of the role that each variable in the data set plays as the nodes in a DAG.</p>
 <hr>
 </div>
@@ -140,10 +148,10 @@
 <h2 class="hasAnchor">
 <a href="#methodology" class="anchor"></a>Methodology</h2>
 <p>To start, we will initialize a specification for the TMLE of our parameter of interest (called a <code>tmle3_Spec</code> in the <code>tlverse</code> nomenclature) simply by calling <code>tmle_shift</code>. We specify the argument <code>shift_val = 0.5</code> when initializing the <code>tmle3_Spec</code> object to communicate that we’re interested in a shift of <span class="math inline">\(0.5\)</span> on the scale of the treatment <span class="math inline">\(A\)</span> – that is, we specify <span class="math inline">\(\delta = 0.5\)</span> (note that this is an arbitrarily chosen value for this example).</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># initialize a tmle specification</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">tmle_spec &lt;-<span class="st"> </span><span class="kw"><a href="../reference/tmle_shift.html">tmle_shift</a></span>(<span class="dt">shift_val =</span> <span class="fl">0.5</span>,</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">                        <span class="dt">shift_fxn =</span> shift_additive_bounded,</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4">                        <span class="dt">shift_fxn_inv =</span> shift_additive_bounded_inv)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># initialize a tmle specification</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">tmle_spec &lt;-<span class="st"> </span><span class="kw"><a href="../reference/tmle_shift.html">tmle_shift</a></span>(<span class="dt">shift_val =</span> <span class="fl">0.5</span>,</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">                        <span class="dt">shift_fxn =</span> shift_additive_bounded,</a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">                        <span class="dt">shift_fxn_inv =</span> shift_additive_bounded_inv)</a></code></pre></div>
 <p>As seen above, the <code>tmle_shift</code> specification object (like all <code>tmle3_Spec</code> objects) does <em>not</em> store the data for our specific analysis of interest. Later, we’ll see that passing a data object directly to the <code>tmle3</code> wrapper function, alongside the instantiated <code>tmle_spec</code>, will serve to construct a <code>tmle3_Task</code> object internally (see the <code>tmle3</code> documentation for details).</p>
 <div id="interlude-constructing-optimal-stacked-regressions-with-sl3" class="section level3">
 <h3 class="hasAnchor">
@@ -151,45 +159,53 @@
 </h3>
 <p>To easily incorporate ensemble machine learning into the estimation procedure, we rely on the facilities provided in the <a href="https://sl3.tlverse.org"><code>sl3</code> R package</a>. For a complete guide on using the <code>sl3</code> R package, consider consulting <a href="https://sl3.tlverse.org" class="uri">https://sl3.tlverse.org</a>, or <a href="https://tlverse.org" class="uri">https://tlverse.org</a> for the <a href="https://github.com/tlverse"><code>tlverse</code> ecosystem</a>, of which <code>sl3</code> is a major part.</p>
 <p>Using the framework provided by the <a href="https://sl3.tlverse.org"><code>sl3</code> package</a>, the nuisance parameters of the TML estimator may be fit with ensemble learning, using the cross-validation framework of the Super Learner algorithm of <span class="citation">van der Laan, Polley, and Hubbard (2007)</span>.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># learners used for conditional expectation regression (e.g., outcome)</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">lrn1 &lt;-<span class="st"> </span>Lrnr_mean<span class="op">$</span><span class="kw">new</span>()</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">lrn2 &lt;-<span class="st"> </span>Lrnr_glm<span class="op">$</span><span class="kw">new</span>()</a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">lrn3 &lt;-<span class="st"> </span>Lrnr_ranger<span class="op">$</span><span class="kw">new</span>()</a>
-<a class="sourceLine" id="cb5-5" data-line-number="5">sl_lrn &lt;-<span class="st"> </span>Lrnr_sl<span class="op">$</span><span class="kw">new</span>(</a>
-<a class="sourceLine" id="cb5-6" data-line-number="6">  <span class="dt">learners =</span> <span class="kw">list</span>(lrn1, lrn2, lrn3),</a>
-<a class="sourceLine" id="cb5-7" data-line-number="7">  <span class="dt">metalearner =</span> Lrnr_nnls<span class="op">$</span><span class="kw">new</span>()</a>
-<a class="sourceLine" id="cb5-8" data-line-number="8">)</a>
-<a class="sourceLine" id="cb5-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co"># learners used for conditional density regression (e.g., propensity score)</span></a>
-<a class="sourceLine" id="cb5-11" data-line-number="11">lrn1_dens &lt;-<span class="st"> </span>Lrnr_condensier<span class="op">$</span><span class="kw">new</span>(</a>
-<a class="sourceLine" id="cb5-12" data-line-number="12">  <span class="dt">nbins =</span> <span class="dv">25</span>, <span class="dt">bin_estimator =</span> lrn1,</a>
-<a class="sourceLine" id="cb5-13" data-line-number="13">  <span class="dt">bin_method =</span> <span class="st">"dhist"</span></a>
-<a class="sourceLine" id="cb5-14" data-line-number="14">)</a>
-<a class="sourceLine" id="cb5-15" data-line-number="15">lrn2_dens &lt;-<span class="st"> </span>Lrnr_condensier<span class="op">$</span><span class="kw">new</span>(</a>
-<a class="sourceLine" id="cb5-16" data-line-number="16">  <span class="dt">nbins =</span> <span class="dv">20</span>, <span class="dt">bin_estimator =</span> lrn2,</a>
-<a class="sourceLine" id="cb5-17" data-line-number="17">  <span class="dt">bin_method =</span> <span class="st">"dhist"</span></a>
-<a class="sourceLine" id="cb5-18" data-line-number="18">)</a>
-<a class="sourceLine" id="cb5-19" data-line-number="19">lrn3_dens &lt;-<span class="st"> </span>Lrnr_condensier<span class="op">$</span><span class="kw">new</span>(</a>
-<a class="sourceLine" id="cb5-20" data-line-number="20">  <span class="dt">nbins =</span> <span class="dv">15</span>, <span class="dt">bin_estimator =</span> lrn3,</a>
-<a class="sourceLine" id="cb5-21" data-line-number="21">  <span class="dt">bin_method =</span> <span class="st">"dhist"</span></a>
-<a class="sourceLine" id="cb5-22" data-line-number="22">)</a>
-<a class="sourceLine" id="cb5-23" data-line-number="23">sl_lrn_dens &lt;-<span class="st"> </span>Lrnr_sl<span class="op">$</span><span class="kw">new</span>(</a>
-<a class="sourceLine" id="cb5-24" data-line-number="24">  <span class="dt">learners =</span> <span class="kw">list</span>(lrn1_dens, lrn2_dens, lrn3_dens),</a>
-<a class="sourceLine" id="cb5-25" data-line-number="25">  <span class="dt">metalearner =</span> Lrnr_solnp_density<span class="op">$</span><span class="kw">new</span>()</a>
-<a class="sourceLine" id="cb5-26" data-line-number="26">)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># learners used for conditional expectation regression (e.g., outcome)</span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">lrn1 &lt;-<span class="st"> </span>Lrnr_mean<span class="op">$</span><span class="kw">new</span>()</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">lrn2 &lt;-<span class="st"> </span>Lrnr_glm<span class="op">$</span><span class="kw">new</span>()</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">lrn3 &lt;-<span class="st"> </span>Lrnr_ranger<span class="op">$</span><span class="kw">new</span>()</a>
+<a class="sourceLine" id="cb6-5" data-line-number="5">sl_lrn &lt;-<span class="st"> </span>Lrnr_sl<span class="op">$</span><span class="kw">new</span>(</a>
+<a class="sourceLine" id="cb6-6" data-line-number="6">  <span class="dt">learners =</span> <span class="kw">list</span>(lrn1, lrn2, lrn3),</a>
+<a class="sourceLine" id="cb6-7" data-line-number="7">  <span class="dt">metalearner =</span> Lrnr_nnls<span class="op">$</span><span class="kw">new</span>()</a>
+<a class="sourceLine" id="cb6-8" data-line-number="8">)</a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co"># learners used for conditional density regression (e.g., propensity score)</span></a>
+<a class="sourceLine" id="cb6-11" data-line-number="11">lrn1_dens &lt;-<span class="st"> </span>Lrnr_condensier<span class="op">$</span><span class="kw">new</span>(</a>
+<a class="sourceLine" id="cb6-12" data-line-number="12">  <span class="dt">nbins =</span> <span class="dv">25</span>, <span class="dt">bin_estimator =</span> lrn1,</a>
+<a class="sourceLine" id="cb6-13" data-line-number="13">  <span class="dt">bin_method =</span> <span class="st">"dhist"</span></a>
+<a class="sourceLine" id="cb6-14" data-line-number="14">)</a>
+<a class="sourceLine" id="cb6-15" data-line-number="15">lrn2_dens &lt;-<span class="st"> </span>Lrnr_condensier<span class="op">$</span><span class="kw">new</span>(</a>
+<a class="sourceLine" id="cb6-16" data-line-number="16">  <span class="dt">nbins =</span> <span class="dv">20</span>, <span class="dt">bin_estimator =</span> lrn2,</a>
+<a class="sourceLine" id="cb6-17" data-line-number="17">  <span class="dt">bin_method =</span> <span class="st">"dhist"</span></a>
+<a class="sourceLine" id="cb6-18" data-line-number="18">)</a>
+<a class="sourceLine" id="cb6-19" data-line-number="19">lrn3_dens &lt;-<span class="st"> </span>Lrnr_condensier<span class="op">$</span><span class="kw">new</span>(</a>
+<a class="sourceLine" id="cb6-20" data-line-number="20">  <span class="dt">nbins =</span> <span class="dv">15</span>, <span class="dt">bin_estimator =</span> lrn3,</a>
+<a class="sourceLine" id="cb6-21" data-line-number="21">  <span class="dt">bin_method =</span> <span class="st">"dhist"</span></a>
+<a class="sourceLine" id="cb6-22" data-line-number="22">)</a>
+<a class="sourceLine" id="cb6-23" data-line-number="23">sl_lrn_dens &lt;-<span class="st"> </span>Lrnr_sl<span class="op">$</span><span class="kw">new</span>(</a>
+<a class="sourceLine" id="cb6-24" data-line-number="24">  <span class="dt">learners =</span> <span class="kw">list</span>(lrn1_dens, lrn2_dens, lrn3_dens),</a>
+<a class="sourceLine" id="cb6-25" data-line-number="25">  <span class="dt">metalearner =</span> Lrnr_solnp_density<span class="op">$</span><span class="kw">new</span>()</a>
+<a class="sourceLine" id="cb6-26" data-line-number="26">)</a></code></pre></div>
 <p>As seen above, we can generate two different ensemble learners for the two nuisance regressions that must be fit in the process of computing this TML estimator. In particular, we use a Super Learner composed of an intercept model, a GLM, and a random forest (as implemented in <a href="cran.r-project.org/package=ranger">the <code>ranger</code> R package</a>) for fitting the outcome regressions (often denoted “Q” in the literature) while we use variations of these learners, through <a href="https://github.com/osofr/condensier">the <code>condensier</code> R package</a>, for the conditional density estimation needed in fitting the treatment mechanism (often denoted “g” in the literature).</p>
 <p>We make the above explicit with respect to standard notation by bundling the ensemble learners into a list object below:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># specify outcome and treatment regressions and create learner list</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">Q_learner &lt;-<span class="st"> </span>sl_lrn</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">g_learner &lt;-<span class="st"> </span>sl_lrn_dens</a>
-<a class="sourceLine" id="cb6-4" data-line-number="4">learner_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">Y =</span> Q_learner, <span class="dt">A =</span> g_learner)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co"># specify outcome and treatment regressions and create learner list</span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">Q_learner &lt;-<span class="st"> </span>sl_lrn</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">g_learner &lt;-<span class="st"> </span>sl_lrn_dens</a>
+<a class="sourceLine" id="cb7-4" data-line-number="4">learner_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">Y =</span> Q_learner, <span class="dt">A =</span> g_learner)</a></code></pre></div>
 <p>The <code>learner_list</code> object above specifies the role that each of the ensemble learners we’ve generated is to play in computing initial estimators to be used in building a TMLE for the parameter of interest here. In particular, it makes explicit the fact that our <code>Q_learner</code> is used in fitting the outcome regression while our <code>g_learner</code> is used in fitting our treatment mechanism regression.</p>
 </div>
 <div id="targeted-estimation-of-stochastic-interventions-effects" class="section level3">
 <h3 class="hasAnchor">
 <a href="#targeted-estimation-of-stochastic-interventions-effects" class="anchor"></a>Targeted Estimation of Stochastic Interventions Effects</h3>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">tmle_fit &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/tmle3/topics/tmle3">tmle3</a></span>(tmle_spec, data, node_list, learner_list)</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">tmle_fit</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">tmle_fit &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/tmle3/topics/tmle3">tmle3</a></span>(tmle_spec, data, node_list, learner_list)</a></code></pre></div>
+<pre><code>## 
+## Iter: 1 fn: 1829.0370     Pars:  0.89608896 0.10389031 0.00002072
+## Iter: 2 fn: 1829.0370     Pars:  0.89609185 0.10389521 0.00001294
+## solnp--&gt; Completed in 2 iterations</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">tmle_fit</a></code></pre></div>
+<pre><code>##    type         param init_est tmle_est        se    lower    upper
+## 1:  TSM E[Y_{A=NULL}] 2.029112  2.03477 0.0648038 1.907757 2.161783
+##    psi_transformed lower_transformed upper_transformed
+## 1:         2.03477          1.907757          2.161783</code></pre>
 <p>The <code>print</code> method of the resultant <code>tmle_fit</code> object conveniently displays the results from computing our TML estimator.</p>
 </div>
 <div id="statistical-inference-for-targeted-maximum-likelihood-estimates" class="section level3">
@@ -207,7 +223,11 @@
 <p><span class="math display">\[\psi_n \pm z_{\alpha} \cdot \frac{\sigma_n}{\sqrt{n}},\]</span> where <span class="math inline">\(\sigma_n^2\)</span> is an estimator of <span class="math inline">\(V(D(P_0))\)</span>. The estimator <span class="math inline">\(\sigma_n^2\)</span> may be obtained using the bootstrap or computed directly via the following</p>
 <p><span class="math display">\[\sigma_n^2 = \frac{1}{n} \sum_{i = 1}^{n} D^2(\bar{Q}_n^*, g_n)(O_i)\]</span></p>
 <p>Having now re-examined these facts, let’s simply examine the results of computing our TML estimator:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">tmle_fit</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">tmle_fit</a></code></pre></div>
+<pre><code>##    type         param init_est tmle_est        se    lower    upper
+## 1:  TSM E[Y_{A=NULL}] 2.029112  2.03477 0.0648038 1.907757 2.161783
+##    psi_transformed lower_transformed upper_transformed
+## 1:         2.03477          1.907757          2.161783</code></pre>
 </div>
 </div>
 <div id="references" class="section level2 unnumbered">

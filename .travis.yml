@@ -1,15 +1,18 @@
 branches:
   only:
   - master
-  - devel
+
+env:
+  global:
+  - RGL_USE_NULL=TRUE
 
 language: r
 sudo: required
 cache: packages
-
 warnings_are_errors: true
-r_build_args: ''
-r_check_args: '--no-vignettes'
+
+r_build_args: '--no-manual'
+r_check_args: '--no-build-vignettes --no-manual'
 
 r:
   - release
@@ -18,15 +21,11 @@ r:
 before_install:
   - Rscript -e 'update.packages(ask = FALSE)'
 
-# Install nlopt package to help nloptr install (for r-oldrel)
-addons:
-  apt:
-    packages:
-      - libnlopt-dev
-
 r_packages:
   - devtools
+  - sessioninfo
   - covr
+  - data.table
 
 r_github_packages:
   - r-lib/devtools@2d012d1
@@ -35,10 +34,10 @@ r_github_packages:
   - jimhester/covr
   - osofr/simcausal
   - osofr/condensier
-  - jeremyrcoyle/hal9001
   - nhejazi/txshift
   - tlverse/delayed
   - tlverse/origami
+  - tlverse/hal9001
   - tlverse/sl3
   - tlverse/tmle3
 

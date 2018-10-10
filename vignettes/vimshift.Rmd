@@ -47,9 +47,10 @@ set.seed(429153)
 ## Data and Notation
 
 1. Start with a simple additive shift -- i.e., $d(a,w) = a + \delta$ if
-   $a < u(w) - \delta$ or $d(a, w) = a$ if $a \geq u(w) - \delta$.
+   $a leq u(w) - \delta$ or $d(a, w) = a$ if $a \geq u(w) - \delta$.
 
-2. The additive shift will have support everywhere (i.e., $a < u(w)$ is true everywhere).
+2. The additive shift will have support everywhere (i.e., $a \leq u(w)$ is true
+   everywhere).
 
 3. The data structure that we now observe is $O = (W, A, Y)$.
 
@@ -69,10 +70,6 @@ A <- as.numeric(rnorm(n_obs, mean = tx_mult * W, sd = 1))
 
 # create outcome as a linear function of A, W + white noise
 Y <- A + W + rnorm(n_obs, mean = 0, sd = 1)
-
-# organize data and nodes for tmle3
-data <- data.table(W, A, Y)
-node_list <- list(W = "W", A = "A", Y = "Y")
 ```
 
 The above composes our observed data structure $O = (W, A, Y)$. To formally
@@ -85,6 +82,7 @@ equation models_ (NPSEMs), reflected in the node list that we set up:
 # organize data and nodes for tmle3
 data <- data.table(W, A, Y)
 node_list <- list(W = "W", A = "A", Y = "Y")
+head(data)
 ```
 
 We now have an observed data structure (`data`) and a specification of the role
@@ -213,10 +211,10 @@ while our `g_learner` is used in fitting our treatment mechanism regression.
 
 To start, we will initialize a specification for the TMLE of our parameter of
 interest (called a `tmle3_Spec` in the `tlverse` nomenclature) simply by calling
-`tmle_shift`. We specify the argument `shift_grid = seq(-0.5, 0.5, by = 0.5)`
+`tmle_shift`. We specify the argument `shift_grid = seq(-1, 1, by = 0.5)`
 when initializing the `tmle3_Spec` object to communicate that we're interested
-in assessing the mean counterfactual outcome over a grid of shifts `r seq(-0.5,
-0.5, by = 0.5)` on the scale of the treatment $A$ (note that the numerical
+in assessing the mean counterfactual outcome over a grid of shifts `r seq(-1,
+1, by = 0.5)` on the scale of the treatment $A$ (note that the numerical
 choice of shift is an arbitrarily chosen set of values for this example).
 
 ```{r vim_spec_init}
@@ -266,9 +264,9 @@ tmle_fit <- fit_tmle3(tmle_task, likelihood_targeted, tmle_params, updater)
 tmle_fit
 ```
 
-Instead, one may invoke the `tmle3` convenience function to fit the series of
-TML estimators (one for each parameter defined by the grid delta) in a single
-function call:
+Instead, one may invoke the `tmle3` wrapper function (a user-facing convenience
+utility) to fit the series of TML estimators (one for each parameter defined by
+the grid delta) in a single function call:
 
 ```{r fit_tmle_auto}
 # fit the TML estimator
@@ -355,7 +353,7 @@ $$\sqrt{n}(\beta_n - \beta_0) \to N(0, \Sigma),$$
 where $\Sigma$ is the empirical covariance matrix of $\text{EIF}_{\beta}(O)$.
 
 ```{r msm_fit}
-tmle_fit$summar[6:7,]
+tmle_fit$summary[6:7,]
 ```
 
 #### Directly Targeting the MSM Parameter $\beta$
@@ -382,6 +380,24 @@ constructed as
 $$\overline{Q}_{n, \epsilon}(A,W) = \overline{Q}_n(A,W) + \epsilon (H_1(g),
 H_2(g),$$ for all $\delta$, where $H_1(g)$ is the auxiliary covariate for
 $\beta_0$ and $H_2(g)$ is the auxiliary covariate for $\beta_1$.
+
+To construct a targeted maximum likelihood estimator that directly targets the
+parameters of the working marginal structural model, we may use the
+`tmle_vimshift_msm` Spec (instead of the `tmle_vimshift_delta` Spec that
+appears above):
+
+```{r vim_targeted_msm_fit}
+# what's the grid of shifts we wish to consider?
+delta_grid <- seq(-1, 1, 0.5)
+
+# initialize a tmle specification
+tmle_msm_spec <- tmle_vimshift_msm(shift_grid = delta_grid,
+                                   max_shifted_ratio = 2)
+
+# fit the TML estimator and examine the results
+tmle_msm_fit <- tmle3(tmle_msm_spec, data, node_list, learner_list)
+tmle_msm_fit
+```
 
 ## References
 

@@ -198,12 +198,12 @@
 <a href="#targeted-estimation-of-stochastic-interventions-effects" class="anchor"></a>Targeted Estimation of Stochastic Interventions Effects</h3>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">tmle_fit &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/tmle3/topics/tmle3">tmle3</a></span>(tmle_spec, data, node_list, learner_list)</a></code></pre></div>
 <pre><code>## 
-## Iter: 1 fn: 1829.0370     Pars:  0.896093011 0.103897792 0.000009197
-## Iter: 2 fn: 1829.0370     Pars:  0.896094138 0.103900803 0.000005059
+## Iter: 1 fn: 1829.0370     Pars:  0.89608896 0.10389031 0.00002072
+## Iter: 2 fn: 1829.0370     Pars:  0.89609185 0.10389521 0.00001294
 ## solnp--&gt; Completed in 2 iterations</code></pre>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">tmle_fit</a></code></pre></div>
-<pre><code>##    type         param init_est tmle_est         se    lower    upper
-## 1:  TSM E[Y_{A=NULL}] 2.029112  2.03477 0.06480381 1.907757 2.161783
+<pre><code>##    type         param init_est tmle_est        se    lower    upper
+## 1:  TSM E[Y_{A=NULL}] 2.029112  2.03477 0.0648038 1.907757 2.161783
 ##    psi_transformed lower_transformed upper_transformed
 ## 1:         2.03477          1.907757          2.161783</code></pre>
 <p>The <code>print</code> method of the resultant <code>tmle_fit</code> object conveniently displays the results from computing our TML estimator.</p>
@@ -224,8 +224,8 @@
 <p><span class="math display">\[\sigma_n^2 = \frac{1}{n} \sum_{i = 1}^{n} D^2(\bar{Q}_n^*, g_n)(O_i)\]</span></p>
 <p>Having now re-examined these facts, let’s simply examine the results of computing our TML estimator:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">tmle_fit</a></code></pre></div>
-<pre><code>##    type         param init_est tmle_est         se    lower    upper
-## 1:  TSM E[Y_{A=NULL}] 2.029112  2.03477 0.06480381 1.907757 2.161783
+<pre><code>##    type         param init_est tmle_est        se    lower    upper
+## 1:  TSM E[Y_{A=NULL}] 2.029112  2.03477 0.0648038 1.907757 2.161783
 ##    psi_transformed lower_transformed upper_transformed
 ## 1:         2.03477          1.907757          2.161783</code></pre>
 </div>

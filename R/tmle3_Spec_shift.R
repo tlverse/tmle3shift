@@ -18,16 +18,14 @@ tmle3_Spec_shift <- R6::R6Class(
     initialize = function(shift_fxn = shift_additive_bounded,
                               shift_fxn_inv = shift_additive_bounded_inv,
                               shift_val = 0,
-                              max_shifted_ratio = 2,
-                              likelihood_override = NULL,
+                              max_shifted_ratio = 2
                               ...) {
       # store option to pass into make_params
       options <- list(
         shift_fxn = shift_fxn,
         shift_fxn_inv = shift_fxn_inv,
         delta_shift = shift_val,
-        max_shifted_ratio = max_shifted_ratio,
-        likelihood_def = likelihood_override
+        max_shifted_ratio = max_shifted_ratio
       )
       do.call(super$initialize, options)
     },

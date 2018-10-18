@@ -19,17 +19,26 @@ tmle3_Spec_shift <- R6::R6Class(
                               shift_fxn_inv = shift_additive_bounded_inv,
                               shift_val = 0,
                               max_shifted_ratio = 2,
+                              likelihood_override = NULL,
                               ...) {
+      # store option to pass into make_params
       options <- list(
         shift_fxn = shift_fxn,
         shift_fxn_inv = shift_fxn_inv,
         delta_shift = shift_val,
-        max_shifted_ratio = max_shifted_ratio
+        max_shifted_ratio = max_shifted_ratio,
+        likelihood_def = likelihood_override
       )
       do.call(super$initialize, options)
     },
     make_params = function(tmle_task, likelihood) {
-      # TODO: export and use sl3:::get_levels
+      # produce trained likelihood when likelihood_def provided
+      likelihood_def <- self$options$likelihood_def
+      if (!is.null(likelihood_def)) {
+        likelihood <- likelihood_def$train(tmle_task)
+      }
+
+      # check intervention levels
       A_vals <- tmle_task$get_tmle_node("A")
       if (is.factor(A_vals)) {
         msg <- paste(
@@ -55,6 +64,7 @@ tmle3_Spec_shift <- R6::R6Class(
         max_shifted_ratio = max_shifted_ratio # max ratio difference
       )
 
+      # construct treatment-specific mean parameter
       shifted_mean <- tmle3::Param_TSM$new(likelihood, intervention)
 
       # output should be a list

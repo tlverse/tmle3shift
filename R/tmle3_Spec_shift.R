@@ -24,7 +24,8 @@ tmle3_Spec_shift <- R6::R6Class(
         shift_fxn = shift_fxn,
         shift_fxn_inv = shift_fxn_inv,
         delta_shift = shift_val,
-        max_shifted_ratio = max_shifted_ratio
+        max_shifted_ratio = max_shifted_ratio,
+        ...
       )
       do.call(super$initialize, options)
     },

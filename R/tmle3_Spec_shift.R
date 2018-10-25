@@ -61,6 +61,9 @@ tmle3_Spec_shift <- R6::R6Class(
       # output should be a list
       tmle_params <- list(shifted_mean)
       return(tmle_params)
+    },
+    make_updater = function() {
+      updater <- tmle3_Update$new(cvtmle = FALSE)
     }
   ),
   active = list(),

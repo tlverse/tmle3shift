@@ -1,4 +1,4 @@
-context("Additive shift intervention results match classic implementation")
+context("Simple additive shift intervention results match classic")
 
 library(uuid)
 library(assertthat)
@@ -55,8 +55,12 @@ lrn3_dens <- Lrnr_condensier$new(
   nbins = 15, bin_estimator = lrn3,
   bin_method = "dhist"
 )
+lrn4_dens <- Lrnr_condensier$new(
+  nbins = 10, bin_estimator = lrn2,
+  bin_method = "dhist"
+)
 sl_lrn_dens <- Lrnr_sl$new(
-  learners = list(lrn1_dens, lrn2_dens, lrn3_dens),
+  learners = list(lrn1_dens, lrn2_dens, lrn3_dens, lrn4_dens),
   metalearner = Lrnr_solnp_density$new()
 )
 
@@ -109,7 +113,7 @@ set.seed(429153)
 ## TODO: validate that we're getting the same errors on g fitting
 tmle_sl_shift_classic <- tmle_txshift(
   W = W, A = A, Y = Y, delta = delta_value,
-  fluc_method = "weighted",
+  fluc_method = "standard",
   g_fit_args = list(
     fit_type = "sl",
     sl_lrnrs = g_learner
@@ -132,7 +136,8 @@ classic_se <- sqrt(tmle_sl_shift_classic$var)
 
 ## only approximately equal (although it's O(1/n))
 test_that("Parameter point estimate matches result from classic package", {
-  expect_equal(tmle3_psi, classic_psi, tol = 1 / n_obs, scale = classic_psi)
+  expect_equal(tmle3_psi, classic_psi, tol = 6 * (1 / n_obs),
+               scale = tmle3_psi)
 })
 
 ## only approximately equal (although it's O(1/n))

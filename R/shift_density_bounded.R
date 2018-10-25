@@ -33,6 +33,12 @@ shift_additive_bounded <- function(tmle_task, delta, likelihood_base,
     likelihood_base
   )
 
+  # set NA values to 0 for density comparison
+  na_mask_intervention_density_ratio <- is.na(intervention_density_ratio)
+  if (FALSE %in% na_mask_intervention_density_ratio) {
+    intervention_density_ratio[na_mask_intervention_density_ratio] <- 0
+  }
+
   # compute realistic value of intervention
   observed_a <- tmle_task$get_tmle_node("A")
   shift_amt <- ifelse(intervention_density_ratio < max_shifted_ratio, delta, 0)
@@ -53,6 +59,12 @@ shift_additive_bounded_inv <- function(tmle_task, delta, likelihood_base,
     tmle_task, delta,
     likelihood_base
   )
+
+  # set NA values to 0 for density comparison
+  na_mask_intervention_density_ratio <- is.na(intervention_density_ratio)
+  if (FALSE %in% na_mask_intervention_density_ratio) {
+    intervention_density_ratio[na_mask_intervention_density_ratio] <- 0
+  }
 
   # compute realistic value of intervention
   observed_a <- tmle_task$get_tmle_node("A")

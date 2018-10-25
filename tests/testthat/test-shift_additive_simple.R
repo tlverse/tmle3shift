@@ -17,6 +17,7 @@ set.seed(429153)
 n_obs <- 1000 # number of observations
 n_w <- 1 # number of baseline covariates
 tx_mult <- 2 # multiplier for the effect of W = 1 on the treatment
+delta_value <- 0.5 # value of the shift parameter
 
 ## baseline covariates -- simple, binary
 W <- as.numeric(replicate(n_w, rbinom(n_obs, 1, 0.5)))
@@ -71,7 +72,7 @@ learner_list <- list(Y = Q_learner, A = g_learner)
 
 # initialize a tmle specification
 tmle_spec <- tmle_shift(
-  shift_val = 0.5,
+  shift_val = delta_value,
   shift_fxn = shift_additive,
   shift_fxn_inv = shift_additive_inv
 )
@@ -107,7 +108,7 @@ set.seed(429153)
 
 ## TODO: validate that we're getting the same errors on g fitting
 tmle_sl_shift_classic <- tmle_txshift(
-  W = W, A = A, Y = Y, delta = 0.5,
+  W = W, A = A, Y = Y, delta = delta_value,
   fluc_method = "weighted",
   g_fit_args = list(
     fit_type = "sl",

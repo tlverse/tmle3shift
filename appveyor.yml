@@ -15,14 +15,16 @@ environment:
     WARNINGS_ARE_ERRORS: 0
     R_ARCH: x64
     USE_RTOOLS: true
+    GITHUB_PAT:
+      secure: mW3puUbGi4Q8x4bRzDxlV8FWIIrCPzrg5QXzGKnEx+O092df4uUmbmfkQaFQ3DJY
 
 cache:
-  - C:\RLibrary -> appveyor.yml
+  - C:\RLibrary
 
 # Adapt as necessary starting from here
 build_script:
   - travis-tool.sh install_deps
-  - travis-tool.sh install_github r-lib/devtools@2d012d1
+  - travis-tool.sh install_github r-lib/devtools
   - travis-tool.sh install_github r-lib/sessioninfo
   - travis-tool.sh install_github Rdatatable/data.table
   - travis-tool.sh install_github jimhester/covr

@@ -81,7 +81,7 @@
 <a href="https://nimahejazi.org">Nima S. Hejazi</a>, <a href="https://github.com/jeremyrcoyle">Jeremy R. Coyle</a>, and <a href="https://vanderlaan-lab.org">Mark J. van der Laan</a>
 </h4>
             
-            <h4 class="date">2018-10-10</h4>
+            <h4 class="date">2018-10-24</h4>
       
       
       <div class="hidden name"><code>vimshift.Rmd</code></div>
@@ -253,26 +253,26 @@
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># fit the TML estimator</span></a>
 <a class="sourceLine" id="cb9-2" data-line-number="2">tmle_fit &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/tmle3/topics/tmle3">tmle3</a></span>(tmle_spec, data, node_list, learner_list)</a></code></pre></div>
 <pre><code>## 
-## Iter: 1 fn: 1834.2934     Pars:  0.09403194 0.02130001 0.00002312 0.88464494
-## Iter: 2 fn: 1834.2934     Pars:  0.09403798 0.02130289 0.00001423 0.88464490
+## Iter: 1 fn: 1834.2719     Pars:  0.09216332 0.02402433 0.00004324 0.88376911
+## Iter: 2 fn: 1834.2718     Pars:  0.09217750 0.02403054 0.00002222 0.88376973
 ## solnp--&gt; Completed in 2 iterations</code></pre>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">tmle_fit</a></code></pre></div>
 <pre><code>##          type          param  init_est  tmle_est         se     lower
-## 1:        TSM  E[Y_{A=NULL}] 0.6011976 0.5992119 0.06323217 0.4752792
-## 2:        TSM  E[Y_{A=NULL}] 1.0377049 1.0328285 0.06722522 0.9010694
+## 1:        TSM  E[Y_{A=NULL}] 0.6011976 0.5992044 0.06323787 0.4752605
+## 2:        TSM  E[Y_{A=NULL}] 1.0377049 1.0328160 0.06722456 0.9010583
 ## 3:        TSM  E[Y_{A=NULL}] 1.5431887 1.5432763 0.06656993 1.4128016
-## 4:        TSM  E[Y_{A=NULL}] 2.0347742 2.0305806 0.06505842 1.9030685
-## 5:        TSM  E[Y_{A=NULL}] 2.4944453 2.4869943 0.06083826 2.3677535
-## 6: MSM_linear MSM(intercept) 1.5427416 1.5389140 0.06343542 1.4145828
-## 7: MSM_linear     MSM(slope) 0.9556543 0.9536458 0.01304592 0.9280762
+## 4:        TSM  E[Y_{A=NULL}] 2.0347742 2.0305620 0.06505555 1.9030554
+## 5:        TSM  E[Y_{A=NULL}] 2.4944453 2.4869662 0.06083687 2.3677281
+## 6: MSM_linear MSM(intercept) 1.5427412 1.5388999 0.06343582 1.4145680
+## 7: MSM_linear     MSM(slope) 0.9556556 0.9536373 0.01305091 0.9280580
 ##        upper psi_transformed lower_transformed upper_transformed
-## 1: 0.7231447       0.5992119         0.4752792         0.7231447
-## 2: 1.1645875       1.0328285         0.9010694         1.1645875
+## 1: 0.7231484       0.5992044         0.4752605         0.7231484
+## 2: 1.1645737       1.0328160         0.9010583         1.1645737
 ## 3: 1.6737509       1.5432763         1.4128016         1.6737509
-## 4: 2.1580928       2.0305806         1.9030685         2.1580928
-## 5: 2.6062351       2.4869943         2.3677535         2.6062351
-## 6: 1.6632451       1.5389140         1.4145828         1.6632451
-## 7: 0.9792153       0.9536458         0.9280762         0.9792153</code></pre>
+## 4: 2.1580685       2.0305620         1.9030554         2.1580685
+## 5: 2.6062042       2.4869662         2.3677281         2.6062042
+## 6: 1.6632318       1.5388999         1.4145680         1.6632318
+## 7: 0.9792166       0.9536373         0.9280580         0.9792166</code></pre>
 <p><em>Remark</em>: The <code>print</code> method of the resultant <code>tmle_fit</code> object conveniently displays the results from computing our TML estimator.</p>
 </div>
 <div id="inference-with-marginal-structural-models" class="section level3">
@@ -301,12 +301,12 @@ m_{\beta}(\delta))\right)h(\delta),\]</span> where <span class="math inline">\(\
 - m_{\beta}(\delta)) = 0.\]</span></p>
 <p>Inference from a working MSM is rather straightforward. To wit, the limiting distribution for <span class="math inline">\(m_{\beta}(\delta)\)</span> may be expressed <span class="math display">\[\sqrt{n}(\beta_n - \beta_0) \to N(0, \Sigma),\]</span> where <span class="math inline">\(\Sigma\)</span> is the empirical covariance matrix of <span class="math inline">\(\text{EIF}_{\beta}(O)\)</span>.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">tmle_fit<span class="op">$</span>summary[<span class="dv">6</span><span class="op">:</span><span class="dv">7</span>,]</a></code></pre></div>
-<pre><code>##          type          param  init_est  tmle_est         se     lower
-## 1: MSM_linear MSM(intercept) 1.5427416 1.5389140 0.06343542 1.4145828
-## 2: MSM_linear     MSM(slope) 0.9556543 0.9536458 0.01304592 0.9280762
+<pre><code>##          type          param  init_est  tmle_est         se    lower
+## 1: MSM_linear MSM(intercept) 1.5427412 1.5388999 0.06343582 1.414568
+## 2: MSM_linear     MSM(slope) 0.9556556 0.9536373 0.01305091 0.928058
 ##        upper psi_transformed lower_transformed upper_transformed
-## 1: 1.6632451       1.5389140         1.4145828         1.6632451
-## 2: 0.9792153       0.9536458         0.9280762         0.9792153</code></pre>
+## 1: 1.6632318       1.5388999          1.414568         1.6632318
+## 2: 0.9792166       0.9536373          0.928058         0.9792166</code></pre>
 <div id="directly-targeting-the-msm-parameter-beta" class="section level4">
 <h4 class="hasAnchor">
 <a href="#directly-targeting-the-msm-parameter-beta" class="anchor"></a>Directly Targeting the MSM Parameter <span class="math inline">\(\beta\)</span>
@@ -329,8 +329,8 @@ H_2(g),\]</span> for all <span class="math inline">\(\delta\)</span>, where <spa
 <a class="sourceLine" id="cb15-8" data-line-number="8"><span class="co"># fit the TML estimator and examine the results</span></a>
 <a class="sourceLine" id="cb15-9" data-line-number="9">tmle_msm_fit &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/tmle3/topics/tmle3">tmle3</a></span>(tmle_msm_spec, data, node_list, learner_list)</a></code></pre></div>
 <pre><code>## 
-## Iter: 1 fn: 1860.7946     Pars:  0.001018619 0.000002573 0.107351910 0.891626895
-## Iter: 2 fn: 1860.7946     Pars:  0.0009773585 0.0000003529 0.1073901097 0.8916321789
+## Iter: 1 fn: 1860.7946     Pars:  0.001018954 0.000002283 0.107351823 0.891626936
+## Iter: 2 fn: 1860.7946     Pars:  0.0009773865 0.0000003161 0.1073901107 0.8916321868
 ## solnp--&gt; Completed in 2 iterations</code></pre>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">tmle_msm_fit</a></code></pre></div>
 <pre><code>##          type          param init_est tmle_est         se     lower

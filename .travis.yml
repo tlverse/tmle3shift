@@ -5,14 +5,14 @@ branches:
 env:
   global:
   - RGL_USE_NULL=TRUE
+  - secure: TF4+d5Jj4KrwoEt7a8z0kk0+Y0K6ScKQpuAnGFFp/dSuNLPX76UmIIbKNWA/JhDpgdNyecHdwV+HRPgMj5/wDfokLX7IUMFdpWldDy84Df/m38T2fogspjFa7k3eMeucoOL8q79IUayuRq3g8qGaxa0Sm/JhFJcpqSdyrjAk5qNBDCrt9EcQB92PpiZnWCg4GHHAnegAFEtmmB2QLve6dwhPMS2kAa0mqRWNJVFhpnaNIn1A5rn3FfShtc4ccVfbYqSt7wMAKttjz+FnVSj42zR4IftoHXB1Jvfvdrh1K5iGuiSmiQoS4sxG1ktzqvkRDbRbxZ4GKT8VQ9DsISL3sALbpAyafLjdmxf76YGMldRztPAvkdgZMBPpvBer6x2fEkLgpq4MEnTwfhBABMwMoXUt/p3ed/HtrjTtlzUttZpQHvL+OgOguo6ZzfDSCWbChGU5v/d3at0xRCO0QJoClxZ1lhNn+5jpaH2VcTRidel4Yr3Y7HfJOumHO21mFjC87lHKqZZBcWd33s3Y2Km9AuYcy3pLM3BfU7BlAyUsEhUniaFFVC9yMj4LOuYTG1xjFkuvM7ZAn80bcXfz4JKmEDjzG9DxQDaETARdJfyIG+vsx+xmej1LaoHBeuIxfCRcMKZJzvXlq9aZCwSl8Ps/RequfJWRsyn2TXieDxGOP4Q=
 
 language: r
 sudo: required
 cache: packages
 warnings_are_errors: true
-
-r_build_args: '--no-manual'
-r_check_args: '--no-build-vignettes --no-manual'
+r_build_args: "--no-manual"
+r_check_args: "--no-build-vignettes --no-manual"
 
 r:
   - release
@@ -28,7 +28,7 @@ r_packages:
   - data.table
 
 r_github_packages:
-  - r-lib/devtools@2d012d1
+  - r-lib/devtools
   - r-lib/sessioninfo
   - Rdatatable/data.table
   - jimhester/covr

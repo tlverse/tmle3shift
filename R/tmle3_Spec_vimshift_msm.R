@@ -79,6 +79,9 @@ tmle3_Spec_vimshift_msm <- R6::R6Class(
 
       # output should be a list
       return(msm_linear_param)
+    },
+    make_updater = function() {
+      updater <- tmle3_Update$new(cvtmle = FALSE)
     }
   ),
   active = list(),

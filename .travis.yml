@@ -18,8 +18,8 @@ r:
   - release
   - devel
 
-#before_install:
-  #- Rscript -e 'update.packages(ask = FALSE)'
+before_install:
+  - Rscript -e 'update.packages(ask = FALSE)'
 
 r_packages:
   - devtools
@@ -28,7 +28,6 @@ r_packages:
   - data.table
 
 r_github_packages:
-  - r-lib/devtools
   - r-lib/sessioninfo
   - Rdatatable/data.table
   - jimhester/covr
@@ -39,7 +38,7 @@ r_github_packages:
   - tlverse/origami
   - tlverse/hal9001
   - tlverse/sl3
-  - tlverse/tmle3
+  - tlverse/tmle3@3a61005
 
 after_success:
   - travis_wait 80 Rscript -e 'covr::codecov()'

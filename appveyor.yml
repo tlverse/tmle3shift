@@ -19,12 +19,11 @@ environment:
       secure: Nu6c5CmcVdYHDUVGej5ZIXGKOXVPBwqUwjrLV8d6UlbUaAtYuUhgpNuv9oLztAQQ
 
 cache:
-  - C:\RLibrary
+  - C:\RLibrary -> appveyor.yml
 
 # Adapt as necessary starting from here
 build_script:
   - travis-tool.sh install_deps
-  - travis-tool.sh install_github r-lib/devtools
   - travis-tool.sh install_github r-lib/sessioninfo
   - travis-tool.sh install_github Rdatatable/data.table
   - travis-tool.sh install_github jimhester/covr
@@ -35,7 +34,7 @@ build_script:
   - travis-tool.sh install_github tlverse/origami
   - travis-tool.sh install_github tlverse/hal9001
   - travis-tool.sh install_github tlverse/sl3
-  - travis-tool.sh install_github tlverse/tmle3
+  - travis-tool.sh install_github tlverse/tmle3@3a61005
 
 test_script:
   - travis-tool.sh run_tests

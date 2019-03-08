@@ -38,7 +38,7 @@ r_github_packages:
   - tlverse/origami
   - tlverse/hal9001
   - tlverse/sl3
-  - tlverse/tmle3@3a61005
+  - tlverse/tmle3
 
 after_success:
   - travis_wait 80 Rscript -e 'covr::codecov()'

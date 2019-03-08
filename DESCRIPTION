@@ -58,7 +58,7 @@ Remotes:
     github::tlverse/origami,
     github::tlverse/delayed,
     github::tlverse/sl3,
-    github::tlverse/tmle3@3a61005
+    github::tlverse/tmle3
 URL: https://tmle3shift.tlverse.com/
 BugReports: https://github.com/tlverse/tmle3shift/issues
 Encoding: UTF-8

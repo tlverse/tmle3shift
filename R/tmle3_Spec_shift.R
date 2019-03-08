@@ -29,6 +29,25 @@ tmle3_Spec_shift <- R6::R6Class(
       )
       do.call(super$initialize, options)
     },
+    make_initial_likelihood = function(tmle_task, learner_list = NULL) {
+      # produce trained likelihood when likelihood_def provided
+      likelihood_def <- self$options$likelihood_override
+      if (!is.null(likelihood_def)) {
+        likelihood <- likelihood_def$train(tmle_task)
+      } else {
+        factor_list <- list(
+          define_lf(LF_emp, "W"),
+          define_lf(LF_fit, "A", learner = learner_list[["A"]]),
+          define_lf(LF_fit, "Y", learner = learner_list[["Y"]], type = "mean")
+        )
+
+        likelihood_def <- Likelihood$new(factor_list)
+
+        # fit_likelihood
+        likelihood <- likelihood_def$train(tmle_task)
+      }
+      return(likelihood)
+    },
     make_params = function(tmle_task, likelihood) {
       # TODO: export and use sl3:::get_levels
       A_vals <- tmle_task$get_tmle_node("A")

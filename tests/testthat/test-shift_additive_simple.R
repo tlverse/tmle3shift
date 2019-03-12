@@ -40,20 +40,20 @@ sl_lrn <- Lrnr_sl$new(
 )
 
 # learners used for conditional density regression (e.g., propensity score)
-glm_dens_many_bins <- Lrnr_condensier$new(
-  nbins = 20, bin_estimator = lrn2,
+lrn1_dens <- Lrnr_condensier$new(
+  nbins = 20, bin_estimator = lrn1,
   bin_method = "dhist"
 )
-mean_dens_mod_bins <- Lrnr_condensier$new(
-  nbins = 10, bin_estimator = lrn1,
+lrn2_dens <- Lrnr_condensier$new(
+  nbins = 10, bin_estimator = lrn2,
   bin_method = "dhist"
 )
-mean_dens_few_bins <- Lrnr_condensier$new(
-  nbins = 5, bin_estimator = lrn1,
+lrn3_dens <- Lrnr_condensier$new(
+  nbins = 5, bin_estimator = lrn3,
   bin_method = "dhist"
 )
 sl_lrn_dens <- Lrnr_sl$new(
-  learners = list(rf_dens_many_bins, rf_dens_mod_bins, rf_dens_few_bins),
+  learners = list(lrn1_dens, lrn2_dens, lrn3_dens),
   metalearner = Lrnr_solnp_density$new()
 )
 
@@ -102,8 +102,7 @@ tmle3_se <- tmle_fit$summary$se
 ################################################################################
 set.seed(429153)
 
-## TODO: validate that we're getting the same errors on g fitting
-tmle_sl_shift_classic <- txshift(
+txshift_sl_tmle <- txshift(
   W = W, A = A, Y = Y, delta = delta_value,
   fluc_method = "standard",
   g_fit_args = list(
@@ -117,9 +116,9 @@ tmle_sl_shift_classic <- txshift(
 )
 
 ## extract results from fit object produced by classical package
-summary(tmle_sl_shift_classic)
-classic_psi <- tmle_sl_shift_classic$psi
-classic_se <- sqrt(tmle_sl_shift_classic$var)
+summary(txshift_sl_tmle)
+txshift_psi <- txshift_sl_tmle$psi
+txshift_se <- sqrt(txshift_sl_tmle$var)
 
 
 ################################################################################
@@ -127,12 +126,11 @@ classic_se <- sqrt(tmle_sl_shift_classic$var)
 ################################################################################
 
 ## only approximately equal (although it's O(1/n))
-test_that("Parameter point estimate matches result from classic package", {
-  expect_equal(tmle3_psi, classic_psi, tol = 6 * (1 / n_obs),
-               scale = tmle3_psi)
+test_that("Parameter point estimate matches result from txshift package", {
+  expect_equal(tmle3_psi, txshift_psi, tol = 1 / n_obs, scale = tmle3_psi)
 })
 
 ## only approximately equal (although it's O(1/n))
-test_that("Standard error matches result from classic package", {
-  expect_equal(tmle3_se, classic_se, tol = 1 / n_obs, scale = classic_se)
+test_that("Standard error matches result from txshift package", {
+  expect_equal(tmle3_se, txshift_se, tol = 1 / n_obs, scale = tmle3_se)
 })

@@ -28,17 +28,18 @@ r_packages:
   - data.table
 
 r_github_packages:
+  - r-lib/covr
   - r-lib/sessioninfo
   - Rdatatable/data.table
-  - jimhester/covr
   - osofr/simcausal
   - osofr/condensier
-  - nhejazi/txshift
   - tlverse/delayed
   - tlverse/origami
   - tlverse/hal9001
   - tlverse/sl3
   - tlverse/tmle3
+  - nhejazi/haldensify
+  - nhejazi/txshift
 
 after_success:
   - travis_wait 80 Rscript -e 'covr::codecov()'

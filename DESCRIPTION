@@ -53,7 +53,8 @@ Suggests:
     txshift,
     Rsolnp,
     nnls,
-    ranger
+    ranger,
+    xgboost
 Remotes:
     github::osofr/simcausal,
     github::osofr/condensier,

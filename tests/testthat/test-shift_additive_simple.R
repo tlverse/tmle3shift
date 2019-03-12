@@ -1,12 +1,9 @@
 context("Simple additive shift intervention results match classic")
 
-library(uuid)
-library(assertthat)
 library(data.table)
-library(future)
 library(sl3)
 library(tmle3)
-library(ranger)
+library(txshift)
 set.seed(429153)
 
 ################################################################################
@@ -43,24 +40,20 @@ sl_lrn <- Lrnr_sl$new(
 )
 
 # learners used for conditional density regression (e.g., propensity score)
-lrn1_dens <- Lrnr_condensier$new(
-  nbins = 25, bin_estimator = lrn1,
-  bin_method = "dhist"
-)
-lrn2_dens <- Lrnr_condensier$new(
+glm_dens_many_bins <- Lrnr_condensier$new(
   nbins = 20, bin_estimator = lrn2,
   bin_method = "dhist"
 )
-lrn3_dens <- Lrnr_condensier$new(
-  nbins = 15, bin_estimator = lrn3,
+mean_dens_mod_bins <- Lrnr_condensier$new(
+  nbins = 10, bin_estimator = lrn1,
   bin_method = "dhist"
 )
-lrn4_dens <- Lrnr_condensier$new(
-  nbins = 10, bin_estimator = lrn2,
+mean_dens_few_bins <- Lrnr_condensier$new(
+  nbins = 5, bin_estimator = lrn1,
   bin_method = "dhist"
 )
 sl_lrn_dens <- Lrnr_sl$new(
-  learners = list(lrn1_dens, lrn2_dens, lrn3_dens, lrn4_dens),
+  learners = list(rf_dens_many_bins, rf_dens_mod_bins, rf_dens_few_bins),
   metalearner = Lrnr_solnp_density$new()
 )
 
@@ -107,11 +100,10 @@ tmle3_se <- tmle_fit$summary$se
 ################################################################################
 # compute numerical result using classical implementation (txshift R package)
 ################################################################################
-library(txshift)
 set.seed(429153)
 
 ## TODO: validate that we're getting the same errors on g fitting
-tmle_sl_shift_classic <- tmle_txshift(
+tmle_sl_shift_classic <- txshift(
   W = W, A = A, Y = Y, delta = delta_value,
   fluc_method = "standard",
   g_fit_args = list(

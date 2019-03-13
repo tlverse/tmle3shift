@@ -1,11 +1,8 @@
 context("Variable importance for shift interventions via delta method")
 
-library(uuid)
-library(assertthat)
 library(data.table)
 library(sl3)
 library(tmle3)
-library(ranger)
 set.seed(429153)
 
 ################################################################################
@@ -42,15 +39,15 @@ sl_lrn <- Lrnr_sl$new(
 
 # learners used for conditional density regression (e.g., propensity score)
 lrn1_dens <- Lrnr_condensier$new(
-  nbins = 25, bin_estimator = lrn1,
+  nbins = 20, bin_estimator = lrn1,
   bin_method = "dhist"
 )
 lrn2_dens <- Lrnr_condensier$new(
-  nbins = 20, bin_estimator = lrn2,
+  nbins = 10, bin_estimator = lrn2,
   bin_method = "dhist"
 )
 lrn3_dens <- Lrnr_condensier$new(
-  nbins = 15, bin_estimator = lrn3,
+  nbins = 5, bin_estimator = lrn3,
   bin_method = "dhist"
 )
 sl_lrn_dens <- Lrnr_sl$new(
@@ -69,7 +66,7 @@ learner_list <- list(Y = Q_learner, A = g_learner)
 ################################################################################
 
 # what's the grid of shifts we wish to consider?
-delta_grid <- seq(-1, 1, 0.5)
+delta_grid <- seq(-1, 1, 1)
 
 # initialize a tmle specification
 tmle_spec <- tmle_vimshift_delta(
@@ -101,15 +98,14 @@ tmle_fit
 ## get estimates from Params corresponding to non-MSM TMLEs
 tmle_fit_orig_est <- list(
   tmle_fit$estimates[[1]], tmle_fit$estimates[[2]],
-  tmle_fit$estimates[[3]], tmle_fit$estimates[[4]],
-  tmle_fit$estimates[[5]]
+  tmle_fit$estimates[[3]]
 )
 
 ## use MSM to summarize results
 msm_fit_table <- trend_msm(tmle_fit_orig_est, delta_grid)
 
 ## extract relevant tmle3 results for test and re-format appropriately
-msm_tmle3_table <- tmle_fit$summary[6:7, c(6, 4, 7, 5)]
+msm_tmle3_table <- tmle_fit$summary[4:5, c(6, 4, 7, 5)]
 msm_classic_table <- as.data.table(msm_fit_table[, -5])
 
 ## set column names to be equal to avoid equivalency commplications

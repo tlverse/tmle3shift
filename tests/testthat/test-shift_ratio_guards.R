@@ -1,12 +1,8 @@
 context("Shift intervention with positivity guards")
 
-library(uuid)
-library(assertthat)
 library(data.table)
-library(future)
 library(sl3)
 library(tmle3)
-library(ranger)
 set.seed(429153)
 
 ################################################################################
@@ -43,15 +39,15 @@ sl_lrn <- Lrnr_sl$new(
 
 # learners used for conditional density regression (e.g., propensity score)
 lrn1_dens <- Lrnr_condensier$new(
-  nbins = 25, bin_estimator = lrn1,
+  nbins = 20, bin_estimator = lrn1,
   bin_method = "dhist"
 )
 lrn2_dens <- Lrnr_condensier$new(
-  nbins = 20, bin_estimator = lrn2,
+  nbins = 10, bin_estimator = lrn2,
   bin_method = "dhist"
 )
 lrn3_dens <- Lrnr_condensier$new(
-  nbins = 15, bin_estimator = lrn3,
+  nbins = 5, bin_estimator = lrn3,
   bin_method = "dhist"
 )
 sl_lrn_dens <- Lrnr_sl$new(

@@ -21,12 +21,13 @@ Authors@R: c(
 Maintainer: Nima Hejazi <nh@nimahejazi.org>
 Description: Targeted maximum likelihood estimation (TMLE) of population-level
     causal effects under stochastic treatment regimes and related nonparametric
-    variable importance analysis. Tools are provided for computing the TMLE of a
-    treatment effect under interventions that are shifts of a continuous-valued
-    treatment, as first described by I. Díaz Muñoz and M.J. van der Laan (2013;
+    variable importance analyses. Utilities are provided for computing the TML
+    estimate of a counterfactual mean under a stochastically modified
+    (continuous-valued) treatment node, under intervention policies that shift
+    the natural value of the treatment. The methodology implemented was first
+    described by I. Díaz and M.J. van der Laan (2013;
     doi: <10.1111/j.1541-0420.2011.01685.x>) and expanded upon in I. Díaz and
-    M.J. van der Laan (2018). This is an adapter package for use with the tmle3
-    framework and the tlverse software ecosystem for Targeted Learning.
+    M.J. van der Laan (2018).
 Depends:
     R (>= 3.4.0)
 License: GPL-3
@@ -42,18 +43,22 @@ Suggests:
     testthat,
     knitr,
     rmarkdown,
+    covr,
     stats,
     ggplot2,
     tidyverse,
     simcausal,
     condensier,
+    haldensify,
     txshift,
     Rsolnp,
     nnls,
-    ranger
+    ranger,
+    xgboost
 Remotes:
     github::osofr/simcausal,
     github::osofr/condensier,
+    github::nhejazi/haldensify,
     github::nhejazi/txshift,
     github::tlverse/origami,
     github::tlverse/delayed,
@@ -65,4 +70,4 @@ Encoding: UTF-8
 LazyData: true
 LazyLoad: yes
 VignetteBuilder: knitr
-RoxygenNote: 6.1.0.9000
+RoxygenNote: 6.1.1

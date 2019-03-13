@@ -1,11 +1,8 @@
-context("Variable importance for shifts, directly targeting MSM")
+context("Variable importance measures directly targeting MSM parameters")
 
-library(uuid)
-library(assertthat)
 library(data.table)
 library(sl3)
 library(tmle3)
-library(ranger)
 set.seed(429153)
 
 ################################################################################
@@ -42,15 +39,15 @@ sl_lrn <- Lrnr_sl$new(
 
 # learners used for conditional density regression (e.g., propensity score)
 lrn1_dens <- Lrnr_condensier$new(
-  nbins = 25, bin_estimator = lrn1,
+  nbins = 20, bin_estimator = lrn1,
   bin_method = "dhist"
 )
 lrn2_dens <- Lrnr_condensier$new(
-  nbins = 20, bin_estimator = lrn2,
+  nbins = 10, bin_estimator = lrn2,
   bin_method = "dhist"
 )
 lrn3_dens <- Lrnr_condensier$new(
-  nbins = 15, bin_estimator = lrn3,
+  nbins = 5, bin_estimator = lrn3,
   bin_method = "dhist"
 )
 sl_lrn_dens <- Lrnr_sl$new(
@@ -69,7 +66,7 @@ learner_list <- list(Y = Q_learner, A = g_learner)
 ################################################################################
 
 # what's the grid of shifts we wish to consider?
-delta_grid <- seq(-1, 1, 0.5)
+delta_grid <- seq(-1, 1, 1)
 
 # initialize a tmle specification for direct targeting of MSM parameters
 tmle_spec <- tmle_vimshift_msm(
@@ -134,9 +131,10 @@ tmle_fit_delta_method <- fit_tmle3(
 ################################################################################
 
 ## extract relevant tmle3 results for test and re-format appropriately
-msm_delta_summary <- tmle_fit_delta_method$summary[6:7, ]
+msm_delta_summary <- tmle_fit_delta_method$summary[4:5, ]
 msm_targeted_summary <- tmle_fit_targeted_msm$summary
 
 test_that("Results from Targeted MSM approach and Delta Method MSM match", {
-  expect_equal(msm_delta_summary, msm_targeted_summary, tolerance = 0.005)
+  expect_equal(msm_delta_summary, msm_targeted_summary,
+               tolerance = 5 * (1 / n_obs))
 })

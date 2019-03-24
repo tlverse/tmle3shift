@@ -10,6 +10,7 @@ env:
 language: r
 sudo: required
 cache: packages
+cran: http://cran.rstudio.com
 warnings_are_errors: true
 r_build_args: "--no-manual"
 r_check_args: "--no-build-vignettes --no-manual"
@@ -51,3 +52,4 @@ notifications:
   email:
     on_success: change
     on_failure: change
+

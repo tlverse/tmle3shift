@@ -1,21 +1,16 @@
 Package: tmle3shift
-Title: Targeted Maximum Likelihood Estimation of the Effects of Stochastic Shift
+Title: Targeted Maximum Likelihood Estimation of Stochastic Shift Effects
   Interventions
 Version: 0.1.5
 Authors@R: c(
     person("Nima", "Hejazi", email = "nh@nimahejazi.org",
-           role = c("aut", "cre"),
+           role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0002-7127-2789")),
     person("Jeremy", "Coyle", email = "jeremy.coyle@gmail.com",
-           role = c("aut", "cph"),
+           role = c("aut"),
            comment = c(ORCID = "0000-0002-9874-6649")),
-    person("David", "Benkeser", email = "benkeser@emory.edu",
-           role = "ctb",
-           comment = c(ORCID = "0000-0002-1019-8343")),
-    person("Iván", "Díaz", email = "ild2005@med.cornell.edu",
-           role = "ctb"),
     person("Mark", "van der Laan", email = "laan@berkeley.edu",
-           role = c("aut", "ths"),
+           role = c("ctb", "ths"),
            comment = c(ORCID = "0000-0003-1432-5511"))
   )
 Maintainer: Nima Hejazi <nh@nimahejazi.org>
@@ -64,7 +59,7 @@ Remotes:
     github::tlverse/delayed,
     github::tlverse/sl3,
     github::tlverse/tmle3
-URL: https://tmle3shift.tlverse.com/
+URL: https://tlverse.org/tmle3shift
 BugReports: https://github.com/tlverse/tmle3shift/issues
 Encoding: UTF-8
 LazyData: true

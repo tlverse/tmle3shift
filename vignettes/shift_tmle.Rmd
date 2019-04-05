@@ -1,7 +1,6 @@
 ---
 title: "Targeted Learning with Stochastic Treatment Regimes"
-author: "[Nima Hejazi](https://nimahejazi.org), [David
-  Benkeser](https://www.benkeserstatistics.com/), and [Jeremy
+author: "[Nima Hejazi](https://nimahejazi.org) and [Jeremy
   Coyle](https://github.com/jeremyrcoyle)"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette

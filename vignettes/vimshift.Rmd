@@ -1,7 +1,7 @@
 ---
 title: "Variable Importance with Grids of Stochastic Interventions"
-author: "[Nima S. Hejazi](https://nimahejazi.org), [Jeremy R.
-  Coyle](https://github.com/jeremyrcoyle), and [Mark J. van der
+author: "[Nima Hejazi](https://nimahejazi.org), [Jeremy
+  Coyle](https://github.com/jeremyrcoyle), and [Mark van der
   Laan](https://vanderlaan-lab.org)"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette

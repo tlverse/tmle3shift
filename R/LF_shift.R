@@ -79,7 +79,7 @@
 #'           ratio of the counterfactual intervention density to the observed
 #'           intervention density is below this value
 ##'    }
-#'     \item{\code{...}}{Not currently used.
+#'     \item{\code{...}}{Additional arguments passed to the base class.
 #'     }
 #'   }
 #'

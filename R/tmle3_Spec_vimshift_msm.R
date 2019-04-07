@@ -46,16 +46,21 @@ tmle3_Spec_vimshift_msm <- R6::R6Class(
       shift_grid <- self$options$shift_grid
       max_shifted_ratio <- self$options$max_shifted_ratio
 
+      # treatment likelihood bound (away from 0 for continuous A)
+      A_bound <- c(1 / tmle_task$nrow, Inf)
+
+      browser()
       # define shift intervention over grid (additive only for now)
       interventions <-
         lapply(shift_grid, function(x) {
           tmle3::define_lf(LF_shift,
             name = "A",
             original_lf = likelihood$factor_list[["A"]],
-            likelihood_base = likelihood, # initial likelihood
-            shift_fxn, shift_fxn_inv, # shift fxns
-            shift_delta = x,
-            max_shifted_ratio = max_shifted_ratio
+            likelihood_base = likelihood,                # initial likelihood
+            shift_fxn, shift_fxn_inv,                    # shift fxns
+            shift_delta = x,                             # shift value in grid
+            max_shifted_ratio = max_shifted_ratio,       # ratio for shifting
+            bound = A_bound                              # bound away from zero
           )
         })
 

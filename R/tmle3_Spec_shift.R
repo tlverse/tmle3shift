@@ -65,14 +65,18 @@ tmle3_Spec_shift <- R6::R6Class(
       delta_shift <- self$options$delta_shift
       max_shifted_ratio <- self$options$max_shifted_ratio
 
+      # treatment likelihood bound (away from 0 for continuous A)
+      A_bound <- c(1 / tmle_task$nrow, Inf)
+
       # define shift intervention (additive only for now)
       intervention <- tmle3::define_lf(LF_shift,
         name = "A",
         original_lf = likelihood$factor_list[["A"]],
-        likelihood_base = likelihood, # initialized likelihood
-        shift_fxn, shift_fxn_inv, # shift fxns (from user)
-        shift_delta = delta_shift, # shift magnitude
-        max_shifted_ratio = max_shifted_ratio # max ratio difference
+        likelihood_base = likelihood,                  # initialized likelihood
+        shift_fxn, shift_fxn_inv,                      # shift fxns (from user)
+        shift_delta = delta_shift,                     # shift magnitude
+        max_shifted_ratio = max_shifted_ratio,         # max ratio difference
+        bound = A_bound                                # bound away from zero
       )
 
       shifted_mean <- tmle3::Param_TSM$new(likelihood, intervention)

@@ -1,7 +1,6 @@
 ---
 title: "Targeted Learning with Stochastic Treatment Regimes"
-author: "[Nima Hejazi](https://nimahejazi.org), [David
-  Benkeser](https://www.benkeserstatistics.com/), and [Jeremy
+author: "[Nima Hejazi](https://nimahejazi.org) and [Jeremy
   Coyle](https://github.com/jeremyrcoyle)"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -34,24 +33,50 @@ To start, let's load the packages we'll use and set a seed for simulation:
 ```{r setup, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(data.table)
-library(condensier)
 library(sl3)
 library(tmle3)
 library(tmle3shift)
 set.seed(429153)
 ```
 
----
-
 ## Data and Notation
 
-1. Start with a simple additive shift -- i.e., $d(a,w) = a + \delta$ if
-   $a \leq u(w) - \delta$ or $d(a, w) = a$ if $a \geq u(w) - \delta$.
+Consider $n$ observed units $O_1, \ldots, O_n$, where each random variable $O =
+(W, A, Y)$ corresponds to a single observational unit. Let $W$ denote baseline
+covariates (e.g., age, sex, education level), $A$ an intervention variable of
+interest (e.g., nutritional supplements), and $Y$ an outcome of interest (e.g.,
+disease status). Though it need not be the case, let $A$ be continuous-valued,
+i.e. $A \in \mathbb{R}$. Let $O_i \sim \mathcal{P} \in \mathcal{M}$, where
+$\mathcal{M}$ is the nonparametric statistical model defined as the set of
+continuous densities on $O$ with respect to some dominating measure. To
+formalize the definition of stochastic interventions and their corresponding
+causal effects, we introduce a nonparametric structural equation model (NPSEM),
+based on @pearl2000causality, to define how the system changes under posited
+interventions:
+\begin{align*}\label{eqn:npsem}
+  W &= f_W(U_W) \\ A &= f_A(W, U_A) \\ Y &= f_Y(A, W, U_Y),
+\end{align*}
+We denote the observed data structure $O = (W, A, Y)$
 
-2. The additive shift will have support everywhere (i.e.,
-   $a \leq u(w)$ is true everywhere).
-
-3. The data structure that we now observe is $O = (W, A, Y)$.
+Letting $A$ denote a continuous-valued treatment, we assume that the
+distribution of $A$ conditional on $W = w$ has support in the interval
+$(l(w), u(w))$ -- for convenience, let this support be _a.e._ That is, the
+minimum natural value of treatment $A$ for an individual with covariates
+$W = w$ is $l(w)$; similarly, the maximum is $u(w)$. Then, a simple stochastic
+intervention, based on a shift $\delta$, may be defined
+\begin{equation}\label{eqn:shift}
+  d(a, w) =
+  \begin{cases}
+    a - \delta & \text{if } a > l(w) + \delta \\
+    a & \text{if } a \leq l(w) + \delta,
+  \end{cases}
+\end{equation}
+where $0 \leq \delta \leq u(w)$ is an arbitrary pre-specified value that
+defines the degree to which the observed value $A$ is to be shifted, where
+possible. For the purpose of using such a shift in practice, the present
+software provides the functions `shift_additive` and `shift_additive_inv`,
+which define a variation of this shift, assuming that the density of treatment
+$A$, conditional on the covariates $W$, has support _a.e._
 
 ### Simulate Data
 
@@ -68,7 +93,7 @@ W <- as.numeric(replicate(n_w, rbinom(n_obs, 1, 0.5)))
 A <- as.numeric(rnorm(n_obs, mean = tx_mult * W, sd = 1))
 
 ## create outcome as a linear function of A, W + white noise
-Y <- A + W + rnorm(n_obs, mean = 0, sd = 1)
+Y <- A + W + rnorm(n_obs, mean = 0, sd = 0.5)
 ```
 
 The above composes our observed data structure $O = (W, A, Y)$. To formally
@@ -87,8 +112,6 @@ head(data)
 We now have an observed data structure (`data`) and a specification of the role
 that each variable in the data set plays as the nodes in a DAG.
 
----
-
 ## Methodology
 
 To start, we will initialize a specification for the TMLE of our parameter of
@@ -101,8 +124,8 @@ this is an arbitrarily chosen value for this example).
 ```{r spec_init}
 # initialize a tmle specification
 tmle_spec <- tmle_shift(shift_val = 0.5,
-                        shift_fxn = shift_additive_bounded,
-                        shift_fxn_inv = shift_additive_bounded_inv)
+                        shift_fxn = shift_additive,
+                        shift_fxn_inv = shift_additive_inv)
 ```
 
 As seen above, the `tmle_shift` specification object (like all `tmle3_Spec`
@@ -115,62 +138,73 @@ object internally (see the `tmle3` documentation for details).
 
 To easily incorporate ensemble machine learning into the estimation procedure,
 we rely on the facilities provided in the [`sl3` R
-package](https://sl3.tlverse.org). For a complete guide on using the `sl3` R
-package, consider consulting https://sl3.tlverse.org, or https://tlverse.org for
+package](https://tlverse.org/sl3). For a complete guide on using the `sl3` R
+package, consider consulting https://tlverse.org/sl3, or https://tlverse.org for
 the [`tlverse` ecosystem](https://github.com/tlverse), of which `sl3` is a major
 part.
 
-Using the framework provided by the [`sl3` package](https://sl3.tlverse.org),
+Using the framework provided by the [`sl3` package](https://tlverse.org/sl3),
 the nuisance parameters of the TML estimator may be fit with ensemble learning,
 using the cross-validation framework of the Super Learner algorithm of
-@vdl2007super.
+@vdl2007super. To estimate the treatment mechanism (often denoted "g" in the
+targeted learning literature), we must make use of learning algorithms
+specifically suited to conditional density estimation; a list of such learners 
+may be extracted from `sl3` by using `sl3_list_learners()`:
 
-```{r sl3_lrnrs}
-# learners used for conditional expectation regression (e.g., outcome)
-lrn1 <- Lrnr_mean$new()
-lrn2 <- Lrnr_glm$new()
-lrn3 <- Lrnr_xgboost$new()
-sl_lrn <- Lrnr_sl$new(
-  learners = list(lrn1, lrn2, lrn3),
-  metalearner = Lrnr_nnls$new()
-)
+```{r sl3_density_lrnrs_search}
+sl3_list_learners("density")
+```
 
-# learners used for conditional density regression (e.g., propensity score)
-lrn1_dens <- Lrnr_condensier$new(
-  nbins = 20, bin_estimator = lrn1,
-  bin_method = "dhist"
+To proceed, we'll select two of the above learners, `Lrnr_haldensify` for using
+the highly adaptive lasso for conditional density estimation, based on an
+algorithm given by @diaz2011super, and `Lrnr_rfcde`, an approach for using
+random forests for conditional density estimation [@pospisil2018rfcde]:
+
+```{r sl3_regression_lrnrs}
+# learners used for conditional density regression (i.e., propensity score)
+lrn_haldensify <- Lrnr_haldensify$new(
+  n_bins = 5, grid_type = "equal_mass",
+  lambda_seq = exp(seq(-1, -13, length = 500))
 )
-lrn2_dens <- Lrnr_condensier$new(
-  nbins = 10, bin_estimator = lrn2,
-  bin_method = "dhist"
-)
-lrn3_dens <- Lrnr_condensier$new(
-  nbins = 5, bin_estimator = lrn3,
-  bin_method = "dhist"
+lrn_rfcde <- Lrnr_rfcde$new(
+  n_trees = 1000, node_size = 5,
+  n_basis = 31, output_type = "observed"
 )
 sl_lrn_dens <- Lrnr_sl$new(
-  learners = list(lrn1_dens, lrn2_dens, lrn3_dens),
+  learners = list(lrn_haldensify, lrn_rfcde),
   metalearner = Lrnr_solnp_density$new()
 )
 ```
 
-As seen above, we can generate two different ensemble learners for the two
-nuisance regressions that must be fit in the process of computing this TML
-estimator. In particular, we use a Super Learner composed of an intercept model,
-a GLM, and a random forest (as implemented in [the `ranger` R
-package](cran.r-project.org/package=ranger)) for fitting the outcome regressions
-(often denoted "Q" in the literature) while we use variations of these learners,
-through [the `condensier` R package](https://github.com/osofr/condensier), for
-the conditional density estimation needed in fitting the treatment mechanism
-(often denoted "g" in the literature).
+We also required an approach for estimating the outcome regression (often
+denoted "Q" in the targeted learning literature). For this, we build a Super
+Learner composed of an intercept model, a GLM, and the [xgboost
+algorithm](https://xgboost.ai/) for gradient boosting:
 
-We make the above explicit with respect to standard notation by bundling the
-ensemble learners into a list object below:
+```{r sl3_density_lrnrs}
+# learners used for conditional expectation regression (e.g., outcome)
+lrn_mean <- Lrnr_mean$new()
+lrn_fglm <- Lrnr_glm_fast$new()
+lrn_xgb <- Lrnr_xgboost$new(nrounds = 10)
+sl_lrn <- Lrnr_sl$new(
+  learners = list(lrn_mean, lrn_fglm, lrn_xgb),
+  metalearner = Lrnr_nnls$new()
+)
+```
+
+We can make the above explicit with respect to standard notation by bundling
+the ensemble learners into a `list` object below. Note that in making the
+`learner_list` object for our TML estimator, for the sake of example, we use
+only the conditional density estimation approach of the [`haldensify`
+package](https://github.com/nhejazi/haldensify) to estimate the treatment
+mechanism; as this is done in an effort to save computation time, we recommend
+using a stacked regression approach in standard data analytic practice.
 
 ```{r make_lrnr_list}
 # specify outcome and treatment regressions and create learner list
 Q_learner <- sl_lrn
-g_learner <- sl_lrn_dens
+#g_learner <- sl_lrn_dens     # in practice
+g_learner <- lrn_haldensify
 learner_list <- list(Y = Q_learner, A = g_learner)
 ```
 

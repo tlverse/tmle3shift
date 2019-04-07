@@ -1,48 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://tmle3shift.tlverse.org/index.html</loc>
+    <loc>https://tlverse.org/tmle3shift/index.html</loc>
   </url>
   <url>
-    <loc>https://tmle3shift.tlverse.org/reference/LF_shift.html</loc>
+    <loc>https://tlverse.org/tmle3shift/reference/LF_shift.html</loc>
   </url>
   <url>
-    <loc>https://tmle3shift.tlverse.org/reference/Param_MSM_linear.html</loc>
+    <loc>https://tlverse.org/tmle3shift/reference/Param_MSM_linear.html</loc>
   </url>
   <url>
-    <loc>https://tmle3shift.tlverse.org/reference/additive_shifting.html</loc>
+    <loc>https://tlverse.org/tmle3shift/reference/additive_shifting.html</loc>
   </url>
   <url>
-    <loc>https://tmle3shift.tlverse.org/reference/additive_shifting_bounded.html</loc>
+    <loc>https://tlverse.org/tmle3shift/reference/additive_shifting_bounded.html</loc>
   </url>
   <url>
-    <loc>https://tmle3shift.tlverse.org/reference/msm_linear_factory.html</loc>
+    <loc>https://tlverse.org/tmle3shift/reference/msm_linear_factory.html</loc>
   </url>
   <url>
-    <loc>https://tmle3shift.tlverse.org/reference/tmle3_Spec_shift.html</loc>
+    <loc>https://tlverse.org/tmle3shift/reference/tmle3_Spec_shift.html</loc>
   </url>
   <url>
-    <loc>https://tmle3shift.tlverse.org/reference/tmle3_Spec_vimshift_delta.html</loc>
+    <loc>https://tlverse.org/tmle3shift/reference/tmle3_Spec_vimshift_delta.html</loc>
   </url>
   <url>
-    <loc>https://tmle3shift.tlverse.org/reference/tmle3_Spec_vimshift_msm.html</loc>
+    <loc>https://tlverse.org/tmle3shift/reference/tmle3_Spec_vimshift_msm.html</loc>
   </url>
   <url>
-    <loc>https://tmle3shift.tlverse.org/reference/tmle_shift.html</loc>
+    <loc>https://tlverse.org/tmle3shift/reference/tmle_shift.html</loc>
   </url>
   <url>
-    <loc>https://tmle3shift.tlverse.org/reference/tmle_vimshift_delta.html</loc>
+    <loc>https://tlverse.org/tmle3shift/reference/tmle_vimshift_delta.html</loc>
   </url>
   <url>
-    <loc>https://tmle3shift.tlverse.org/reference/tmle_vimshift_msm.html</loc>
+    <loc>https://tlverse.org/tmle3shift/reference/tmle_vimshift_msm.html</loc>
   </url>
   <url>
-    <loc>https://tmle3shift.tlverse.org/reference/trend_msm.html</loc>
+    <loc>https://tlverse.org/tmle3shift/reference/trend_msm.html</loc>
   </url>
   <url>
-    <loc>https://tmle3shift.tlverse.org/articles/shift_tmle.html</loc>
+    <loc>https://tlverse.org/tmle3shift/articles/shift_tmle.html</loc>
   </url>
   <url>
-    <loc>https://tmle3shift.tlverse.org/articles/vimshift.html</loc>
+    <loc>https://tlverse.org/tmle3shift/articles/vimshift.html</loc>
   </url>
 </urlset>

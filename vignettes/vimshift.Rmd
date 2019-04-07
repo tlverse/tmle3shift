@@ -1,5 +1,5 @@
 ---
-title: "Variable Importance Analysis with Stochastic Treatment Regimes"
+title: "Variable Importance Analysis with Stochastic Interventions"
 author: "[Nima Hejazi](https://nimahejazi.org), [Jeremy
   Coyle](https://github.com/jeremyrcoyle), and [Mark van der
   Laan](https://vanderlaan-lab.org)"
@@ -7,7 +7,7 @@ date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 bibliography: vignette-refs.bib
 vignette: >
-  %\VignetteIndexEntry{Variable Importance with Grids of Stochastic Interventions}
+  %\VignetteIndexEntry{Variable Importance Analysis with Stochastic Interventions}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -34,15 +34,11 @@ To start, let's load the packages we'll use and set a seed for simulation:
 ```{r setup, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(data.table)
-library(condensier)
-library(ranger)
 library(sl3)
 library(tmle3)
 library(tmle3shift)
 set.seed(429153)
 ```
-
----
 
 ## Data and Notation
 
@@ -113,8 +109,6 @@ head(data)
 
 We now have an observed data structure (`data`) and a specification of the role
 that each variable in the data set plays as the nodes in a DAG.
-
----
 
 ## Methodology
 
@@ -201,7 +195,7 @@ sl3_list_learners("density")
 To proceed, we'll select two of the above learners, `Lrnr_haldensify` for using
 the highly adaptive lasso for conditional density estimation, based on an
 algorithm given by @diaz2011super, and `Lrnr_rfcde`, an approach for using
-random forests for conditional density estimation [@popisil2018rfcde]:
+random forests for conditional density estimation [@pospisil2018rfcde]:
 
 ```{r sl3_regression_lrnrs}
 # learners used for conditional density regression (i.e., propensity score)
@@ -237,17 +231,18 @@ sl_lrn <- Lrnr_sl$new(
 
 We can make the above explicit with respect to standard notation by bundling
 the ensemble learners into a `list` object below. Note that in making the
-`learner_list` object for our TML estimator, for the sake of example, we use
-only the conditional density estimation approach of the [`haldensify`
-package](https://github.com/nhejazi/haldensify) to estimate the treatment
-mechanism; as this is done in an effort to save computation time, we recommend
-using a stacked regression approach in standard data analytic practice.
+`learner_list` object for our TML estimators, for the sake of example, we use
+only the random forest conditional density estimation approach of the [`RFCDE`
+package](https://github.com/tpospisi/RFCDE/tree/master/r) in estimating the
+treatment mechanism; as this is done in an effort to save computation time, we
+recommend using a stacked regression approach in standard data analytic
+practice.
 
 ```{r make_lrnr_list}
 # specify outcome and treatment regressions and create learner list
 Q_learner <- sl_lrn
 #g_learner <- sl_lrn_dens     # in practice
-g_learner <- lrn_haldensify
+g_learner <- lrn_rfcde
 learner_list <- list(Y = Q_learner, A = g_learner)
 ```
 
@@ -261,15 +256,15 @@ while our `g_learner` is used in fitting our treatment mechanism regression.
 
 To start, we will initialize a specification for the TMLE of our parameter of
 interest (called a `tmle3_Spec` in the `tlverse` nomenclature) simply by calling
-`tmle_shift`. We specify the argument `shift_grid = seq(-1, 1, by = 0.5)`
+`tmle_shift`. We specify the argument `shift_grid = seq(-1, 1, by = 1)`
 when initializing the `tmle3_Spec` object to communicate that we're interested
 in assessing the mean counterfactual outcome over a grid of shifts `r seq(-1,
-1, by = 0.5)` on the scale of the treatment $A$ (note that the numerical
+1, by = 1)` on the scale of the treatment $A$ (note that the numerical
 choice of shift is an arbitrarily chosen set of values for this example).
 
 ```{r vim_spec_init}
 # what's the grid of shifts we wish to consider?
-delta_grid <- seq(-1, 1, 0.5)
+delta_grid <- seq(-1, 1, 1)
 
 # initialize a tmle specification
 tmle_spec <- tmle_vimshift_delta(shift_fxn = shift_additive_bounded,
@@ -289,7 +284,7 @@ object internally (see the `tmle3` documentation for details).
 One may walk through the step-by-step procedure for  fitting the TML estimator
 of the mean counterfactual outcome under each shift in the grid, using the
 machinery exposed by the [`tmle3` R package](https://tlverse.org/tmle3) (see
-below); however, the step-by-step procedure is often not of interest.
+below); however, the step-by-step procedure is more often not of interest.
 
 ```{r fit_tmle_manual, eval=FALSE}
 # NOT RUN -- SEE NEXT CODE CHUNK
@@ -439,10 +434,12 @@ appears above):
 
 ```{r vim_targeted_msm_fit}
 # what's the grid of shifts we wish to consider?
-delta_grid <- seq(-1, 1, 0.5)
+delta_grid <- seq(-1, 1, 1)
 
 # initialize a tmle specification
-tmle_msm_spec <- tmle_vimshift_msm(shift_grid = delta_grid,
+tmle_msm_spec <- tmle_vimshift_msm(shift_fxn = shift_additive_bounded,
+                                   shift_fxn_inv = shift_additive_bounded_inv,
+                                   shift_grid = delta_grid,
                                    max_shifted_ratio = 2)
 
 # fit the TML estimator and examine the results

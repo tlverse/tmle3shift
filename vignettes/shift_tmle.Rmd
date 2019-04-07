@@ -158,7 +158,7 @@ sl3_list_learners("density")
 To proceed, we'll select two of the above learners, `Lrnr_haldensify` for using
 the highly adaptive lasso for conditional density estimation, based on an
 algorithm given by @diaz2011super, and `Lrnr_rfcde`, an approach for using
-random forests for conditional density estimation [@popisil2018rfcde]:
+random forests for conditional density estimation [@pospisil2018rfcde]:
 
 ```{r sl3_regression_lrnrs}
 # learners used for conditional density regression (i.e., propensity score)

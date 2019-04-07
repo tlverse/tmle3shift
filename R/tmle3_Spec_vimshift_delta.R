@@ -46,16 +46,20 @@ tmle3_Spec_vimshift_delta <- R6::R6Class(
       shift_grid <- self$options$shift_grid
       max_shifted_ratio <- self$options$max_shifted_ratio
 
+      # treatment likelihood bound (away from 0 for continuous A)
+      A_bound <- c(1 / tmle_task$nrow, Inf)
+
       # define shift intervention over grid (additive only for now)
       interventions <-
         lapply(shift_grid, function(x) {
           tmle3::define_lf(LF_shift,
             name = "A",
             original_lf = likelihood$factor_list[["A"]],
-            likelihood_base = likelihood, # initial likelihood
-            shift_fxn, shift_fxn_inv, # shift fxns
-            shift_delta = x,
-            max_shifted_ratio = max_shifted_ratio
+            likelihood_base = likelihood,                # initial likelihood
+            shift_fxn, shift_fxn_inv,                    # shift fxns
+            shift_delta = x,                             # shift value in grid
+            max_shifted_ratio = max_shifted_ratio,       # ratio for shifting
+            bound = A_bound                              # bound away from zero
           )
         })
 
@@ -68,11 +72,11 @@ tmle3_Spec_vimshift_delta <- R6::R6Class(
       # MSM function factory
       design_matrix <- cbind(rep(1, length(shift_grid)), shift_grid)
       colnames(design_matrix) <- c("intercept", "slope")
-      delta_param_MSM_linear <- msm_linear_factory(design_matrix)
+      delta_param_msm <- msm_linear_factory(design_matrix)
 
       # create MSM via delta method
       msm <- Param_delta$new(
-        likelihood, delta_param_MSM_linear,
+        likelihood, delta_param_msm,
         tsm_params_list
       )
       tmle_params <- unlist(list(tsm_params_list, msm), recursive = FALSE)

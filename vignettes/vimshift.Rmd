@@ -132,8 +132,8 @@ observation through a choice of the shift $\delta$ and the setting of the bound
 $M$.
 
 We formalize and extend the procedure to determine an acceptable set of values
-for the shift $\delta$ in the sequel. Specifically, let there be a shift $d(A,
-W) = A + \delta$, where the shift $\delta$ is defined
+for the shift $\delta$ in the sequel. Specifically, let there be a shift $d(a,
+w) = a + \delta$, where the shift $\delta$ is defined
 \begin{equation}
   \delta(a, w) =
     \begin{cases}
@@ -177,8 +177,8 @@ To easily incorporate ensemble machine learning into the estimation procedure,
 we rely on the facilities provided in the [`sl3` R
 package](https://tlverse.org/sl3). For a complete guide on using the `sl3` R
 package, consider consulting https://tlverse.org/sl3, or https://tlverse.org for
-the [`tlverse` ecosystem](https://github.com/tlverse), of which `sl3` is a major
-part.
+the [`tlverse` ecosystem](https://github.com/tlverse), of which `sl3` is a core
+engine.
 
 Using the framework provided by the [`sl3` package](https://tlverse.org/sl3),
 the nuisance parameters of the TML estimator may be fit with ensemble learning,
@@ -397,10 +397,6 @@ Inference from a working MSM is rather straightforward. To wit, the limiting
 distribution for $m_{\beta}(\delta)$ may be expressed
 $$\sqrt{n}(\beta_n - \beta_0) \to N(0, \Sigma),$$
 where $\Sigma$ is the empirical covariance matrix of $\text{EIF}_{\beta}(O)$.
-
-```{r msm_fit}
-tmle_fit$summary[6:7,]
-```
 
 #### Directly Targeting the MSM Parameter $\beta$
 

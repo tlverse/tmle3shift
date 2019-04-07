@@ -154,7 +154,7 @@
 <h3 class="hasAnchor">
 <a href="#defining-a-grid-of-counterfactual-interventions" class="anchor"></a>Defining a grid of counterfactual interventions</h3>
 <p>In order to specify a <em>grid</em> of shifts <span class="math inline">\(\delta\)</span> to be used in defining a set of stochastic intervention policies in an <em>a priori</em> manner, let us consider an arbitrary scalar <span class="math inline">\(\delta\)</span> that defines a counterfactual outcome <span class="math inline">\(\psi_n = Q_n(d(A, W), W)\)</span>, where, for simplicity, let <span class="math inline">\(d(A, W) = A + \delta\)</span>. A simplified expression of the auxiliary covariate for the TML estimator of <span class="math inline">\(\psi\)</span> is <span class="math inline">\(H_n = \frac{g^{\star}(a \mid w)}{g(a \mid w)}\)</span>, where <span class="math inline">\(g^{\star}(a \mid w)\)</span> defines the treatment mechanism with the stochastic intervention implemented. To ascertain whether a given choice of the shift <span class="math inline">\(\delta\)</span> is <em>admissable</em> – that is, whether such an intervention may be implemented while avoiding violations of the positivity assumption – define a bound <span class="math inline">\(C(\delta) := \frac{g^{\star}(a \mid w)}{g(a \mid w)} \leq M\)</span>, where <span class="math inline">\(g^{\star}(a \mid w)\)</span> is a function of <span class="math inline">\(\delta\)</span> in part, and <span class="math inline">\(M\)</span> is a potentially user-specified upper bound of <span class="math inline">\(C(\delta)\)</span>. Then, <span class="math inline">\(C(\delta)\)</span> may be interpreted as a measure of the influence of a given observation providing a way to limit the maximum influence of a given observation through a choice of the shift <span class="math inline">\(\delta\)</span> and the setting of the bound <span class="math inline">\(M\)</span>.</p>
-<p>We formalize and extend the procedure to determine an acceptable set of values for the shift <span class="math inline">\(\delta\)</span> in the sequel. Specifically, let there be a shift <span class="math inline">\(d(A, W) = A + \delta\)</span>, where the shift <span class="math inline">\(\delta\)</span> is defined <span class="math display">\[\begin{equation}
+<p>We formalize and extend the procedure to determine an acceptable set of values for the shift <span class="math inline">\(\delta\)</span> in the sequel. Specifically, let there be a shift <span class="math inline">\(d(a, w) = a + \delta\)</span>, where the shift <span class="math inline">\(\delta\)</span> is defined <span class="math display">\[\begin{equation}
   \delta(a, w) =
     \begin{cases}
       \delta, &amp; \delta_{\text{min}}(a,w) \leq \delta \leq
@@ -179,7 +179,7 @@
 <h3 class="hasAnchor">
 <a href="#interlude-constructing-optimal-stacked-regressions-with-sl3" class="anchor"></a><em>Interlude:</em> Constructing Optimal Stacked Regressions with <code>sl3</code>
 </h3>
-<p>To easily incorporate ensemble machine learning into the estimation procedure, we rely on the facilities provided in the <a href="https://tlverse.org/sl3"><code>sl3</code> R package</a>. For a complete guide on using the <code>sl3</code> R package, consider consulting <a href="https://tlverse.org/sl3" class="uri">https://tlverse.org/sl3</a>, or <a href="https://tlverse.org" class="uri">https://tlverse.org</a> for the <a href="https://github.com/tlverse"><code>tlverse</code> ecosystem</a>, of which <code>sl3</code> is a major part.</p>
+<p>To easily incorporate ensemble machine learning into the estimation procedure, we rely on the facilities provided in the <a href="https://tlverse.org/sl3"><code>sl3</code> R package</a>. For a complete guide on using the <code>sl3</code> R package, consider consulting <a href="https://tlverse.org/sl3" class="uri">https://tlverse.org/sl3</a>, or <a href="https://tlverse.org" class="uri">https://tlverse.org</a> for the <a href="https://github.com/tlverse"><code>tlverse</code> ecosystem</a>, of which <code>sl3</code> is a core engine.</p>
 <p>Using the framework provided by the <a href="https://tlverse.org/sl3"><code>sl3</code> package</a>, the nuisance parameters of the TML estimator may be fit with ensemble learning, using the cross-validation framework of the Super Learner algorithm of <span class="citation">van der Laan, Polley, and Hubbard (2007)</span>. To estimate the treatment mechanism (often denoted “g” in the targeted learning literature), we must make use of learning algorithms specifically suited to conditional density estimation; a list of such learners may be extracted from <code>sl3</code> by using <code><a href="https://tlverse.org/sl3/reference/list_learners.html">sl3_list_learners()</a></code>:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://tlverse.org/sl3/reference/list_learners.html">sl3_list_learners</a></span>(<span class="st">"density"</span>)</a></code></pre></div>
 <pre><code>## [1] "Lrnr_condensier"    "Lrnr_haldensify"    "Lrnr_rfcde"        
@@ -299,13 +299,6 @@ m_{\beta}(\delta))\right)h(\delta),\]</span> where <span class="math inline">\(\
 \sum_{\delta} h(\delta) \frac{d}{d\beta} f_{\beta}(\delta) (\psi_{\delta}(P_0)
 - m_{\beta}(\delta)) = 0.\]</span></p>
 <p>Inference from a working MSM is rather straightforward. To wit, the limiting distribution for <span class="math inline">\(m_{\beta}(\delta)\)</span> may be expressed <span class="math display">\[\sqrt{n}(\beta_n - \beta_0) \to N(0, \Sigma),\]</span> where <span class="math inline">\(\Sigma\)</span> is the empirical covariance matrix of <span class="math inline">\(\text{EIF}_{\beta}(O)\)</span>.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">tmle_fit<span class="op">$</span>summary[<span class="dv">6</span><span class="op">:</span><span class="dv">7</span>,]</a></code></pre></div>
-<pre><code>##    type param init_est tmle_est se lower upper psi_transformed
-## 1: &lt;NA&gt;  &lt;NA&gt;       NA       NA NA    NA    NA              NA
-## 2: &lt;NA&gt;  &lt;NA&gt;       NA       NA NA    NA    NA              NA
-##    lower_transformed upper_transformed
-## 1:                NA                NA
-## 2:                NA                NA</code></pre>
 <div id="directly-targeting-the-msm-parameter-beta" class="section level4">
 <h4 class="hasAnchor">
 <a href="#directly-targeting-the-msm-parameter-beta" class="anchor"></a>Directly Targeting the MSM Parameter <span class="math inline">\(\beta\)</span>
@@ -318,35 +311,18 @@ g_{\delta}^0(a \mid w) - \Psi_{\delta}\right).\]</span></p>
 <p>Suppose a simple working MSM <span class="math inline">\(\mathbb{E}Y_{g^0_{\delta}} = \beta_0 + \beta_1 \delta\)</span>, then a TML estimator targeting <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> may be constructed as <span class="math display">\[\overline{Q}_{n, \epsilon}(A,W) = \overline{Q}_n(A,W) + \epsilon (H_1(g),
 H_2(g),\]</span> for all <span class="math inline">\(\delta\)</span>, where <span class="math inline">\(H_1(g)\)</span> is the auxiliary covariate for <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(H_2(g)\)</span> is the auxiliary covariate for <span class="math inline">\(\beta_1\)</span>.</p>
 <p>To construct a targeted maximum likelihood estimator that directly targets the parameters of the working marginal structural model, we may use the <code>tmle_vimshift_msm</code> Spec (instead of the <code>tmle_vimshift_delta</code> Spec that appears above):</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="co"># what's the grid of shifts we wish to consider?</span></a>
-<a class="sourceLine" id="cb16-2" data-line-number="2">delta_grid &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/seq">seq</a></span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb16-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb16-4" data-line-number="4"><span class="co"># initialize a tmle specification</span></a>
-<a class="sourceLine" id="cb16-5" data-line-number="5">tmle_msm_spec &lt;-<span class="st"> </span><span class="kw"><a href="../reference/tmle_vimshift_msm.html">tmle_vimshift_msm</a></span>(<span class="dt">shift_fxn =</span> shift_additive_bounded,</a>
-<a class="sourceLine" id="cb16-6" data-line-number="6">                                   <span class="dt">shift_fxn_inv =</span> shift_additive_bounded_inv,</a>
-<a class="sourceLine" id="cb16-7" data-line-number="7">                                   <span class="dt">shift_grid =</span> delta_grid,</a>
-<a class="sourceLine" id="cb16-8" data-line-number="8">                                   <span class="dt">max_shifted_ratio =</span> <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb16-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb16-10" data-line-number="10"><span class="co"># fit the TML estimator and examine the results</span></a>
-<a class="sourceLine" id="cb16-11" data-line-number="11">tmle_msm_fit &lt;-<span class="st"> </span><span class="kw"><a href="http://tmle3.tlverse.org/reference/tmle3.html">tmle3</a></span>(tmle_msm_spec, data, node_list, learner_list)</a></code></pre></div>
-<pre><code>## Called from: tmle_spec$make_params(tmle_task, targeted_likelihood)
-## debug: interventions &lt;- lapply(shift_grid, function(x) {
-##     tmle3::define_lf(LF_shift, name = "A", original_lf = likelihood$factor_list[["A"]], 
-##         likelihood_base = likelihood, shift_fxn, shift_fxn_inv, 
-##         shift_delta = x, max_shifted_ratio = max_shifted_ratio, 
-##         bound = A_bound)
-## })
-## debug: tsm_params_list &lt;- lapply(interventions, function(x) {
-##     tmle3::Param_TSM$new(likelihood, x)
-## })
-## debug: design_matrix &lt;- cbind(rep(1, length(shift_grid)), shift_grid)
-## debug: colnames(design_matrix) &lt;- c("intercept", "slope")
-## debug: delta_param_MSM_linear &lt;- msm_linear_factory(design_matrix)
-## debug: msm_linear_param &lt;- Param_MSM_linear$new(observed_likelihood = likelihood, 
-##     delta_param = delta_param_MSM_linear, parent_parameters = tsm_params_list, 
-##     )
-## debug: return(msm_linear_param)</code></pre>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">tmle_msm_fit</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="co"># what's the grid of shifts we wish to consider?</span></a>
+<a class="sourceLine" id="cb14-2" data-line-number="2">delta_grid &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/seq">seq</a></span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb14-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="co"># initialize a tmle specification</span></a>
+<a class="sourceLine" id="cb14-5" data-line-number="5">tmle_msm_spec &lt;-<span class="st"> </span><span class="kw"><a href="../reference/tmle_vimshift_msm.html">tmle_vimshift_msm</a></span>(<span class="dt">shift_fxn =</span> shift_additive_bounded,</a>
+<a class="sourceLine" id="cb14-6" data-line-number="6">                                   <span class="dt">shift_fxn_inv =</span> shift_additive_bounded_inv,</a>
+<a class="sourceLine" id="cb14-7" data-line-number="7">                                   <span class="dt">shift_grid =</span> delta_grid,</a>
+<a class="sourceLine" id="cb14-8" data-line-number="8">                                   <span class="dt">max_shifted_ratio =</span> <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb14-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb14-10" data-line-number="10"><span class="co"># fit the TML estimator and examine the results</span></a>
+<a class="sourceLine" id="cb14-11" data-line-number="11">tmle_msm_fit &lt;-<span class="st"> </span><span class="kw"><a href="http://tmle3.tlverse.org/reference/tmle3.html">tmle3</a></span>(tmle_msm_spec, data, node_list, learner_list)</a>
+<a class="sourceLine" id="cb14-12" data-line-number="12">tmle_msm_fit</a></code></pre></div>
 <pre><code>## A tmle3_Fit that took 100 step(s)
 ##          type          param  init_est  tmle_est          se     lower
 ## 1: MSM_linear MSM(intercept) 1.5337460 1.5337460 0.057651168 1.4207518

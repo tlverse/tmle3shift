@@ -127,8 +127,10 @@ txshift_se <- sqrt(txshift_sl_tmle$var)
 
 ## only approximately equal (although it's O(1/n))
 test_that("Parameter point estimate matches result from txshift package", {
-  expect_equal(tmle3_psi, txshift_psi, tol = 5 * (1 / n_obs),
-               scale = tmle3_psi)
+  expect_equal(tmle3_psi, txshift_psi,
+    tol = 5 * (1 / n_obs),
+    scale = tmle3_psi
+  )
 })
 
 ## only approximately equal (although it's O(1/n))

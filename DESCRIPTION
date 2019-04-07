@@ -44,15 +44,17 @@ Suggests:
     tidyverse,
     simcausal,
     condensier,
-    haldensify,
-    txshift,
     Rsolnp,
     nnls,
     ranger,
-    xgboost
+    xgboost,
+    txshift,
+    haldensify,
+    RFCDE
 Remotes:
     github::osofr/simcausal,
     github::osofr/condensier,
+    github::tpospisi/RFCDE/r,
     github::nhejazi/haldensify,
     github::nhejazi/txshift,
     github::tlverse/origami,

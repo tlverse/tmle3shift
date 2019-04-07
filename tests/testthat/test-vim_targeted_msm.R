@@ -136,5 +136,6 @@ msm_targeted_summary <- tmle_fit_targeted_msm$summary
 
 test_that("Results from Targeted MSM approach and Delta Method MSM match", {
   expect_equal(msm_delta_summary, msm_targeted_summary,
-               tolerance = 5 * (1 / n_obs))
+    tolerance = 5 * (1 / n_obs)
+  )
 })

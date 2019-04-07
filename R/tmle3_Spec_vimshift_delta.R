@@ -55,15 +55,15 @@ tmle3_Spec_vimshift_delta <- R6::R6Class(
           tmle3::define_lf(LF_shift,
             name = "A",
             original_lf = likelihood$factor_list[["A"]],
-            likelihood_base = likelihood,                # initial likelihood
-            shift_fxn, shift_fxn_inv,                    # shift fxns
-            shift_delta = x,                             # shift value in grid
-            max_shifted_ratio = max_shifted_ratio,       # ratio for shifting
-            bound = A_bound                              # bound away from zero
+            likelihood_base = likelihood, # initial likelihood
+            shift_fxn, shift_fxn_inv, # shift fxns
+            shift_delta = x, # shift value in grid
+            max_shifted_ratio = max_shifted_ratio, # ratio for shifting
+            bound = A_bound # bound away from zero
           )
         })
 
-      # create list of counterfactual means (parameters)
+      # create list of parameters (counterfactual treatment-specific means)
       tsm_params_list <-
         lapply(interventions, function(x) {
           tmle3::Param_TSM$new(likelihood, x)

@@ -37,21 +37,17 @@ sl_lrn <- Lrnr_sl$new(
   metalearner = Lrnr_nnls$new()
 )
 
-# learners used for conditional density regression (e.g., propensity score)
-lrn1_dens <- Lrnr_condensier$new(
-  nbins = 20, bin_estimator = lrn1,
-  bin_method = "dhist"
+# learners used for conditional density regression (i.e., propensity score)
+lrn_haldensify <- Lrnr_haldensify$new(
+  n_bins = 5, grid_type = "equal_mass",
+  lambda_seq = exp(seq(-1, -13, length = 100))
 )
-lrn2_dens <- Lrnr_condensier$new(
-  nbins = 10, bin_estimator = lrn2,
-  bin_method = "dhist"
-)
-lrn3_dens <- Lrnr_condensier$new(
-  nbins = 5, bin_estimator = lrn3,
-  bin_method = "dhist"
+lrn_rfcde <- Lrnr_rfcde$new(
+  n_trees = 500, node_size = 5,
+  n_basis = 31, output_type = "observed"
 )
 sl_lrn_dens <- Lrnr_sl$new(
-  learners = list(lrn1_dens, lrn2_dens, lrn3_dens),
+  learners = list(lrn_haldensify, lrn_rfcde),
   metalearner = Lrnr_solnp_density$new()
 )
 

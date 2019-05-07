@@ -53,12 +53,16 @@ tmle3_Spec_shift <- R6::R6Class(
 
         # treatment, with bounded likelihood away from 0
         A_bound <- c(1 / tmle_task$nrow, Inf)
-        A_factor <- define_lf(LF_fit, "A", learner = learner_list[["A"]],
-                              bound = A_bound)
+        A_factor <- define_lf(LF_fit, "A",
+          learner = learner_list[["A"]],
+          bound = A_bound
+        )
 
         # outcome
-        Y_factor <- define_lf(LF_fit, "Y", learner = learner_list[["Y"]],
-                              type = "mean")
+        Y_factor <- define_lf(LF_fit, "Y",
+          learner = learner_list[["Y"]],
+          type = "mean"
+        )
 
         # construct likelihood from factor list
         factor_list <- list(W_factor, A_factor, Y_factor)

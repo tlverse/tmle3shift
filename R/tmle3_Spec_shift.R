@@ -32,7 +32,7 @@ tmle3_Spec_shift <- R6::R6Class(
     make_initial_likelihood = function(tmle_task, learner_list = NULL) {
       # check that the intervention is continuous-valued
       A_type <- tmle_task$npsem[["A"]]$variable_type
-      if (A_type != "continuous") {
+      if (A_type$type != "continuous") {
         msg <- paste(
           "This parameter is defined as a shift of a continuous",
           "treatment. The treatment detected is NOT continuous."

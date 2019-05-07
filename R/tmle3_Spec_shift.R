@@ -30,28 +30,9 @@ tmle3_Spec_shift <- R6::R6Class(
       do.call(super$initialize, options)
     },
     make_initial_likelihood = function(tmle_task, learner_list = NULL) {
-      # produce trained likelihood when likelihood_def provided
-      likelihood_def <- self$options$likelihood_override
-      if (!is.null(likelihood_def)) {
-        likelihood <- likelihood_def$train(tmle_task)
-      } else {
-        factor_list <- list(
-          define_lf(LF_emp, "W"),
-          define_lf(LF_fit, "A", learner = learner_list[["A"]]),
-          define_lf(LF_fit, "Y", learner = learner_list[["Y"]], type = "mean")
-        )
-
-        likelihood_def <- Likelihood$new(factor_list)
-
-        # fit_likelihood
-        likelihood <- likelihood_def$train(tmle_task)
-      }
-      return(likelihood)
-    },
-    make_params = function(tmle_task, likelihood) {
-      # TODO: export and use sl3:::get_levels
-      A_vals <- tmle_task$get_tmle_node("A")
-      if (is.factor(A_vals)) {
+      # check that the intervention is continuous-valued
+      A_type <- tmle_task$npsem[["A"]]$variable_type
+      if (A_type != "continuous") {
         msg <- paste(
           "This parameter is defined as a shift of a continuous",
           "treatment. The treatment detected is NOT continuous."
@@ -59,6 +40,36 @@ tmle3_Spec_shift <- R6::R6Class(
         stop(msg)
       }
 
+      # produce trained likelihood when likelihood_def provided
+      # NOTE: this is used to pass in likelihood values
+      likelihood_def <- self$options$likelihood_override
+
+      # use pre-constructed (external) likelihood values
+      if (!is.null(likelihood_def)) {
+        likelihood <- likelihood_def$train(tmle_task)
+      } else {
+        # covariates
+        W_factor <- define_lf(LF_emp, "W")
+
+        # treatment, with bounded likelihood away from 0
+        A_bound <- c(1 / tmle_task$nrow, Inf)
+        A_factor <- define_lf(LF_fit, "A", learner = learner_list[["A"]],
+                              bound = A_bound)
+
+        # outcome
+        Y_factor <- define_lf(LF_fit, "Y", learner = learner_list[["Y"]],
+                              type = "mean")
+
+        # construct likelihood from factor list
+        factor_list <- list(W_factor, A_factor, Y_factor)
+        likelihood_def <- Likelihood$new(factor_list)
+
+        # fit/train likelihood
+        likelihood <- likelihood_def$train(tmle_task)
+      }
+      return(likelihood)
+    },
+    make_params = function(tmle_task, likelihood) {
       # unwrap internalized arguments
       shift_fxn <- self$options$shift_fxn
       shift_fxn_inv <- self$options$shift_fxn_inv

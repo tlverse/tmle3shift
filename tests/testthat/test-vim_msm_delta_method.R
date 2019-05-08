@@ -111,6 +111,6 @@ msm_classic_table <- as.data.table(msm_fit_table[, -5])
 ## set column names to be equal to avoid equivalency commplications
 setnames(msm_classic_table, names(msm_tmle3_table))
 
-test_that("Results from tmle3 MSM approach and classic MSM match exactly", {
+test_that("Delta method MSM approach and manual MSM match exactly", {
   expect_equal(msm_tmle3_table, msm_classic_table)
 })

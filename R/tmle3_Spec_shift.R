@@ -1,7 +1,6 @@
 #' Defines a TML Estimator for the Outcome under a Shifted Treatment
 #'
-#' Current limitations: pretty much tailored to \code{Param_TSM}
-#' See TODO notes for places generalization can be added
+#' Current limitations: pretty much tailored to \code{Param_TSM}.
 #'
 #' @importFrom R6 R6Class
 #' @importFrom tmle3 tmle3_Spec define_lf tmle3_Update Targeted_Likelihood
@@ -80,18 +79,18 @@ tmle3_Spec_shift <- R6::R6Class(
       delta_shift <- self$options$delta_shift
       max_shifted_ratio <- self$options$max_shifted_ratio
 
-      # treatment likelihood bound (away from 0 for continuous a)
+      # treatment likelihood bound (away from 0 for continuous A)
       A_bound <- c(1 / tmle_task$nrow, Inf)
 
       # define shift intervention (additive only for now)
       intervention <- tmle3::define_lf(LF_shift,
         name = "A",
         original_lf = likelihood$factor_list[["A"]],
-        likelihood_base = likelihood,                    # initial likelihood
-        shift_fxn, shift_fxn_inv,                        # shift fxns
-        shift_delta = delta_shift,                       # shift magnitude
-        max_shifted_ratio = max_shifted_ratio,           # max ratio difference
-        bound = A_bound                                  # bound shifted g
+        likelihood_base = likelihood, # initial likelihood
+        shift_fxn, shift_fxn_inv, # shift fxns
+        shift_delta = delta_shift, # shift magnitude
+        max_shifted_ratio = max_shifted_ratio, # max ratio difference
+        bound = A_bound # bound shifted g
       )
 
       # create parameter (counterfactual treatment-specific mean)

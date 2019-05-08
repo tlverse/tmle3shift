@@ -37,7 +37,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tmle3shift</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.7</span>
       </span>
     </div>
 
@@ -83,7 +83,7 @@
 <a href="https://nimahejazi.org">Nima Hejazi</a> and <a href="https://github.com/jeremyrcoyle">Jeremy Coyle</a>
 </h4>
             
-            <h4 class="date">2019-05-06</h4>
+            <h4 class="date">2019-05-08</h4>
       
       
       <div class="hidden name"><code>shift_tmle.Rmd</code></div>
@@ -200,13 +200,20 @@
 <div id="targeted-estimation-of-stochastic-interventions-effects" class="section level3">
 <h3 class="hasAnchor">
 <a href="#targeted-estimation-of-stochastic-interventions-effects" class="anchor"></a>Targeted Estimation of Stochastic Interventions Effects</h3>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">tmle_fit &lt;-<span class="st"> </span><span class="kw"><a href="http://tmle3.tlverse.org/reference/tmle3.html">tmle3</a></span>(tmle_spec, data, node_list, learner_list)</a>
-<a class="sourceLine" id="cb11-2" data-line-number="2">tmle_fit</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">tmle_fit &lt;-<span class="st"> </span><span class="kw"><a href="http://tmle3.tlverse.org/reference/tmle3.html">tmle3</a></span>(tmle_spec, data, node_list, learner_list)</a></code></pre></div>
+<pre><code>## Warning in learner$predict_fold(learner_task, fold_number):
+## Lrnr_haldensify_equal_mass_5 is not a cv-aware learner, so
+## self$predict_fold reverts to self$predict
+
+## Warning in learner$predict_fold(learner_task, fold_number):
+## Lrnr_haldensify_equal_mass_5 is not a cv-aware learner, so
+## self$predict_fold reverts to self$predict</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">tmle_fit</a></code></pre></div>
 <pre><code>## A tmle3_Fit that took 1 step(s)
 ##    type         param init_est tmle_est         se    lower    upper
-## 1:  TSM E[Y_{A=NULL}] 2.051405 2.030714 0.06017526 1.912772 2.148655
+## 1:  TSM E[Y_{A=NULL}] 2.051405 2.049421 0.06025543 1.931322 2.167519
 ##    psi_transformed lower_transformed upper_transformed
-## 1:        2.030714          1.912772          2.148655</code></pre>
+## 1:        2.049421          1.931322          2.167519</code></pre>
 <p>The <code>print</code> method of the resultant <code>tmle_fit</code> object conveniently displays the results from computing our TML estimator.</p>
 </div>
 <div id="statistical-inference-for-targeted-maximum-likelihood-estimates" class="section level3">
@@ -224,12 +231,12 @@
 <p><span class="math display">\[\psi_n \pm z_{\alpha} \cdot \frac{\sigma_n}{\sqrt{n}},\]</span> where <span class="math inline">\(\sigma_n^2\)</span> is an estimator of <span class="math inline">\(V(D(P_0))\)</span>. The estimator <span class="math inline">\(\sigma_n^2\)</span> may be obtained using the bootstrap or computed directly via the following</p>
 <p><span class="math display">\[\sigma_n^2 = \frac{1}{n} \sum_{i = 1}^{n} D^2(\bar{Q}_n^*, g_n)(O_i)\]</span></p>
 <p>Having now re-examined these facts, let’s simply examine the results of computing our TML estimator:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">tmle_fit</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">tmle_fit</a></code></pre></div>
 <pre><code>## A tmle3_Fit that took 1 step(s)
 ##    type         param init_est tmle_est         se    lower    upper
-## 1:  TSM E[Y_{A=NULL}] 2.051405 2.030714 0.06017526 1.912772 2.148655
+## 1:  TSM E[Y_{A=NULL}] 2.051405 2.049421 0.06025543 1.931322 2.167519
 ##    psi_transformed lower_transformed upper_transformed
-## 1:        2.030714          1.912772          2.148655</code></pre>
+## 1:        2.049421          1.931322          2.167519</code></pre>
 </div>
 </div>
 <div id="references" class="section level2 unnumbered">

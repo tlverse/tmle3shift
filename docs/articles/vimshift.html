@@ -37,7 +37,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tmle3shift</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.7</span>
       </span>
     </div>
 
@@ -83,7 +83,7 @@
 <a href="https://nimahejazi.org">Nima Hejazi</a>, <a href="https://github.com/jeremyrcoyle">Jeremy Coyle</a>, and <a href="https://vanderlaan-lab.org">Mark van der Laan</a>
 </h4>
             
-            <h4 class="date">2019-05-06</h4>
+            <h4 class="date">2019-05-08</h4>
       
       
       <div class="hidden name"><code>vimshift.Rmd</code></div>
@@ -259,112 +259,35 @@
 <p>Instead, one may invoke the <code>tmle3</code> wrapper function (a user-facing convenience utility) to fit the series of TML estimators (one for each parameter defined by the grid delta) in a single function call:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="co"># fit the TML estimator</span></a>
 <a class="sourceLine" id="cb12-2" data-line-number="2">tmle_fit &lt;-<span class="st"> </span><span class="kw"><a href="http://tmle3.tlverse.org/reference/tmle3.html">tmle3</a></span>(tmle_spec, data, node_list, learner_list)</a></code></pre></div>
-<pre><code>## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
+<pre><code>## Warning in learner$predict_fold(learner_task, fold_number):
+## Lrnr_rfcde_1000_5_31_cosine_0_FALSE_auto_observed is not a cv-aware
+## learner, so self$predict_fold reverts to self$predict
 
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
+## Warning in learner$predict_fold(learner_task, fold_number):
+## Lrnr_rfcde_1000_5_31_cosine_0_FALSE_auto_observed is not a cv-aware
+## learner, so self$predict_fold reverts to self$predict
 
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
+## Warning in learner$predict_fold(learner_task, fold_number):
+## Lrnr_rfcde_1000_5_31_cosine_0_FALSE_auto_observed is not a cv-aware
+## learner, so self$predict_fold reverts to self$predict
 
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
-
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
-
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
-
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
-
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
-
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
-
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
-
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
-
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
-
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
-
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
-
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
-
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
-
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
-
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
-
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
-
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
-
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
-
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
-
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
-
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
-
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
-
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
-
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
-
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
-
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
-
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
-
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used</code></pre>
+## Warning in learner$predict_fold(learner_task, fold_number):
+## Lrnr_rfcde_1000_5_31_cosine_0_FALSE_auto_observed is not a cv-aware
+## learner, so self$predict_fold reverts to self$predict</code></pre>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">tmle_fit</a></code></pre></div>
 <pre><code>## A tmle3_Fit that took 1 step(s)
 ##          type          param  init_est  tmle_est          se     lower
-## 1:        TSM  E[Y_{A=NULL}] 0.6171512 0.6241454 0.057469187 0.5115078
+## 1:        TSM  E[Y_{A=NULL}] 0.6171512 0.6241431 0.057484404 0.5114758
 ## 2:        TSM  E[Y_{A=NULL}] 1.5443672 1.5436275 0.059872139 1.4262803
-## 3:        TSM  E[Y_{A=NULL}] 2.4502913 2.4427644 0.057804628 2.3294695
-## 4: MSM_linear MSM(intercept) 1.5370861 1.5366760 0.057723190 1.4235406
-## 5: MSM_linear     MSM(slope) 0.9165762 0.9093283 0.009047027 0.8915964
+## 3:        TSM  E[Y_{A=NULL}] 2.4502913 2.4425952 0.057811496 2.3292868
+## 4: MSM_linear MSM(intercept) 1.5370861 1.5366183 0.057728336 1.4234728
+## 5: MSM_linear     MSM(slope) 0.9165762 0.9092445 0.009073113 0.8914615
 ##        upper psi_transformed lower_transformed upper_transformed
-## 1: 0.7367829       0.6241454         0.5115078         0.7367829
+## 1: 0.7368105       0.6241431         0.5114758         0.7368105
 ## 2: 1.6609748       1.5436275         1.4262803         1.6609748
-## 3: 2.5560594       2.4427644         2.3294695         2.5560594
-## 4: 1.6498114       1.5366760         1.4235406         1.6498114
-## 5: 0.9270601       0.9093283         0.8915964         0.9270601</code></pre>
+## 3: 2.5559037       2.4425952         2.3292868         2.5559037
+## 4: 1.6497637       1.5366183         1.4234728         1.6497637
+## 5: 0.9270275       0.9092445         0.8914615         0.9270275</code></pre>
 <p><em>Remark</em>: The <code>print</code> method of the resultant <code>tmle_fit</code> object conveniently displays the results from computing our TML estimator.</p>
 </div>
 <div id="inference-with-marginal-structural-models" class="section level3">
@@ -415,43 +338,17 @@ H_2(g),\]</span> for all <span class="math inline">\(\delta\)</span>, where <spa
 <a class="sourceLine" id="cb16-9" data-line-number="9"></a>
 <a class="sourceLine" id="cb16-10" data-line-number="10"><span class="co"># fit the TML estimator and examine the results</span></a>
 <a class="sourceLine" id="cb16-11" data-line-number="11">tmle_msm_fit &lt;-<span class="st"> </span><span class="kw"><a href="http://tmle3.tlverse.org/reference/tmle3.html">tmle3</a></span>(tmle_msm_spec, data, node_list, learner_list)</a></code></pre></div>
-<pre><code>## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
-
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
-
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
-
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
-
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
-
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
-
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
-
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
-
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used
-
-## Warning in if (response == "CDE") {: the condition has length &gt; 1 and only
-## the first element will be used</code></pre>
+<pre><code>## Warning in learner$predict_fold(learner_task, fold_number):
+## Lrnr_rfcde_1000_5_31_cosine_0_FALSE_auto_observed is not a cv-aware
+## learner, so self$predict_fold reverts to self$predict</code></pre>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">tmle_msm_fit</a></code></pre></div>
 <pre><code>## A tmle3_Fit that took 100 step(s)
 ##          type          param  init_est  tmle_est          se     lower
-## 1: MSM_linear MSM(intercept) 1.5339071 1.5339071 0.057644370 1.4209262
-## 2: MSM_linear     MSM(slope) 0.9147671 0.9147671 0.009103745 0.8969241
+## 1: MSM_linear MSM(intercept) 1.5338665 1.5338384 0.057648178 1.4208500
+## 2: MSM_linear     MSM(slope) 0.9151067 0.9151153 0.009129132 0.8972225
 ##        upper psi_transformed lower_transformed upper_transformed
-## 1: 1.6468880       1.5339071         1.4209262         1.6468880
-## 2: 0.9326102       0.9147671         0.8969241         0.9326102</code></pre>
+## 1: 1.6468267       1.5338384         1.4208500         1.6468267
+## 2: 0.9330081       0.9151153         0.8972225         0.9330081</code></pre>
 </div>
 </div>
 </div>

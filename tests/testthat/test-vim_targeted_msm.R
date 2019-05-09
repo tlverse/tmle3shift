@@ -127,15 +127,15 @@ tmle_fit_delta_method <- fit_tmle3(
 
 
 ################################################################################
-# TEST: Compare Targeted MSM Parameters to Estimates via Delta Method
+# TEST: Compare Targeted MSM Parameters to Estimates via Delta method
 ################################################################################
 
 ## extract relevant tmle3 results for test and re-format appropriately
 msm_delta_summary <- tmle_fit_delta_method$summary[4:5, ]
 msm_targeted_summary <- tmle_fit_targeted_msm$summary
 
-test_that("Results from Targeted MSM approach and Delta Method MSM match", {
+test_that("Targeted MSM approach and delta method MSM match nearly", {
   expect_equal(msm_delta_summary, msm_targeted_summary,
-    tolerance = 5 * (1 / n_obs)
+    tol = 0.01,
   )
 })

@@ -1,6 +1,6 @@
 Package: tmle3shift
 Title: Targeted Maximum Likelihood Estimation of Stochastic Intervention Effects
-Version: 0.1.6
+Version: 0.1.7
 Authors@R: c(
     person("Nima", "Hejazi", email = "nh@nimahejazi.org",
            role = c("aut", "cre", "cph"),

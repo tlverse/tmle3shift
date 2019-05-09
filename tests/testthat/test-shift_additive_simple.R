@@ -131,5 +131,7 @@ test_that("Parameter point estimate matches result from txshift package", {
 
 ## only approximately equal (although it's o(1/n))
 test_that("Standard error matches result from txshift package", {
-  expect_equal(tmle3_se, txshift_se, tol = 1 / n_obs, scale = tmle3_se)
+  expect_equal(tmle3_se, txshift_se,
+               tol = 1 / n_obs,
+               scale = tmle3_se)
 })

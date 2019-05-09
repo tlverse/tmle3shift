@@ -1,7 +1,6 @@
 #' Defines a TML Estimator for Variable Importance for Continuous Interventions
 #'
-#' Current limitations: pretty much tailored to \code{Param_TSM}
-#' See TODO notes for places generalization can be added
+#' Current limitations: pretty much tailored to \code{Param_TSM}.
 #'
 #' @importFrom R6 R6Class
 #' @importFrom tmle3 tmle3_Spec define_lf tmle3_Update Targeted_Likelihood
@@ -13,7 +12,7 @@ tmle3_Spec_vimshift_delta <- R6::R6Class(
   classname = "tmle3_Spec_vimshift_delta",
   portable = TRUE,
   class = TRUE,
-  inherit = tmle3_Spec,
+  inherit = tmle3_Spec_shift,
   public = list(
     initialize = function(shift_fxn = shift_additive_bounded,
                               shift_fxn_inv = shift_additive_bounded_inv,
@@ -24,22 +23,12 @@ tmle3_Spec_vimshift_delta <- R6::R6Class(
         shift_fxn = shift_fxn,
         shift_fxn_inv = shift_fxn_inv,
         shift_grid = shift_grid,
-        max_shifted_ratio = max_shifted_ratio
+        max_shifted_ratio = max_shifted_ratio,
+        ...
       )
-      shift_args_extra <- list(...)
       do.call(super$initialize, options)
     },
     make_params = function(tmle_task, likelihood) {
-      # TODO: export and use sl3:::get_levels
-      A_vals <- tmle_task$get_tmle_node("A")
-      if (is.factor(A_vals)) {
-        msg <- paste(
-          "This parameter is defined as a series of shifts of a continuous",
-          "treatment. The treatment detected is NOT continuous."
-        )
-        stop(msg)
-      }
-
       # unwrap internalized arguments
       shift_fxn <- self$options$shift_fxn
       shift_fxn_inv <- self$options$shift_fxn_inv
@@ -56,10 +45,10 @@ tmle3_Spec_vimshift_delta <- R6::R6Class(
             name = "A",
             original_lf = likelihood$factor_list[["A"]],
             likelihood_base = likelihood, # initial likelihood
-            shift_fxn, shift_fxn_inv, # shift fxns
+            shift_fxn, shift_fxn_inv, # shift functions
             shift_delta = x, # shift value in grid
             max_shifted_ratio = max_shifted_ratio, # ratio for shifting
-            bound = A_bound # bound away from zero
+            bound = A_bound # bound shifted g
           )
         })
 
@@ -85,7 +74,7 @@ tmle3_Spec_vimshift_delta <- R6::R6Class(
       return(tmle_params)
     },
     make_updater = function() {
-      updater <- tmle3_Update$new(cvtmle = FALSE)
+      updater <- tmle3_Update$new(cvtmle = TRUE)
     }
   ),
   active = list(),

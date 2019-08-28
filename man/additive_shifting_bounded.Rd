@@ -37,7 +37,7 @@ observational unit when the ratio of the counterfactual intervention density
 to the observed intervention density is below this value.}
 
 \item{fold_number}{Whether to use cross-validated likelihood factor estimates
-or not. Passed through to method \code{\link{get_likelihoods}{tmle3}}.}
+or not. Passed through to method \code{get_likelihoods} in \pkg{tmle3}.}
 
 \item{...}{Additional arguments (currently unused).}
 
@@ -57,7 +57,7 @@ the bounds induced by the support of the intervention, conditional on the
 covariates.}
 
 \item{fold_number}{Whether to use cross-validated likelihood factor estimates
-or not. Passed directly to method \code{\link{get_likelihoods}{tmle3}}.}
+or not. Passed directly to method \code{get_likelihoods} in \pkg{tmle3}.}
 }
 \description{
 Additive Shifts of Continuous-Valued Interventions based on Bounded Densities

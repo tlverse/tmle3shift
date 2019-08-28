@@ -88,7 +88,6 @@ updater$tmle_params <- tmle_params
 tmle_fit <- fit_tmle3(tmle_task, likelihood_targeted, tmle_params, updater)
 
 ## extract results from tmle3_Fit object
-tmle_fit
 tmle3_psi <- tmle_fit$summary$tmle_est
 tmle3_se <- tmle_fit$summary$se
 
@@ -100,19 +99,18 @@ set.seed(429153)
 txshift_sl_tmle <- txshift(
   W = W, A = A, Y = Y,
   delta = delta_value,
-  fluc_method = "standard",
+  fluctuation = "standard",
   g_fit_args = list(
     fit_type = "sl",
-    sl_lrnrs = g_learner
+    sl_learners = g_learner
   ),
   Q_fit_args = list(
     fit_type = "sl",
-    sl_lrnrs = Q_learner
+    sl_learners = Q_learner
   )
 )
 
 ## extract results from fit object produced by classical package
-summary(txshift_sl_tmle)
 txshift_psi <- txshift_sl_tmle$psi
 txshift_se <- sqrt(txshift_sl_tmle$var)
 

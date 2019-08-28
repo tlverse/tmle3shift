@@ -73,8 +73,8 @@ tmle3_Spec_vimshift_delta <- R6::R6Class(
       # output should be a list
       return(tmle_params)
     },
-    make_updater = function() {
-      updater <- tmle3_Update$new(cvtmle = TRUE)
+    make_updater = function(...) {
+      updater <- tmle3_Update$new(...)
     }
   ),
   active = list(),

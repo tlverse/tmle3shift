@@ -87,6 +87,5 @@ updater$tmle_params <- tmle_params
 tmle_fit <- fit_tmle3(tmle_task, likelihood_targeted, tmle_params, updater)
 
 ## extract results from tmle3_Fit object
-tmle_fit
 tmle3_psi <- tmle_fit$summary$tmle_est
 tmle3_se <- tmle_fit$summary$se

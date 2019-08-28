@@ -76,7 +76,7 @@ tmle_task <- tmle_spec$make_tmle_task(data, node_list)
 likelihood_init <- tmle_spec$make_initial_likelihood(tmle_task, learner_list)
 
 ## define update method (submodel and loss function)
-updater <- tmle_spec$make_updater()
+updater <- tmle_spec$make_updater(cvtmle = FALSE)
 likelihood_targeted <- Targeted_Likelihood$new(likelihood_init, updater)
 
 ## define param

@@ -9,7 +9,6 @@
 tmle3_Spec_vimshift_msm
 }
 \description{
-Current limitations: pretty much tailored to \code{Param_TSM}
-See TODO notes for places generalization can be added
+Current limitations: pretty much tailored to \code{Param_TSM}.
 }
 \keyword{datasets}

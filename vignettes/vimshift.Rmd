@@ -5,7 +5,7 @@ author: "[Nima Hejazi](https://nimahejazi.org), [Jeremy
   Laan](https://vanderlaan-lab.org)"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
-bibliography: vignette-refs.bib
+bibliography: ../inst/REFERENCES.bib
 vignette: >
   %\VignetteIndexEntry{Variable Importance Analysis with Stochastic Interventions}
   %\VignetteEngine{knitr::rmarkdown}

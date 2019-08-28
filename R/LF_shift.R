@@ -102,10 +102,10 @@ LF_shift <- R6::R6Class(
       private$.shift_delta <- shift_delta
       private$.max_shifted_ratio <- max_shifted_ratio
     },
-    get_mean = function(tmle_task, cv_fold) {
+    get_mean = function(tmle_task, fold_number) {
       stop("get_mean not supported for LF_shift")
     },
-    get_density = function(tmle_task, cv_fold) {
+    get_density = function(tmle_task, fold_number) {
       # get shifted data
       shifted_values <- self$shift_inverse(
         tmle_task = tmle_task,
@@ -113,7 +113,8 @@ LF_shift <- R6::R6Class(
         likelihood_base =
           self$likelihood_base,
         max_shifted_ratio =
-          self$max_shifted_ratio
+          self$max_shifted_ratio,
+        fold_number = fold_number
       )
 
       # generate cf_task data

@@ -7,12 +7,12 @@
 \title{Additive Shifts of Continuous-Valued Interventions based on Bounded Densities}
 \usage{
 shift_additive_bounded(tmle_task, delta, likelihood_base,
-  max_shifted_ratio, ...)
+  max_shifted_ratio, fold_number, ...)
 
 shift_additive_bounded_inv(tmle_task, delta, likelihood_base,
-  max_shifted_ratio, ...)
+  max_shifted_ratio, fold_number, ...)
 
-get_density_ratio(tmle_task, delta, likelihood_base)
+get_density_ratio(tmle_task, delta, likelihood_base, fold_number)
 }
 \arguments{
 \item{tmle_task}{A \code{tmle3_Task} object containing data and nodes, as
@@ -36,6 +36,9 @@ particular, the shifted value of the intervention is assigned to a given
 observational unit when the ratio of the counterfactual intervention density
 to the observed intervention density is below this value.}
 
+\item{fold_number}{Whether to use cross-validated likelihood factor estimates
+or not. Passed through to method \code{\link{get_likelihoods}{tmle3}}.}
+
 \item{...}{Additional arguments (currently unused).}
 
 \item{tmle_task}{A \code{tmle3_Task} object containing data and nodes, as
@@ -52,6 +55,9 @@ observed value of the treatment node "A".}
 implementing guards that ensure that the shifted treatment does not violate
 the bounds induced by the support of the intervention, conditional on the
 covariates.}
+
+\item{fold_number}{Whether to use cross-validated likelihood factor estimates
+or not. Passed directly to method \code{\link{get_likelihoods}{tmle3}}.}
 }
 \description{
 Additive Shifts of Continuous-Valued Interventions based on Bounded Densities

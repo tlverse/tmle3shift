@@ -52,7 +52,7 @@ trend_msm <- function(tmle_fit_estimates, delta_grid, level = 0.95,
   ci_msm_param <- msm_se %*% t(ci_mult) + msm_param
   pval_msm_param <- 2 * stats::pnorm(-abs(msm_param / msm_se))
 
-  # marix for output
+  # matrix for output
   out <- cbind(
     ci_msm_param[, 1], msm_param, ci_msm_param[, 2], msm_se,
     pval_msm_param

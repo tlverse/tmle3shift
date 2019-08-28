@@ -1,7 +1,7 @@
 #' Parameter for Linear Working Marginal Structural Model
 #'
 #' Parameter definition for targeting the parameters of a linear working
-#' marginal structural model (MSM): EY = beta0 + beta1 delta, to
+#' marginal structural model (MSM): EY = beta0 + beta1 * delta, in order to
 #' summarize the variable importance results of a grid of shift interventions.
 #'
 #' @importFrom R6 R6Class
@@ -16,25 +16,25 @@
 #' @format \code{\link{R6Class}} object.
 #'
 #' @section Constructor:
-#'   \code{define_param(Param_MSM_linear, observed_likelihood, intervention_list, ..., outcome_node)}
+#'   \code{define_param(Param_MSM_linear, observed_likelihood,
+#'                      intervention_list, ..., outcome_node)}
 #'
 #'   \describe{
-#'     \item{\code{observed_likelihood}}{A \code{\link{Likelihood}} corresponding to the observed likelihood
-#'     }
-#'     \item{\code{intervention_list}}{A list of objects inheriting from \code{\link{LF_base}}, representing the intervention.
-#'     }
-#'     \item{\code{...}}{Not currently used.
-#'     }
-#'     \item{\code{outcome_node}}{character, the name of the node that should be treated as the outcome
-#'     }
+#'     \item{\code{observed_likelihood}}{A \code{\link{Likelihood}}
+#'       corresponding to the observed likelihood.}
+#'     \item{\code{intervention_list}}{A list of objects inheriting from
+#'       \code{\link{LF_base}}, representing the intervention.}
+#'     \item{\code{...}}{Not currently used.}
+#'     \item{\code{outcome_node}}{character, the name of the node that should
+#'       be treated as the outcome.}
 #'     }
 #'
 #' @section Fields:
 #' \describe{
-#'     \item{\code{cf_likelihood}}{the counterfactual likelihood for this treatment
-#'     }
-#'     \item{\code{intervention_list}}{A list of objects inheriting from \code{\link{LF_base}}, representing the intervention
-#'     }
+#'     \item{\code{cf_likelihood}}{the counterfactual likelihood for this
+#'       treatment.}
+#'     \item{\code{intervention_list}}{A list of objects inheriting from
+#'       \code{\link{LF_base}}, representing the intervention.}
 #' }
 #' @export
 Param_MSM_linear <- R6Class(
@@ -43,20 +43,22 @@ Param_MSM_linear <- R6Class(
   class = TRUE,
   inherit = tmle3::Param_delta,
   public = list(
-    clever_covariates = function(tmle_task = NULL, cv_fold = -1) {
+    clever_covariates = function(tmle_task = NULL, fold_number = "full") {
       # use training task if none provided
       if (is.null(tmle_task)) {
         tmle_task <- self$observed_likelihood$training_task
       }
       intervention_nodes <- names(self$intervention_list)
 
+      # loop to compute estimates of parameter and influence function
       estimates <- lapply(
         self$parent_parameters,
         function(tmle_param) {
-          tmle_param$estimates(tmle_task, cv_fold)
+          tmle_param$estimates(tmle_task, fold_number)
         }
       )
 
+      # re-organize output from above loop
       psis <- lapply(estimates, `[[`, "psi")
       eifs <- lapply(estimates, `[[`, "IC")
       hn_msm_coef <- self$delta_param$hn(x = psis, dx = eifs)
@@ -64,7 +66,7 @@ Param_MSM_linear <- R6Class(
       # combine clever covariates from individual parameters to target MSM
       hn_params_list <-
         lapply(self$parent_parameters, function(tmle_param) {
-          as.numeric(tmle_param$clever_covariates(tmle_task, cv_fold)$Y)
+          as.numeric(tmle_param$clever_covariates(tmle_task, fold_number)$Y)
         })
       hn_params_mat <- do.call(cbind, hn_params_list)
 

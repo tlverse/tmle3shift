@@ -1,10 +1,6 @@
-################################################################################
-# MARGINAL STRUCTURAL MODELS
-################################################################################
-
 #' Function factory for computing linear working MSM delta method functions
 #'
-#' @param design_matrix A \code{matrix} or \code{data.frame} givin the design
+#' @param design_matrix A \code{matrix} or \code{data.frame} giving the design
 #'  matrix to be used in specifying terms of the linear working marginal
 #'  structural model (MSM) for which parameters are to be estimated.
 #'
@@ -35,7 +31,6 @@ msm_linear_factory <- function(design_matrix) {
 
     # get MSM projection matrix
     s_mat <- get_msm_hat(x = x, dx = dx)
-
     msm_param <- as.vector(s_mat %*% psi_vec)
     return(msm_param)
   }

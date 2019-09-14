@@ -1,13 +1,10 @@
 #' Defines a TML Estimator for Variable Importance for Continuous Interventions
 #'
-#' Current limitations: pretty much tailored to \code{Param_TSM}.
-#'
 #' @importFrom R6 R6Class
 #' @importFrom tmle3 tmle3_Spec define_lf tmle3_Update Targeted_Likelihood
 #'  Param_TSM
 #'
 #' @export
-#
 tmle3_Spec_vimshift_msm <- R6::R6Class(
   classname = "tmle3_Spec_vimshift_msm",
   portable = TRUE,
@@ -73,8 +70,8 @@ tmle3_Spec_vimshift_msm <- R6::R6Class(
       # output should be a list
       return(msm_linear_param)
     },
-    make_updater = function(...) {
-      updater <- tmle3_Update$new(...)
+    make_updater = function() {
+      updater <- tmle3_Update$new(cvtmle = TRUE)
     }
   ),
   active = list(),
@@ -106,10 +103,7 @@ tmle3_Spec_vimshift_msm <- R6::R6Class(
 #'  density to the observed intervention density is below this value.
 #' @param ... Additional arguments, passed to shift functions.
 #'
-#' @importFrom sl3 make_learner Lrnr_mean
-#'
 #' @export
-#
 tmle_vimshift_msm <- function(shift_fxn = shift_additive_bounded,
                               shift_fxn_inv = shift_additive_bounded_inv,
                               shift_grid = seq(-1, 1, by = 0.5),

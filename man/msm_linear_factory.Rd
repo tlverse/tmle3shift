@@ -7,7 +7,7 @@
 msm_linear_factory(design_matrix)
 }
 \arguments{
-\item{design_matrix}{A \code{matrix} or \code{data.frame} givin the design
+\item{design_matrix}{A \code{matrix} or \code{data.frame} giving the design
 matrix to be used in specifying terms of the linear working marginal
 structural model (MSM) for which parameters are to be estimated.}
 }

@@ -71,7 +71,7 @@ Param_MSM_linear <- R6Class(
       hn_params_mat <- do.call(cbind, hn_params_list)
 
       # build auxiliary covariates for each MSM parameter
-      hn_msm <- t(hn_msm_coef %*% t(hn_params_mat))
+      hn_msm <- tcrossprod(hn_params_mat, hn_msm_coef)
       return(list(Y = hn_msm))
     }
   )

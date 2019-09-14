@@ -31,11 +31,13 @@ environment:
       R_ARCH: x64
 
 build_script:
-  - travis-tool.sh install_deps
+  - echo Current directory=%CD%
+  - travis-tool.sh install_r base64
   - travis-tool.sh install_github r-lib/sessioninfo r-lib/covr
   - travis-tool.sh install_github tlverse/delayed tlverse/origami tlverse/sl3
   - travis-tool.sh install_github tlverse/tmle3 tlverse/hal9001
   - travis-tool.sh install_github nhejazi/haldensify nhejazi/txshift
+  - travis-tool.sh install_deps
 
 test_script:
   - travis-tool.sh run_tests

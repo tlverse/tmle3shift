@@ -1,13 +1,10 @@
 #' Defines a TML Estimator for Variable Importance for Continuous Interventions
 #'
-#' Current limitations: pretty much tailored to \code{Param_TSM}.
-#'
 #' @importFrom R6 R6Class
 #' @importFrom tmle3 tmle3_Spec define_lf tmle3_Update Targeted_Likelihood
 #'  Param_TSM
 #'
 #' @export
-#
 tmle3_Spec_vimshift_delta <- R6::R6Class(
   classname = "tmle3_Spec_vimshift_delta",
   portable = TRUE,
@@ -18,12 +15,14 @@ tmle3_Spec_vimshift_delta <- R6::R6Class(
                               shift_fxn_inv = shift_additive_bounded_inv,
                               shift_grid = seq(-1, 1, by = 0.5),
                               max_shifted_ratio = 2,
+                              weighting = c("identity", "variance"),
                               ...) {
       options <- list(
         shift_fxn = shift_fxn,
         shift_fxn_inv = shift_fxn_inv,
         shift_grid = shift_grid,
         max_shifted_ratio = max_shifted_ratio,
+        weighting = weighting,
         ...
       )
       do.call(super$initialize, options)
@@ -34,6 +33,7 @@ tmle3_Spec_vimshift_delta <- R6::R6Class(
       shift_fxn_inv <- self$options$shift_fxn_inv
       shift_grid <- self$options$shift_grid
       max_shifted_ratio <- self$options$max_shifted_ratio
+      weighting <- self$options$weighting
 
       # treatment likelihood bound (away from 0 for continuous A)
       A_bound <- c(1 / tmle_task$nrow, Inf)
@@ -61,7 +61,10 @@ tmle3_Spec_vimshift_delta <- R6::R6Class(
       # MSM function factory
       design_matrix <- cbind(rep(1, length(shift_grid)), shift_grid)
       colnames(design_matrix) <- c("intercept", "slope")
-      delta_param_msm <- msm_linear_factory(design_matrix)
+      delta_param_msm <- msm_linear_factory(
+        design_matrix = design_matrix,
+        weighting = weighting
+      )
 
       # create MSM via delta method
       msm <- Param_delta$new(
@@ -104,21 +107,28 @@ tmle3_Spec_vimshift_delta <- R6::R6Class(
 #'  densities. In particular, the shifted value of the intervention is assigned
 #'  to a given observational unit when the ratio of counterfactual intervention
 #'  density to the observed intervention density is below this value.
+#' @param weighting A \code{character} indicating the type of weighting used for
+#'  construction of the marginal structural model. \code{"identity"} applies the
+#'  same weight to all individual estimates while \code{"variance"} applies
+#'  weights based on the inverse variance of the estimate. It is expected that
+#'  variance-based weighting would yield more stable estimates of the parameter
+#'  of the MSM; however, the default remains the identity weighting.
 #' @param ... Additional arguments, passed to shift functions.
 #'
-#' @importFrom sl3 make_learner Lrnr_mean
-#'
 #' @export
-#
 tmle_vimshift_delta <- function(shift_fxn = shift_additive_bounded,
                                 shift_fxn_inv = shift_additive_bounded_inv,
                                 shift_grid = seq(-1, 1, by = 0.5),
                                 max_shifted_ratio = 2,
+                                weighting = c("identity", "variance"),
                                 ...) {
+  # set default for weighting
+  weighting <- match.arg(weighting)
+
   # TODO: unclear why this has to be in a factory function
   tmle3_Spec_vimshift_delta$new(
     shift_fxn, shift_fxn_inv,
     shift_grid, max_shifted_ratio,
-    ...
+    weighting, ...
   )
 }

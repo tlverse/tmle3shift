@@ -9,7 +9,7 @@
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Targeted Learning with Stochastic Treatment Regimes">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
@@ -75,15 +75,16 @@
 <!--/.navbar -->
 
       
+
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>Targeted Learning with Stochastic Treatment Regimes</h1>
                         <h4 class="author">
-<a href="https://nimahejazi.org">Nima Hejazi</a> and <a href="https://github.com/jeremyrcoyle">Jeremy Coyle</a>
+<a href="https://nimahejazi.org">Nima Hejazi</a>, <a href="https://github.com/jeremyrcoyle">Jeremy Coyle</a>, and <a href="https://vanderlaan-lab.org">Mark van der Laan</a>
 </h4>
             
-            <h4 class="date">2019-05-08</h4>
+            <h4 class="date">2019-09-13</h4>
       
       
       <div class="hidden name"><code>shift_tmle.Rmd</code></div>
@@ -156,20 +157,22 @@
 <a class="sourceLine" id="cb5-2" data-line-number="2">tmle_spec &lt;-<span class="st"> </span><span class="kw"><a href="../reference/tmle_shift.html">tmle_shift</a></span>(<span class="dt">shift_val =</span> <span class="fl">0.5</span>,</a>
 <a class="sourceLine" id="cb5-3" data-line-number="3">                        <span class="dt">shift_fxn =</span> shift_additive,</a>
 <a class="sourceLine" id="cb5-4" data-line-number="4">                        <span class="dt">shift_fxn_inv =</span> shift_additive_inv)</a></code></pre></div>
-<p>As seen above, the <code>tmle_shift</code> specification object (like all <code>tmle3_Spec</code> objects) does <em>not</em> store the data for our specific analysis of interest. Later, we’ll see that passing a data object directly to the <code>tmle3</code> wrapper function, alongside the instantiated <code>tmle_spec</code>, will serve to construct a <code>tmle3_Task</code> object internally (see the <code>tmle3</code> documentation for details).</p>
+<p>As seen above, the <code>tmle_shift</code> specification object (like all <code>tmle3_Spec</code> objects) does <em>not</em> store the data for our specific analysis of interest. Later, we’ll see that passing a data object directly to the <code>tmle3</code> wrapper function, alongside the instantiated <code>tmle_spec</code>, will serve to construct a <code>tmle3_Task</code> object internally (see the <code>tmle3</code> documentation for details). Note that, by default, the <code>tmle_spec</code> object is set up to facilitate cross-validated estimation of likelihood components, ensuring certain empirical process conditions may be circumvented by reducing the contribution of an empirical process term to the estimated influence function <span class="citation">(Zheng and Laan 2011)</span>. In practice, this automatic incorporation of cross-validation (CV-TMLE) means that the user need not be concerned with these theoretical conditions being satisfied; moreover, cross-validated estimation of the efficient influence function is expected to control the estimated variance.</p>
 <div id="interlude-constructing-optimal-stacked-regressions-with-sl3" class="section level3">
 <h3 class="hasAnchor">
 <a href="#interlude-constructing-optimal-stacked-regressions-with-sl3" class="anchor"></a><em>Interlude:</em> Constructing Optimal Stacked Regressions with <code>sl3</code>
 </h3>
-<p>To easily incorporate ensemble machine learning into the estimation procedure, we rely on the facilities provided in the <a href="https://tlverse.org/sl3"><code>sl3</code> R package</a>. For a complete guide on using the <code>sl3</code> R package, consider consulting <a href="https://tlverse.org/sl3" class="uri">https://tlverse.org/sl3</a>, or <a href="https://tlverse.org" class="uri">https://tlverse.org</a> for the <a href="https://github.com/tlverse"><code>tlverse</code> ecosystem</a>, of which <code>sl3</code> is a major part.</p>
-<p>Using the framework provided by the <a href="https://tlverse.org/sl3"><code>sl3</code> package</a>, the nuisance parameters of the TML estimator may be fit with ensemble learning, using the cross-validation framework of the Super Learner algorithm of <span class="citation">van der Laan, Polley, and Hubbard (2007)</span>. To estimate the treatment mechanism (often denoted “g” in the targeted learning literature), we must make use of learning algorithms specifically suited to conditional density estimation; a list of such learners may be extracted from <code>sl3</code> by using <code><a href="https://tlverse.org/sl3/reference/list_learners.html">sl3_list_learners()</a></code>:</p>
+<p>To easily incorporate ensemble machine learning into the estimation procedure, we rely on the facilities provided in the <a href="https://tlverse.org/sl3"><code>sl3</code> R package</a>. For a complete guide on using the <code>sl3</code> R package, consider consulting <a href="https://tlverse.org/sl3" class="uri">https://tlverse.org/sl3</a>, or <a href="https://tlverse.org" class="uri">https://tlverse.org</a> for the <a href="https://github.com/tlverse"><code>tlverse</code> ecosystem</a>, of which <code>sl3</code> is a core component.</p>
+<p>Using the framework provided by the <a href="https://tlverse.org/sl3"><code>sl3</code> package</a>, the nuisance parameters of the TML estimator may be fit with ensemble learning, using the cross-validation framework of the Super Learner algorithm of <span class="citation">van der Laan, Polley, and Hubbard (2007)</span>. To estimate the treatment mechanism (denoted g, we must make use of learning algorithms specifically suited to conditional density estimation; a list of such learners may be extracted from <code>sl3</code> using <code><a href="https://tlverse.org/sl3/reference/list_learners.html">sl3_list_learners()</a></code>:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://tlverse.org/sl3/reference/list_learners.html">sl3_list_learners</a></span>(<span class="st">"density"</span>)</a></code></pre></div>
-<pre><code>## [1] "Lrnr_condensier"    "Lrnr_haldensify"    "Lrnr_rfcde"        
-## [4] "Lrnr_solnp_density"</code></pre>
+<pre><code>## [1] "Lrnr_condensier"             "Lrnr_density_discretize"    
+## [3] "Lrnr_density_hse"            "Lrnr_density_semiparametric"
+## [5] "Lrnr_haldensify"             "Lrnr_rfcde"                 
+## [7] "Lrnr_solnp_density"</code></pre>
 <p>To proceed, we’ll select two of the above learners, <code>Lrnr_haldensify</code> for using the highly adaptive lasso for conditional density estimation, based on an algorithm given by <span class="citation">Díaz and van der Laan (2011)</span>, and <code>Lrnr_rfcde</code>, an approach for using random forests for conditional density estimation <span class="citation">(Pospisil and Lee 2018)</span>:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co"># learners used for conditional density regression (i.e., propensity score)</span></a>
 <a class="sourceLine" id="cb8-2" data-line-number="2">lrn_haldensify &lt;-<span class="st"> </span>Lrnr_haldensify<span class="op">$</span><span class="kw">new</span>(</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3">  <span class="dt">n_bins =</span> <span class="dv">5</span>, <span class="dt">grid_type =</span> <span class="st">"equal_mass"</span>,</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3">  <span class="dt">n_bins =</span> <span class="dv">10</span>, <span class="dt">grid_type =</span> <span class="st">"equal_mass"</span>,</a>
 <a class="sourceLine" id="cb8-4" data-line-number="4">  <span class="dt">lambda_seq =</span> <span class="kw"><a href="https://rdrr.io/r/base/Log.html">exp</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">-13</span>, <span class="dt">length =</span> <span class="dv">500</span>))</a>
 <a class="sourceLine" id="cb8-5" data-line-number="5">)</a>
 <a class="sourceLine" id="cb8-6" data-line-number="6">lrn_rfcde &lt;-<span class="st"> </span>Lrnr_rfcde<span class="op">$</span><span class="kw">new</span>(</a>
@@ -180,7 +183,7 @@
 <a class="sourceLine" id="cb8-11" data-line-number="11">  <span class="dt">learners =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(lrn_haldensify, lrn_rfcde),</a>
 <a class="sourceLine" id="cb8-12" data-line-number="12">  <span class="dt">metalearner =</span> Lrnr_solnp_density<span class="op">$</span><span class="kw">new</span>()</a>
 <a class="sourceLine" id="cb8-13" data-line-number="13">)</a></code></pre></div>
-<p>We also required an approach for estimating the outcome regression (often denoted “Q” in the targeted learning literature). For this, we build a Super Learner composed of an intercept model, a GLM, and the <a href="https://xgboost.ai/">xgboost algorithm</a> for gradient boosting:</p>
+<p>We also require an approach for estimating the outcome regression (denoted Q). For this, we build a Super Learner composed of an intercept model, a main terms GLM, and the <a href="https://xgboost.ai/">xgboost algorithm</a> for gradient boosting:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># learners used for conditional expectation regression (e.g., outcome)</span></a>
 <a class="sourceLine" id="cb9-2" data-line-number="2">lrn_mean &lt;-<span class="st"> </span>Lrnr_mean<span class="op">$</span><span class="kw">new</span>()</a>
 <a class="sourceLine" id="cb9-3" data-line-number="3">lrn_fglm &lt;-<span class="st"> </span>Lrnr_glm_fast<span class="op">$</span><span class="kw">new</span>()</a>
@@ -192,28 +195,27 @@
 <p>We can make the above explicit with respect to standard notation by bundling the ensemble learners into a <code>list</code> object below. Note that in making the <code>learner_list</code> object for our TML estimator, for the sake of example, we use only the conditional density estimation approach of the <a href="https://github.com/nhejazi/haldensify"><code>haldensify</code> package</a> to estimate the treatment mechanism; as this is done in an effort to save computation time, we recommend using a stacked regression approach in standard data analytic practice.</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co"># specify outcome and treatment regressions and create learner list</span></a>
 <a class="sourceLine" id="cb10-2" data-line-number="2">Q_learner &lt;-<span class="st"> </span>sl_lrn</a>
-<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co">#g_learner &lt;- sl_lrn_dens     # in practice</span></a>
-<a class="sourceLine" id="cb10-4" data-line-number="4">g_learner &lt;-<span class="st"> </span>lrn_haldensify</a>
-<a class="sourceLine" id="cb10-5" data-line-number="5">learner_list &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">Y =</span> Q_learner, <span class="dt">A =</span> g_learner)</a></code></pre></div>
+<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co"># in practice, we'd use an ensemble learner; here, we do not to save time</span></a>
+<a class="sourceLine" id="cb10-4" data-line-number="4">g_learner &lt;-<span class="st"> </span>sl_lrn_dens</a>
+<a class="sourceLine" id="cb10-5" data-line-number="5">g_cv_learner &lt;-<span class="st"> </span>Lrnr_cv<span class="op">$</span><span class="kw">new</span>(lrn_haldensify, <span class="dt">full_fit =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb10-6" data-line-number="6">learner_list &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">Y =</span> Q_learner, <span class="dt">A =</span> g_cv_learner)</a></code></pre></div>
 <p>The <code>learner_list</code> object above specifies the role that each of the ensemble learners we’ve generated is to play in computing initial estimators to be used in building a TMLE for the parameter of interest here. In particular, it makes explicit the fact that our <code>Q_learner</code> is used in fitting the outcome regression while our <code>g_learner</code> is used in fitting our treatment mechanism regression.</p>
 </div>
 <div id="targeted-estimation-of-stochastic-interventions-effects" class="section level3">
 <h3 class="hasAnchor">
 <a href="#targeted-estimation-of-stochastic-interventions-effects" class="anchor"></a>Targeted Estimation of Stochastic Interventions Effects</h3>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">tmle_fit &lt;-<span class="st"> </span><span class="kw"><a href="http://tmle3.tlverse.org/reference/tmle3.html">tmle3</a></span>(tmle_spec, data, node_list, learner_list)</a></code></pre></div>
-<pre><code>## Warning in learner$predict_fold(learner_task, fold_number):
-## Lrnr_haldensify_equal_mass_5 is not a cv-aware learner, so
-## self$predict_fold reverts to self$predict
-
-## Warning in learner$predict_fold(learner_task, fold_number):
-## Lrnr_haldensify_equal_mass_5 is not a cv-aware learner, so
-## self$predict_fold reverts to self$predict</code></pre>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">tmle_fit</a></code></pre></div>
+<p>Note that, by default, the</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">tmle_fit &lt;-<span class="st"> </span><span class="kw"><a href="http://tlverse.org/tmle3/reference/tmle3.html">tmle3</a></span>(tmle_spec, data, node_list, learner_list)</a></code></pre></div>
+<pre><code>## Warning: `lang_tail()` is deprecated as of rlang 0.2.0.
+## This warning is displayed once per session.</code></pre>
+<pre><code>## Warning: `mut_node_cdr()` is deprecated as of rlang 0.2.0.
+## This warning is displayed once per session.</code></pre>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">tmle_fit</a></code></pre></div>
 <pre><code>## A tmle3_Fit that took 1 step(s)
 ##    type         param init_est tmle_est         se    lower    upper
-## 1:  TSM E[Y_{A=NULL}] 2.051405 2.049421 0.06025543 1.931322 2.167519
+## 1:  TSM E[Y_{A=NULL}] 2.051405 2.052554 0.06028563 1.934397 2.170712
 ##    psi_transformed lower_transformed upper_transformed
-## 1:        2.049421          1.931322          2.167519</code></pre>
+## 1:        2.052554          1.934397          2.170712</code></pre>
 <p>The <code>print</code> method of the resultant <code>tmle_fit</code> object conveniently displays the results from computing our TML estimator.</p>
 </div>
 <div id="statistical-inference-for-targeted-maximum-likelihood-estimates" class="section level3">
@@ -221,22 +223,22 @@
 <a href="#statistical-inference-for-targeted-maximum-likelihood-estimates" class="anchor"></a>Statistical Inference for Targeted Maximum Likelihood Estimates</h3>
 <p>Recall that the asymptotic distribution of TML estimators has been studied thoroughly: <span class="math display">\[\psi_n - \psi_0 = (P_n - P_0) \cdot D(\bar{Q}_n^*, g_n) + R(\hat{P}^*, P_0),\]</span> which, provided the following two conditions:</p>
 <ol style="list-style-type: decimal">
-<li>If <span class="math inline">\(D(\bar{Q}_n^*, g_n)\)</span> converges to <span class="math inline">\(D(P_0)\)</span> in <span class="math inline">\(L_2(P_0)\)</span> norm, and</li>
-<li>the size of the class of functions considered for estimation of <span class="math inline">\(\bar{Q}_n^*\)</span> and <span class="math inline">\(g_n\)</span> is bounded (technically, <span class="math inline">\(\exists \mathcal{F}\)</span> st <span class="math inline">\(D(\bar{Q}_n^*, g_n) \in \mathcal{F}\)</span> <em><strong>whp</strong></em>, where <span class="math inline">\(\mathcal{F}\)</span> is a Donsker class), readily admits the conclusion that <span class="math inline">\(\psi_n - \psi_0 = (P_n - P_0) \cdot D(P_0) + R(\hat{P}^*, P_0)\)</span>.</li>
+<li>If <span class="math inline">\(D(\bar{Q}_n^{\star}, g_n)\)</span> converges to <span class="math inline">\(D(P_0)\)</span> in <span class="math inline">\(L_2(P_0)\)</span> norm, and</li>
+<li>the size of the class of functions considered for estimation of <span class="math inline">\(\bar{Q}_n^{\star}\)</span> and <span class="math inline">\(g_n\)</span> is bounded (technically, <span class="math inline">\(\exists \mathcal{F}\)</span> s.t. <span class="math inline">\(D(\bar{Q}_n^{\star}, g_n) \in \mathcal{F}\)</span> <em><strong>whp</strong></em>, where <span class="math inline">\(\mathcal{F}\)</span> is a Donsker class), readily admits the conclusion that <span class="math inline">\(\psi_n - \psi_0 = (P_n - P_0) \cdot D(P_0) + R(\hat{P}^{\star}, P_0)\)</span>.</li>
 </ol>
 <p>Under the additional condition that the remainder term <span class="math inline">\(R(\hat{P}^*, P_0)\)</span> decays as <span class="math inline">\(o_P \left( \frac{1}{\sqrt{n}} \right),\)</span> we have that <span class="math display">\[\psi_n - \psi_0 = (P_n - P_0) \cdot D(P_0) + o_P \left( \frac{1}{\sqrt{n}}
  \right),\]</span> which, by a central limit theorem, establishes a Gaussian limiting distribution for the estimator:</p>
 <p><span class="math display">\[\sqrt{n}(\psi_n - \psi) \to N(0, V(D(P_0))),\]</span> where <span class="math inline">\(V(D(P_0))\)</span> is the variance of the efficient influence curve (canonical gradient) when <span class="math inline">\(\psi\)</span> admits an asymptotically linear representation.</p>
 <p>The above implies that <span class="math inline">\(\psi_n\)</span> is a <span class="math inline">\(\sqrt{n}\)</span>-consistent estimator of <span class="math inline">\(\psi\)</span>, that it is asymptotically normal (as given above), and that it is locally efficient. This allows us to build Wald-type confidence intervals in a straightforward manner:</p>
 <p><span class="math display">\[\psi_n \pm z_{\alpha} \cdot \frac{\sigma_n}{\sqrt{n}},\]</span> where <span class="math inline">\(\sigma_n^2\)</span> is an estimator of <span class="math inline">\(V(D(P_0))\)</span>. The estimator <span class="math inline">\(\sigma_n^2\)</span> may be obtained using the bootstrap or computed directly via the following</p>
-<p><span class="math display">\[\sigma_n^2 = \frac{1}{n} \sum_{i = 1}^{n} D^2(\bar{Q}_n^*, g_n)(O_i)\]</span></p>
+<p><span class="math display">\[\sigma_n^2 = \frac{1}{n} \sum_{i = 1}^{n} D^2(\bar{Q}_n^{\star}, g_n)(O_i)\]</span></p>
 <p>Having now re-examined these facts, let’s simply examine the results of computing our TML estimator:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">tmle_fit</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">tmle_fit</a></code></pre></div>
 <pre><code>## A tmle3_Fit that took 1 step(s)
 ##    type         param init_est tmle_est         se    lower    upper
-## 1:  TSM E[Y_{A=NULL}] 2.051405 2.049421 0.06025543 1.931322 2.167519
+## 1:  TSM E[Y_{A=NULL}] 2.051405 2.052554 0.06028563 1.934397 2.170712
 ##    psi_transformed lower_transformed upper_transformed
-## 1:        2.049421          1.931322          2.167519</code></pre>
+## 1:        2.052554          1.934397          2.170712</code></pre>
 </div>
 </div>
 <div id="references" class="section level2 unnumbered">
@@ -267,11 +269,15 @@
 <div id="ref-vdl2018targeted">
 <p>———. 2018. <em>Targeted Learning in Data Science: Causal Inference for Complex Longitudinal Studies</em>. Springer Science &amp; Business Media.</p>
 </div>
+<div id="ref-zheng2011cross">
+<p>Zheng, Wenjing, and Mark J van der Laan. 2011. “Cross-Validated Targeted Minimum-Loss-Based Estimation.” In <em>Targeted Learning</em>, 459–74. Springer.</p>
+</div>
 </div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+
         <div id="tocnav">
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
@@ -287,17 +293,20 @@
 </div>
 
 
+
       <footer><div class="copyright">
-  <p>Developed by Nima Hejazi, Jeremy Coyle.</p>
+  <p>Developed by Nima Hejazi, Jeremy Coyle, Mark van der Laan.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.0.</p>
 </div>
+
       </footer>
 </div>
 
   
+
 
   </body>
 </html>

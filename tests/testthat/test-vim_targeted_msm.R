@@ -5,14 +5,11 @@ library(sl3)
 library(tmle3)
 set.seed(429153)
 
-################################################################################
-# setup data and learners for tests
-################################################################################
-
 ## simulate simple data for tmle-shift sketch
 n_obs <- 1000 # number of observations
 n_w <- 1 # number of baseline covariates
-tx_mult <- 2 # multiplier for the effect of W = 1 on the treatment
+tx_mult <- 2 # multiplier for effect of W = 1 on treatment
+delta_grid <- seq(-1, 1, 1) # grid of shifts to consider
 
 ## baseline covariates -- simple, binary
 W <- as.numeric(replicate(n_w, rbinom(n_obs, 1, 0.5)))
@@ -29,44 +26,25 @@ node_list <- list(W = "W", A = "A", Y = "Y")
 
 
 # learners used for conditional expectation regression (e.g., outcome)
-lrn1 <- Lrnr_mean$new()
-lrn2 <- Lrnr_glm$new()
-lrn3 <- Lrnr_ranger$new()
-sl_lrn <- Lrnr_sl$new(
-  learners = list(lrn1, lrn2, lrn3),
+mean_lrnr <- Lrnr_mean$new()
+glm_lrnr <- Lrnr_glm$new()
+sl_lrnr <- Lrnr_sl$new(
+  learners = list(mean_lrnr, glm_lrnr),
   metalearner = Lrnr_nnls$new()
 )
 
-# learners used for conditional density regression (e.g., propensity score)
-lrn1_dens <- Lrnr_condensier$new(
-  nbins = 20, bin_estimator = lrn1,
-  bin_method = "dhist"
+# learners used for conditional density regression (i.e., propensity score)
+haldensify_lrnr <- Lrnr_haldensify$new(
+  n_bins = 5, grid_type = "equal_mass",
+  lambda_seq = exp(seq(-1, -13, length = 100))
 )
-lrn2_dens <- Lrnr_condensier$new(
-  nbins = 10, bin_estimator = lrn2,
-  bin_method = "dhist"
-)
-lrn3_dens <- Lrnr_condensier$new(
-  nbins = 5, bin_estimator = lrn3,
-  bin_method = "dhist"
-)
-sl_lrn_dens <- Lrnr_sl$new(
-  learners = list(lrn1_dens, lrn2_dens, lrn3_dens),
-  metalearner = Lrnr_solnp_density$new()
-)
+cv_haldensify_lrnr <- Lrnr_cv$new(haldensify_lrnr, full_fit = TRUE)
 
 # specify outcome and treatment regressions and create learner list
-Q_learner <- sl_lrn
-g_learner <- sl_lrn_dens
+Q_learner <- sl_lrnr
+g_learner <- cv_haldensify_lrnr
 learner_list <- list(Y = Q_learner, A = g_learner)
 
-
-################################################################################
-# TARGET MSM PARAMETERS DIRECTLY
-################################################################################
-
-# what's the grid of shifts we wish to consider?
-delta_grid <- seq(-1, 1, 1)
 
 # initialize a tmle specification for direct targeting of MSM parameters
 tmle_spec <- tmle_vimshift_msm(
@@ -95,10 +73,6 @@ tmle_fit_targeted_msm <- fit_tmle3(
 )
 
 
-################################################################################
-# COMPUTE MSM PARAMETERS VIA DELTA METHOD
-################################################################################
-
 # initialize a tmle specification for delta method
 tmle_spec <- tmle_vimshift_delta(
   shift_grid = delta_grid,
@@ -125,10 +99,6 @@ tmle_fit_delta_method <- fit_tmle3(
   updater
 )
 
-
-################################################################################
-# TEST: Compare Targeted MSM Parameters to Estimates via Delta method
-################################################################################
 
 ## extract relevant tmle3 results for test and re-format appropriately
 msm_delta_summary <- tmle_fit_delta_method$summary[4:5, ]

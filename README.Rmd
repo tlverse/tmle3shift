@@ -1,7 +1,7 @@
 ---
 output:
   rmarkdown::github_document
-bibliography: "README-refs.bib"
+bibliography: "inst/REFERENCES.bib"
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -60,10 +60,10 @@ end-to-end methodology for variable importance analyses.
 ## Installation
 
 You can install the development version of `tmle3shift` from GitHub via
-[`devtools`](https://www.rstudio.com/products/rpackages/devtools/) with
+[`remotes`](https://CRAN.R-project.org/package=remotes) with
 
 ```{r gh-installation, eval = FALSE}
-devtools::install_github("tlverse/tmle3shift")
+remotes::install_github("tlverse/tmle3shift")
 ```
 
 ---

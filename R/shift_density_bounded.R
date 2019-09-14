@@ -17,6 +17,8 @@
 #'  particular, the shifted value of the intervention is assigned to a given
 #'  observational unit when the ratio of the counterfactual intervention density
 #'  to the observed intervention density is below this value.
+#' @param fold_number Whether to use cross-validated likelihood factor estimates
+#'  or not. Passed through to method \code{get_likelihoods} in \pkg{tmle3}.
 #' @param ... Additional arguments (currently unused).
 #'
 #' @family shifting_interventions
@@ -26,11 +28,13 @@
 #' @export
 #
 shift_additive_bounded <- function(tmle_task, delta, likelihood_base,
-                                   max_shifted_ratio, ...) {
+                                   max_shifted_ratio, fold_number, ...) {
   # ratio of observed and shifted intervention densities
   intervention_density_ratio <- get_density_ratio(
-    tmle_task, delta,
-    likelihood_base
+    tmle_task = tmle_task,
+    delta = delta,
+    likelihood_base = likelihood_base,
+    fold_number = fold_number
   )
 
   # set NA values to 0 for density comparison
@@ -53,11 +57,13 @@ shift_additive_bounded <- function(tmle_task, delta, likelihood_base,
 #' @export
 #
 shift_additive_bounded_inv <- function(tmle_task, delta, likelihood_base,
-                                       max_shifted_ratio, ...) {
+                                       max_shifted_ratio, fold_number, ...) {
   # ratio of observed and shifted intervention densities
   intervention_density_ratio <- get_density_ratio(
-    tmle_task, delta,
-    likelihood_base
+    tmle_task = tmle_task,
+    delta = delta,
+    likelihood_base = likelihood_base,
+    fold_number = fold_number
   )
 
   # set NA values to 0 for density comparison
@@ -88,6 +94,8 @@ shift_additive_bounded_inv <- function(tmle_task, delta, likelihood_base,
 #'  implementing guards that ensure that the shifted treatment does not violate
 #'  the bounds induced by the support of the intervention, conditional on the
 #'  covariates.
+#' @param fold_number Whether to use cross-validated likelihood factor estimates
+#'  or not. Passed directly to method \code{get_likelihoods} in \pkg{tmle3}.
 #'
 #' @importFrom data.table data.table
 #'
@@ -97,10 +105,9 @@ shift_additive_bounded_inv <- function(tmle_task, delta, likelihood_base,
 #'
 #' @keywords internal
 #
-get_density_ratio <- function(tmle_task, delta, likelihood_base) {
-  # first, extract observed natural value of treatment and find shifted values
-  obs_a <- tmle_task$get_tmle_node("A")
-  shifted_a <- obs_a - delta
+get_density_ratio <- function(tmle_task, delta, likelihood_base, fold_number) {
+  # extract observed natural value of treatment and compute shifted values
+  shifted_a <- tmle_task$get_tmle_node("A") - delta
 
   # generate counterfactual task from shifted values
   cf_task <- tmle_task$generate_counterfactual_task(
@@ -109,8 +116,16 @@ get_density_ratio <- function(tmle_task, delta, likelihood_base) {
   )
 
   # find densities associated with tasks with observed and shifted intervention
-  emp_intervention_density <- likelihood_base$get_likelihoods(tmle_task, "A")
-  cf_intervention_density <- likelihood_base$get_likelihoods(cf_task, "A")
+  emp_intervention_density <-
+    likelihood_base$get_likelihoods(
+      tmle_task = tmle_task, nodes = "A",
+      fold_number = fold_number
+    )
+  cf_intervention_density <-
+    likelihood_base$get_likelihoods(
+      tmle_task = cf_task, nodes = "A",
+      fold_number = fold_number
+    )
 
   # compute ratio of counterfactual and empirical intervention densities
   intervention_density_ratio <-

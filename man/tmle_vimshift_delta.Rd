@@ -6,7 +6,8 @@
 \usage{
 tmle_vimshift_delta(shift_fxn = shift_additive_bounded,
   shift_fxn_inv = shift_additive_bounded_inv, shift_grid = seq(-1, 1,
-  by = 0.5), max_shifted_ratio = 2, ...)
+  by = 0.5), max_shifted_ratio = 2, weighting = c("identity",
+  "variance"), ...)
 }
 \arguments{
 \item{shift_fxn}{A \code{function} defining the type of shift to be applied
@@ -26,6 +27,13 @@ tolerance for the ratio of the counterfactual and observed intervention
 densities. In particular, the shifted value of the intervention is assigned
 to a given observational unit when the ratio of counterfactual intervention
 density to the observed intervention density is below this value.}
+
+\item{weighting}{A \code{character} indicating the type of weighting used for
+construction of the marginal structural model. \code{"identity"} applies the
+same weight to all individual estimates while \code{"variance"} applies
+weights based on the inverse variance of the estimate. It is expected that
+variance-based weighting would yield more stable estimates of the parameter
+of the MSM; however, the default remains the identity weighting.}
 
 \item{...}{Additional arguments, passed to shift functions.}
 }

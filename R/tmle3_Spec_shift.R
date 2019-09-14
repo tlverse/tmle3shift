@@ -1,13 +1,10 @@
 #' Defines a TML Estimator for the Outcome under a Shifted Treatment
 #'
-#' Current limitations: pretty much tailored to \code{Param_TSM}.
-#'
 #' @importFrom R6 R6Class
 #' @importFrom tmle3 tmle3_Spec define_lf tmle3_Update Targeted_Likelihood
 #'  Param_TSM
 #'
 #' @export
-#
 tmle3_Spec_shift <- R6::R6Class(
   classname = "tmle3_Spec_shift",
   portable = TRUE,
@@ -132,10 +129,7 @@ tmle3_Spec_shift <- R6::R6Class(
 #'  density to the observed intervention density is below this value.
 ##' @param ... Additional arguments (currently unused).
 #'
-#' @importFrom sl3 make_learner Lrnr_mean
-#'
 #' @export
-#
 tmle_shift <- function(shift_fxn = shift_additive_bounded,
                        shift_fxn_inv = shift_additive_bounded_inv,
                        shift_val = 1, max_shifted_ratio = 2, ...) {

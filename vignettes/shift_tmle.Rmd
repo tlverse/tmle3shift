@@ -1,10 +1,11 @@
 ---
 title: "Targeted Learning with Stochastic Treatment Regimes"
-author: "[Nima Hejazi](https://nimahejazi.org) and [Jeremy
-  Coyle](https://github.com/jeremyrcoyle)"
+author: "[Nima Hejazi](https://nimahejazi.org), [Jeremy
+  Coyle](https://github.com/jeremyrcoyle), and [Mark van der
+  Laan](https://vanderlaan-lab.org)"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
-bibliography: vignette-refs.bib
+bibliography: ../inst/REFERENCES.bib
 vignette: >
   %\VignetteIndexEntry{Targeted Learning with Stochastic Treatment Regimes}
   %\VignetteEngine{knitr::rmarkdown}
@@ -132,7 +133,15 @@ As seen above, the `tmle_shift` specification object (like all `tmle3_Spec`
 objects) does _not_ store the data for our specific analysis of interest. Later,
 we'll see that passing a data object directly to the `tmle3` wrapper function,
 alongside the instantiated `tmle_spec`, will serve to construct a `tmle3_Task`
-object internally (see the `tmle3` documentation for details).
+object internally (see the `tmle3` documentation for details). Note that, by
+default, the `tmle_spec` object is set up to facilitate cross-validated
+estimation of likelihood components, ensuring certain empirical process
+conditions may be circumvented by reducing the contribution of an empirical
+process term to the estimated influence function [@zheng2011cross]. In practice,
+this automatic incorporation of cross-validation (CV-TMLE) means that the user
+need not be concerned with these theoretical conditions being satisfied;
+moreover, cross-validated estimation of the efficient influence function is
+expected to control the estimated variance.
 
 ### _Interlude:_ Constructing Optimal Stacked Regressions with `sl3`
 
@@ -140,16 +149,15 @@ To easily incorporate ensemble machine learning into the estimation procedure,
 we rely on the facilities provided in the [`sl3` R
 package](https://tlverse.org/sl3). For a complete guide on using the `sl3` R
 package, consider consulting https://tlverse.org/sl3, or https://tlverse.org for
-the [`tlverse` ecosystem](https://github.com/tlverse), of which `sl3` is a major
-part.
+the [`tlverse` ecosystem](https://github.com/tlverse), of which `sl3` is a core
+component.
 
 Using the framework provided by the [`sl3` package](https://tlverse.org/sl3),
 the nuisance parameters of the TML estimator may be fit with ensemble learning,
 using the cross-validation framework of the Super Learner algorithm of
-@vdl2007super. To estimate the treatment mechanism (often denoted "g" in the
-targeted learning literature), we must make use of learning algorithms
-specifically suited to conditional density estimation; a list of such learners 
-may be extracted from `sl3` by using `sl3_list_learners()`:
+@vdl2007super. To estimate the treatment mechanism (denoted g, we must make use
+of learning algorithms specifically suited to conditional density estimation; a
+list of such learners may be extracted from `sl3` using `sl3_list_learners()`:
 
 ```{r sl3_density_lrnrs_search}
 sl3_list_learners("density")
@@ -163,7 +171,7 @@ random forests for conditional density estimation [@pospisil2018rfcde]:
 ```{r sl3_regression_lrnrs}
 # learners used for conditional density regression (i.e., propensity score)
 lrn_haldensify <- Lrnr_haldensify$new(
-  n_bins = 5, grid_type = "equal_mass",
+  n_bins = 10, grid_type = "equal_mass",
   lambda_seq = exp(seq(-1, -13, length = 500))
 )
 lrn_rfcde <- Lrnr_rfcde$new(
@@ -176,10 +184,9 @@ sl_lrn_dens <- Lrnr_sl$new(
 )
 ```
 
-We also required an approach for estimating the outcome regression (often
-denoted "Q" in the targeted learning literature). For this, we build a Super
-Learner composed of an intercept model, a GLM, and the [xgboost
-algorithm](https://xgboost.ai/) for gradient boosting:
+We also require an approach for estimating the outcome regression (denoted Q).
+For this, we build a Super Learner composed of an intercept model, a main terms
+GLM, and the [xgboost algorithm](https://xgboost.ai/) for gradient boosting:
 
 ```{r sl3_density_lrnrs}
 # learners used for conditional expectation regression (e.g., outcome)
@@ -203,9 +210,10 @@ using a stacked regression approach in standard data analytic practice.
 ```{r make_lrnr_list}
 # specify outcome and treatment regressions and create learner list
 Q_learner <- sl_lrn
-#g_learner <- sl_lrn_dens     # in practice
-g_learner <- lrn_haldensify
-learner_list <- list(Y = Q_learner, A = g_learner)
+# in practice, we'd use an ensemble learner; here, we do not to save time
+g_learner <- sl_lrn_dens
+g_cv_learner <- Lrnr_cv$new(lrn_haldensify, full_fit = TRUE)
+learner_list <- list(Y = Q_learner, A = g_cv_learner)
 ```
 
 The `learner_list` object above specifies the role that each of the ensemble
@@ -215,6 +223,8 @@ explicit the fact that our `Q_learner` is used in fitting the outcome regression
 while our `g_learner` is used in fitting our treatment mechanism regression.
 
 ### Targeted Estimation of Stochastic Interventions Effects
+
+Note that, by default, the
 
 ```{r fit_tmle}
 tmle_fit <- tmle3(tmle_spec, data, node_list, learner_list)
@@ -231,13 +241,13 @@ thoroughly:
 $$\psi_n - \psi_0 = (P_n - P_0) \cdot D(\bar{Q}_n^*, g_n) + R(\hat{P}^*, P_0),$$
 which, provided the following two conditions:
 
-1. If $D(\bar{Q}_n^*, g_n)$ converges to $D(P_0)$ in $L_2(P_0)$ norm, and
-2. the size of the class of functions considered for estimation of $\bar{Q}_n^*$
-   and $g_n$ is bounded (technically, $\exists \mathcal{F}$ st
-   $D(\bar{Q}_n^*, g_n) \in \mathcal{F}$ *__whp__*, where $\mathcal{F}$ is a
-   Donsker class),
+1. If $D(\bar{Q}_n^{\star}, g_n)$ converges to $D(P_0)$ in $L_2(P_0)$ norm, and
+2. the size of the class of functions considered for estimation of
+   $\bar{Q}_n^{\star}$ and $g_n$ is bounded (technically, $\exists \mathcal{F}$
+   s.t. $D(\bar{Q}_n^{\star}, g_n) \in \mathcal{F}$ *__whp__*, where
+   $\mathcal{F}$ is a Donsker class),
 readily admits the conclusion that
-$\psi_n - \psi_0 = (P_n - P_0) \cdot D(P_0) + R(\hat{P}^*, P_0)$.
+$\psi_n - \psi_0 = (P_n - P_0) \cdot D(P_0) + R(\hat{P}^{\star}, P_0)$.
 
 Under the additional condition that the remainder term $R(\hat{P}^*, P_0)$
 decays as $o_P \left( \frac{1}{\sqrt{n}} \right),$ we have that
@@ -259,7 +269,7 @@ $$\psi_n \pm z_{\alpha} \cdot \frac{\sigma_n}{\sqrt{n}},$$
 where $\sigma_n^2$ is an estimator of $V(D(P_0))$. The estimator $\sigma_n^2$
 may be obtained using the bootstrap or computed directly via the following
 
-$$\sigma_n^2 = \frac{1}{n} \sum_{i = 1}^{n} D^2(\bar{Q}_n^*, g_n)(O_i)$$
+$$\sigma_n^2 = \frac{1}{n} \sum_{i = 1}^{n} D^2(\bar{Q}_n^{\star}, g_n)(O_i)$$
 
 Having now re-examined these facts, let's simply examine the results of
 computing our TML estimator:

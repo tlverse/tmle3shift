@@ -20,7 +20,6 @@ deploy.sh
 ^README-.*\.Rmd$
 ^README\.html$
 ^README-.*\.png$
-^README-refs.bib$
 ^cran-comments.md$
 ^CONTRIBUTING\.md$
 ^Makefile$

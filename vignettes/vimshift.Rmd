@@ -5,7 +5,7 @@ author: "[Nima Hejazi](https://nimahejazi.org), [Jeremy
   Laan](https://vanderlaan-lab.org)"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
-bibliography: vignette-refs.bib
+bibliography: ../inst/REFERENCES.bib
 vignette: >
   %\VignetteIndexEntry{Variable Importance Analysis with Stochastic Interventions}
   %\VignetteEngine{knitr::rmarkdown}
@@ -241,9 +241,10 @@ practice.
 ```{r make_lrnr_list}
 # specify outcome and treatment regressions and create learner list
 Q_learner <- sl_lrn
-#g_learner <- sl_lrn_dens     # in practice
-g_learner <- lrn_rfcde
-learner_list <- list(Y = Q_learner, A = g_learner)
+# in practice, we'd use an ensemble learner; here, we do not to save time
+g_learner <- sl_lrn_dens
+g_cv_learner <- Lrnr_cv$new(lrn_haldensify, full_fit = TRUE)
+learner_list <- list(Y = Q_learner, A = g_cv_learner)
 ```
 
 The `learner_list` object above specifies the role that each of the ensemble

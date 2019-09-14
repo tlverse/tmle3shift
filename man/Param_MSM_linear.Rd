@@ -13,32 +13,32 @@ Param_MSM_linear
 }
 \description{
 Parameter definition for targeting the parameters of a linear working
-marginal structural model (MSM): EY = beta0 + beta1 delta, to
+marginal structural model (MSM): EY = beta0 + beta1 * delta, in order to
 summarize the variable importance results of a grid of shift interventions.
 }
 \section{Constructor}{
 
-  \code{define_param(Param_MSM_linear, observed_likelihood, intervention_list, ..., outcome_node)}
+  \code{define_param(Param_MSM_linear, observed_likelihood,
+                     intervention_list, ..., outcome_node)}
 
   \describe{
-    \item{\code{observed_likelihood}}{A \code{\link{Likelihood}} corresponding to the observed likelihood
-    }
-    \item{\code{intervention_list}}{A list of objects inheriting from \code{\link{LF_base}}, representing the intervention.
-    }
-    \item{\code{...}}{Not currently used.
-    }
-    \item{\code{outcome_node}}{character, the name of the node that should be treated as the outcome
-    }
+    \item{\code{observed_likelihood}}{A \code{\link{Likelihood}}
+      corresponding to the observed likelihood.}
+    \item{\code{intervention_list}}{A list of objects inheriting from
+      \code{\link{LF_base}}, representing the intervention.}
+    \item{\code{...}}{Not currently used.}
+    \item{\code{outcome_node}}{character, the name of the node that should
+      be treated as the outcome.}
     }
 }
 
 \section{Fields}{
 
 \describe{
-    \item{\code{cf_likelihood}}{the counterfactual likelihood for this treatment
-    }
-    \item{\code{intervention_list}}{A list of objects inheriting from \code{\link{LF_base}}, representing the intervention
-    }
+    \item{\code{cf_likelihood}}{the counterfactual likelihood for this
+      treatment.}
+    \item{\code{intervention_list}}{A list of objects inheriting from
+      \code{\link{LF_base}}, representing the intervention.}
 }
 }
 

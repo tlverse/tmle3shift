@@ -1,6 +1,6 @@
 Package: tmle3shift
 Title: Targeted Maximum Likelihood Estimation of Stochastic Intervention Effects
-Version: 0.1.7
+Version: 0.1.8
 Authors@R: c(
     person("Nima", "Hejazi", email = "nh@nimahejazi.org",
            role = c("aut", "cre", "cph"),
@@ -9,7 +9,7 @@ Authors@R: c(
            role = c("aut"),
            comment = c(ORCID = "0000-0002-9874-6649")),
     person("Mark", "van der Laan", email = "laan@berkeley.edu",
-           role = c("ctb", "ths"),
+           role = c("aut", "ths"),
            comment = c(ORCID = "0000-0003-1432-5511"))
   )
 Maintainer: Nima Hejazi <nh@nimahejazi.org>
@@ -31,7 +31,6 @@ Imports:
     methods,
     data.table,
     assertthat,
-    sl3,
     tmle3
 Suggests:
     testthat,
@@ -41,8 +40,7 @@ Suggests:
     stats,
     ggplot2,
     tidyverse,
-    simcausal,
-    condensier,
+    sl3,
     Rsolnp,
     nnls,
     ranger,
@@ -51,13 +49,10 @@ Suggests:
     haldensify,
     RFCDE
 Remotes:
-    github::osofr/simcausal,
-    github::osofr/condensier,
     github::tpospisi/RFCDE/r,
     github::nhejazi/haldensify,
     github::nhejazi/txshift,
     github::tlverse/origami,
-    github::tlverse/delayed,
     github::tlverse/sl3,
     github::tlverse/tmle3
 URL: https://tlverse.org/tmle3shift

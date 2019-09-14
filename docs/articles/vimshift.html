@@ -9,7 +9,7 @@
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Variable Importance Analysis with Stochastic Interventions">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
@@ -75,6 +75,7 @@
 <!--/.navbar -->
 
       
+
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
@@ -83,7 +84,7 @@
 <a href="https://nimahejazi.org">Nima Hejazi</a>, <a href="https://github.com/jeremyrcoyle">Jeremy Coyle</a>, and <a href="https://vanderlaan-lab.org">Mark van der Laan</a>
 </h4>
             
-            <h4 class="date">2019-05-08</h4>
+            <h4 class="date">2019-09-13</h4>
       
       
       <div class="hidden name"><code>vimshift.Rmd</code></div>
@@ -183,8 +184,10 @@
 <p>To easily incorporate ensemble machine learning into the estimation procedure, we rely on the facilities provided in the <a href="https://tlverse.org/sl3"><code>sl3</code> R package</a>. For a complete guide on using the <code>sl3</code> R package, consider consulting <a href="https://tlverse.org/sl3" class="uri">https://tlverse.org/sl3</a>, or <a href="https://tlverse.org" class="uri">https://tlverse.org</a> for the <a href="https://github.com/tlverse"><code>tlverse</code> ecosystem</a>, of which <code>sl3</code> is a core engine.</p>
 <p>Using the framework provided by the <a href="https://tlverse.org/sl3"><code>sl3</code> package</a>, the nuisance parameters of the TML estimator may be fit with ensemble learning, using the cross-validation framework of the Super Learner algorithm of <span class="citation">van der Laan, Polley, and Hubbard (2007)</span>. To estimate the treatment mechanism (often denoted “g” in the targeted learning literature), we must make use of learning algorithms specifically suited to conditional density estimation; a list of such learners may be extracted from <code>sl3</code> by using <code><a href="https://tlverse.org/sl3/reference/list_learners.html">sl3_list_learners()</a></code>:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://tlverse.org/sl3/reference/list_learners.html">sl3_list_learners</a></span>(<span class="st">"density"</span>)</a></code></pre></div>
-<pre><code>## [1] "Lrnr_condensier"    "Lrnr_haldensify"    "Lrnr_rfcde"        
-## [4] "Lrnr_solnp_density"</code></pre>
+<pre><code>## [1] "Lrnr_condensier"             "Lrnr_density_discretize"    
+## [3] "Lrnr_density_hse"            "Lrnr_density_semiparametric"
+## [5] "Lrnr_haldensify"             "Lrnr_rfcde"                 
+## [7] "Lrnr_solnp_density"</code></pre>
 <p>To proceed, we’ll select two of the above learners, <code>Lrnr_haldensify</code> for using the highly adaptive lasso for conditional density estimation, based on an algorithm given by <span class="citation">Díaz and van der Laan (2011)</span>, and <code>Lrnr_rfcde</code>, an approach for using random forests for conditional density estimation <span class="citation">(Pospisil and Lee 2018)</span>:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co"># learners used for conditional density regression (i.e., propensity score)</span></a>
 <a class="sourceLine" id="cb7-2" data-line-number="2">lrn_haldensify &lt;-<span class="st"> </span>Lrnr_haldensify<span class="op">$</span><span class="kw">new</span>(</a>
@@ -211,9 +214,10 @@
 <p>We can make the above explicit with respect to standard notation by bundling the ensemble learners into a <code>list</code> object below. Note that in making the <code>learner_list</code> object for our TML estimators, for the sake of example, we use only the random forest conditional density estimation approach of the <a href="https://github.com/tpospisi/RFCDE/tree/master/r"><code>RFCDE</code> package</a> in estimating the treatment mechanism; as this is done in an effort to save computation time, we recommend using a stacked regression approach in standard data analytic practice.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># specify outcome and treatment regressions and create learner list</span></a>
 <a class="sourceLine" id="cb9-2" data-line-number="2">Q_learner &lt;-<span class="st"> </span>sl_lrn</a>
-<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="co">#g_learner &lt;- sl_lrn_dens     # in practice</span></a>
-<a class="sourceLine" id="cb9-4" data-line-number="4">g_learner &lt;-<span class="st"> </span>lrn_rfcde</a>
-<a class="sourceLine" id="cb9-5" data-line-number="5">learner_list &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">Y =</span> Q_learner, <span class="dt">A =</span> g_learner)</a></code></pre></div>
+<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="co"># in practice, we'd use an ensemble learner; here, we do not to save time</span></a>
+<a class="sourceLine" id="cb9-4" data-line-number="4">g_learner &lt;-<span class="st"> </span>sl_lrn_dens</a>
+<a class="sourceLine" id="cb9-5" data-line-number="5">g_cv_learner &lt;-<span class="st"> </span>Lrnr_cv<span class="op">$</span><span class="kw">new</span>(lrn_haldensify, <span class="dt">full_fit =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb9-6" data-line-number="6">learner_list &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">Y =</span> Q_learner, <span class="dt">A =</span> g_cv_learner)</a></code></pre></div>
 <p>The <code>learner_list</code> object above specifies the role that each of the ensemble learners we’ve generated is to play in computing initial estimators to be used in building a TMLE for the parameter of interest here. In particular, it makes explicit the fact that our <code>Q_learner</code> is used in fitting the outcome regression while our <code>g_learner</code> is used in fitting our treatment mechanism regression.</p>
 </div>
 <div id="initializing-vimshift-through-its-tmle3_spec" class="section level3">
@@ -252,42 +256,31 @@
 <a class="sourceLine" id="cb11-15" data-line-number="15">updater<span class="op">$</span>tmle_params &lt;-<span class="st"> </span>tmle_params</a>
 <a class="sourceLine" id="cb11-16" data-line-number="16"></a>
 <a class="sourceLine" id="cb11-17" data-line-number="17"><span class="co"># fit TML estimator update</span></a>
-<a class="sourceLine" id="cb11-18" data-line-number="18">tmle_fit &lt;-<span class="st"> </span><span class="kw"><a href="http://tmle3.tlverse.org/reference/tmle3_Fit.html">fit_tmle3</a></span>(tmle_task, likelihood_targeted, tmle_params, updater)</a>
+<a class="sourceLine" id="cb11-18" data-line-number="18">tmle_fit &lt;-<span class="st"> </span><span class="kw"><a href="http://tlverse.org/tmle3/reference/tmle3_Fit.html">fit_tmle3</a></span>(tmle_task, likelihood_targeted, tmle_params, updater)</a>
 <a class="sourceLine" id="cb11-19" data-line-number="19"></a>
 <a class="sourceLine" id="cb11-20" data-line-number="20"><span class="co"># extract results from tmle3_Fit object</span></a>
 <a class="sourceLine" id="cb11-21" data-line-number="21">tmle_fit</a></code></pre></div>
 <p>Instead, one may invoke the <code>tmle3</code> wrapper function (a user-facing convenience utility) to fit the series of TML estimators (one for each parameter defined by the grid delta) in a single function call:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="co"># fit the TML estimator</span></a>
-<a class="sourceLine" id="cb12-2" data-line-number="2">tmle_fit &lt;-<span class="st"> </span><span class="kw"><a href="http://tmle3.tlverse.org/reference/tmle3.html">tmle3</a></span>(tmle_spec, data, node_list, learner_list)</a></code></pre></div>
-<pre><code>## Warning in learner$predict_fold(learner_task, fold_number):
-## Lrnr_rfcde_1000_5_31_cosine_0_FALSE_auto_observed is not a cv-aware
-## learner, so self$predict_fold reverts to self$predict
-
-## Warning in learner$predict_fold(learner_task, fold_number):
-## Lrnr_rfcde_1000_5_31_cosine_0_FALSE_auto_observed is not a cv-aware
-## learner, so self$predict_fold reverts to self$predict
-
-## Warning in learner$predict_fold(learner_task, fold_number):
-## Lrnr_rfcde_1000_5_31_cosine_0_FALSE_auto_observed is not a cv-aware
-## learner, so self$predict_fold reverts to self$predict
-
-## Warning in learner$predict_fold(learner_task, fold_number):
-## Lrnr_rfcde_1000_5_31_cosine_0_FALSE_auto_observed is not a cv-aware
-## learner, so self$predict_fold reverts to self$predict</code></pre>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">tmle_fit</a></code></pre></div>
+<a class="sourceLine" id="cb12-2" data-line-number="2">tmle_fit &lt;-<span class="st"> </span><span class="kw"><a href="http://tlverse.org/tmle3/reference/tmle3.html">tmle3</a></span>(tmle_spec, data, node_list, learner_list)</a></code></pre></div>
+<pre><code>## Warning: `lang_tail()` is deprecated as of rlang 0.2.0.
+## This warning is displayed once per session.</code></pre>
+<pre><code>## Warning: `mut_node_cdr()` is deprecated as of rlang 0.2.0.
+## This warning is displayed once per session.</code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">tmle_fit</a></code></pre></div>
 <pre><code>## A tmle3_Fit that took 1 step(s)
 ##          type          param  init_est  tmle_est          se     lower
-## 1:        TSM  E[Y_{A=NULL}] 0.6171512 0.6241431 0.057484404 0.5114758
+## 1:        TSM  E[Y_{A=NULL}] 0.6927253 0.7029436 0.055240464 0.5946743
 ## 2:        TSM  E[Y_{A=NULL}] 1.5443672 1.5436275 0.059872139 1.4262803
-## 3:        TSM  E[Y_{A=NULL}] 2.4502913 2.4425952 0.057811496 2.3292868
-## 4: MSM_linear MSM(intercept) 1.5370861 1.5366183 0.057728336 1.4234728
-## 5: MSM_linear     MSM(slope) 0.9165762 0.9092445 0.009073113 0.8914615
+## 3:        TSM  E[Y_{A=NULL}] 2.5172535 2.5086866 0.058969444 2.3931086
+## 4: MSM_linear MSM(intercept) 1.5847820 1.5850859 0.057574563 1.4722418
+## 5: MSM_linear     MSM(slope) 0.9122641 0.9028715 0.007850982 0.8874838
 ##        upper psi_transformed lower_transformed upper_transformed
-## 1: 0.7368105       0.6241431         0.5114758         0.7368105
+## 1: 0.8112129       0.7029436         0.5946743         0.8112129
 ## 2: 1.6609748       1.5436275         1.4262803         1.6609748
-## 3: 2.5559037       2.4425952         2.3292868         2.5559037
-## 4: 1.6497637       1.5366183         1.4234728         1.6497637
-## 5: 0.9270275       0.9092445         0.8914615         0.9270275</code></pre>
+## 3: 2.6242646       2.5086866         2.3931086         2.6242646
+## 4: 1.6979300       1.5850859         1.4722418         1.6979300
+## 5: 0.9182591       0.9028715         0.8874838         0.9182591</code></pre>
 <p><em>Remark</em>: The <code>print</code> method of the resultant <code>tmle_fit</code> object conveniently displays the results from computing our TML estimator.</p>
 </div>
 <div id="inference-with-marginal-structural-models" class="section level3">
@@ -327,28 +320,25 @@ g_{\delta}^0(a \mid w) - \Psi_{\delta}\right).\]</span></p>
 <p>Suppose a simple working MSM <span class="math inline">\(\mathbb{E}Y_{g^0_{\delta}} = \beta_0 + \beta_1 \delta\)</span>, then a TML estimator targeting <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> may be constructed as <span class="math display">\[\overline{Q}_{n, \epsilon}(A,W) = \overline{Q}_n(A,W) + \epsilon (H_1(g),
 H_2(g),\]</span> for all <span class="math inline">\(\delta\)</span>, where <span class="math inline">\(H_1(g)\)</span> is the auxiliary covariate for <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(H_2(g)\)</span> is the auxiliary covariate for <span class="math inline">\(\beta_1\)</span>.</p>
 <p>To construct a targeted maximum likelihood estimator that directly targets the parameters of the working marginal structural model, we may use the <code>tmle_vimshift_msm</code> Spec (instead of the <code>tmle_vimshift_delta</code> Spec that appears above):</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="co"># what's the grid of shifts we wish to consider?</span></a>
-<a class="sourceLine" id="cb16-2" data-line-number="2">delta_grid &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb16-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb16-4" data-line-number="4"><span class="co"># initialize a tmle specification</span></a>
-<a class="sourceLine" id="cb16-5" data-line-number="5">tmle_msm_spec &lt;-<span class="st"> </span><span class="kw"><a href="../reference/tmle_vimshift_msm.html">tmle_vimshift_msm</a></span>(<span class="dt">shift_fxn =</span> shift_additive_bounded,</a>
-<a class="sourceLine" id="cb16-6" data-line-number="6">                                   <span class="dt">shift_fxn_inv =</span> shift_additive_bounded_inv,</a>
-<a class="sourceLine" id="cb16-7" data-line-number="7">                                   <span class="dt">shift_grid =</span> delta_grid,</a>
-<a class="sourceLine" id="cb16-8" data-line-number="8">                                   <span class="dt">max_shifted_ratio =</span> <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb16-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb16-10" data-line-number="10"><span class="co"># fit the TML estimator and examine the results</span></a>
-<a class="sourceLine" id="cb16-11" data-line-number="11">tmle_msm_fit &lt;-<span class="st"> </span><span class="kw"><a href="http://tmle3.tlverse.org/reference/tmle3.html">tmle3</a></span>(tmle_msm_spec, data, node_list, learner_list)</a></code></pre></div>
-<pre><code>## Warning in learner$predict_fold(learner_task, fold_number):
-## Lrnr_rfcde_1000_5_31_cosine_0_FALSE_auto_observed is not a cv-aware
-## learner, so self$predict_fold reverts to self$predict</code></pre>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">tmle_msm_fit</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="co"># what's the grid of shifts we wish to consider?</span></a>
+<a class="sourceLine" id="cb17-2" data-line-number="2">delta_grid &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb17-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb17-4" data-line-number="4"><span class="co"># initialize a tmle specification</span></a>
+<a class="sourceLine" id="cb17-5" data-line-number="5">tmle_msm_spec &lt;-<span class="st"> </span><span class="kw"><a href="../reference/tmle_vimshift_msm.html">tmle_vimshift_msm</a></span>(<span class="dt">shift_fxn =</span> shift_additive_bounded,</a>
+<a class="sourceLine" id="cb17-6" data-line-number="6">                                   <span class="dt">shift_fxn_inv =</span> shift_additive_bounded_inv,</a>
+<a class="sourceLine" id="cb17-7" data-line-number="7">                                   <span class="dt">shift_grid =</span> delta_grid,</a>
+<a class="sourceLine" id="cb17-8" data-line-number="8">                                   <span class="dt">max_shifted_ratio =</span> <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb17-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb17-10" data-line-number="10"><span class="co"># fit the TML estimator and examine the results</span></a>
+<a class="sourceLine" id="cb17-11" data-line-number="11">tmle_msm_fit &lt;-<span class="st"> </span><span class="kw"><a href="http://tlverse.org/tmle3/reference/tmle3.html">tmle3</a></span>(tmle_msm_spec, data, node_list, learner_list)</a>
+<a class="sourceLine" id="cb17-12" data-line-number="12">tmle_msm_fit</a></code></pre></div>
 <pre><code>## A tmle3_Fit that took 100 step(s)
 ##          type          param  init_est  tmle_est          se     lower
-## 1: MSM_linear MSM(intercept) 1.5338665 1.5338384 0.057648178 1.4208500
-## 2: MSM_linear     MSM(slope) 0.9151067 0.9151153 0.009129132 0.8972225
-##        upper psi_transformed lower_transformed upper_transformed
-## 1: 1.6468267       1.5338384         1.4208500         1.6468267
-## 2: 0.9330081       0.9151153         0.8972225         0.9330081</code></pre>
+## 1: MSM_linear MSM(intercept) 1.5838574 1.5835315 0.057778930 1.4702869
+## 2: MSM_linear     MSM(slope) 0.9133474 0.9133462 0.007955137 0.8977544
+##       upper psi_transformed lower_transformed upper_transformed
+## 1: 1.696776       1.5835315         1.4702869          1.696776
+## 2: 0.928938       0.9133462         0.8977544          0.928938</code></pre>
 </div>
 </div>
 </div>
@@ -385,6 +375,7 @@ H_2(g),\]</span> for all <span class="math inline">\(\delta\)</span>, where <spa
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+
         <div id="tocnav">
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
@@ -400,17 +391,20 @@ H_2(g),\]</span> for all <span class="math inline">\(\delta\)</span>, where <spa
 </div>
 
 
+
       <footer><div class="copyright">
-  <p>Developed by Nima Hejazi, Jeremy Coyle.</p>
+  <p>Developed by Nima Hejazi, Jeremy Coyle, Mark van der Laan.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.0.</p>
 </div>
+
       </footer>
 </div>
 
   
+
 
   </body>
 </html>

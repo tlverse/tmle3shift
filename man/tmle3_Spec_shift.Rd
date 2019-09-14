@@ -9,7 +9,6 @@
 tmle3_Spec_shift
 }
 \description{
-Current limitations: pretty much tailored to \code{Param_TSM}
-See TODO notes for places generalization can be added
+Defines a TML Estimator for the Outcome under a Shifted Treatment
 }
 \keyword{datasets}

@@ -56,10 +56,10 @@ for variable importance analyses.
 ## Installation
 
 You can install the development version of `tmle3shift` from GitHub via
-[`devtools`](https://www.rstudio.com/products/rpackages/devtools/) with
+[`remotes`](https://CRAN.R-project.org/package=remotes) with
 
 ``` r
-devtools::install_github("tlverse/tmle3shift")
+remotes::install_github("tlverse/tmle3shift")
 ```
 
 -----

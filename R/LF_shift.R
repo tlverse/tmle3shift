@@ -128,8 +128,10 @@ LF_shift <- R6::R6Class(
 
       # get original likelihood for shifted data
       cf_likelihood <-
-        self$original_lf$get_likelihood(tmle_task = cf_task,
-                                        fold_number = fold_number)
+        self$original_lf$get_likelihood(
+          tmle_task = cf_task,
+          fold_number = fold_number
+        )
       return(cf_likelihood)
     },
     cf_values = function(tmle_task, fold_number = "full") {

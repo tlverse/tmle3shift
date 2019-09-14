@@ -6,9 +6,9 @@ library(tmle3)
 set.seed(429153)
 
 ## simulate simple data for tmle-shift sketch
-n_obs <- 1000          # number of observations
-n_w <- 1               # number of baseline covariates
-tx_mult <- 2           # multiplier for the effect of W = 1 on the treatment
+n_obs <- 1000 # number of observations
+n_w <- 1 # number of baseline covariates
+tx_mult <- 2 # multiplier for the effect of W = 1 on the treatment
 
 ## baseline covariates -- simple, binary
 W <- as.numeric(replicate(n_w, rbinom(n_obs, 1, 0.5)))
@@ -73,4 +73,3 @@ tmle_fit <- fit_tmle3(tmle_task, likelihood_targeted, tmle_params, updater)
 ## extract results from tmle3_Fit object
 (tmle3_psi <- tmle_fit$summary$tmle_est)
 (tmle3_se <- tmle_fit$summary$se)
-

@@ -117,11 +117,15 @@ get_density_ratio <- function(tmle_task, delta, likelihood_base, fold_number) {
 
   # find densities associated with tasks with observed and shifted intervention
   emp_intervention_density <-
-    likelihood_base$get_likelihoods(tmle_task = tmle_task, nodes = "A",
-                                    fold_number = fold_number)
+    likelihood_base$get_likelihoods(
+      tmle_task = tmle_task, nodes = "A",
+      fold_number = fold_number
+    )
   cf_intervention_density <-
-    likelihood_base$get_likelihoods(tmle_task = cf_task, nodes = "A",
-                                    fold_number = fold_number)
+    likelihood_base$get_likelihoods(
+      tmle_task = cf_task, nodes = "A",
+      fold_number = fold_number
+    )
 
   # compute ratio of counterfactual and empirical intervention densities
   intervention_density_ratio <-

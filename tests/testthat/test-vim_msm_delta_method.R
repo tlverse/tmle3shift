@@ -6,10 +6,10 @@ library(tmle3)
 set.seed(429153)
 
 ## simulate simple data for tmle-shift sketch
-n_obs <- 1000                    # number of observations
-n_w <- 1                         # number of baseline covariates
-tx_mult <- 2                     # multiplier for effect of W = 1 on treatment
-delta_grid <- seq(-1, 1, 1)      # grid of shifts
+n_obs <- 1000 # number of observations
+n_w <- 1 # number of baseline covariates
+tx_mult <- 2 # multiplier for effect of W = 1 on treatment
+delta_grid <- seq(-1, 1, 1) # grid of shifts
 
 
 ## baseline covariates -- simple, binary

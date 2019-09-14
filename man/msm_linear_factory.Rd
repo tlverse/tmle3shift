@@ -4,12 +4,19 @@
 \alias{msm_linear_factory}
 \title{Function factory for computing linear working MSM delta method functions}
 \usage{
-msm_linear_factory(design_matrix)
+msm_linear_factory(design_matrix, weighting = c("identity", "variance"))
 }
 \arguments{
 \item{design_matrix}{A \code{matrix} or \code{data.frame} giving the design
 matrix to be used in specifying terms of the linear working marginal
 structural model (MSM) for which parameters are to be estimated.}
+
+\item{weighting}{A \code{character} indicating the type of weighting used for
+construction of the marginal structural model. \code{"identity"} applies the
+same weight to all individual estimates while \code{"variance"} applies
+weights based on the inverse variance of the estimate. It is expected that
+variance-based weighting would yield more stable estimates of the parameter
+of the MSM; however, the default remains the identity weighting.}
 }
 \description{
 Function factory for computing linear working MSM delta method functions

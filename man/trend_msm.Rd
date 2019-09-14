@@ -4,7 +4,8 @@
 \alias{trend_msm}
 \title{Test for a trend in the effect of shift interventions}
 \usage{
-trend_msm(tmle_fit_estimates, delta_grid, level = 0.95, weights = NULL)
+trend_msm(tmle_fit_estimates, delta_grid, level = 0.95,
+  weighting = c("identity", "variance"))
 }
 \arguments{
 \item{tmle_fit_estimates}{A \code{list} corresponding to the
@@ -16,11 +17,12 @@ shift parameter used in computing each of the TML estimates.}
 
 \item{level}{The nominal coverage probability of the confidence interval.}
 
-\item{weights}{A \code{numeric} vector indicating the weights (if any) to be
-applied to each of the estimated mean counterfactual outcomes under posited
-values of the shift parameter delta. The default is to weight each estimate
-by the inverse of its variance, in order to improve stability; however, this
-may be changed depending on the exact choice of shift function.}
+\item{weighting}{A \code{character} indicating the type of weighting used for
+construction of the marginal structural model. \code{"identity"} applies the
+same weight to all individual estimates while \code{"variance"} applies
+weights based on the inverse variance of the estimate. It is expected that
+variance-based weighting would yield more stable estimates of the parameter
+of the MSM; however, the default remains the identity weighting.}
 }
 \description{
 Test for a trend in the effect of shift interventions

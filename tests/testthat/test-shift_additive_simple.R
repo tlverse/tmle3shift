@@ -7,10 +7,10 @@ library(txshift)
 set.seed(429153)
 
 ## simulate simple data for tmle-shift sketch
-n_obs <- 1000          # number of observations
-n_w <- 1               # number of baseline covariates
-tx_mult <- 2           # multiplier for the effect of W = 1 on the treatment
-delta_value <- 0.5     # value of the shift parameter
+n_obs <- 1000 # number of observations
+n_w <- 1 # number of baseline covariates
+tx_mult <- 2 # multiplier for the effect of W = 1 on the treatment
+delta_value <- 0.5 # value of the shift parameter
 
 ## baseline covariates -- simple, binary
 W <- as.numeric(replicate(n_w, rbinom(n_obs, 1, 0.5)))
@@ -108,7 +108,7 @@ test_that("Parameter point estimate matches result from txshift package", {
 ## NOTE: tmle3shift uses CV-TMLE so approximate equality is expected
 test_that("Standard error matches result from txshift package", {
   expect_equal(tmle3_se, txshift_se,
-               tol = 0.01,
-               scale = tmle3_se)
+    tol = 0.01,
+    scale = tmle3_se
+  )
 })
-

@@ -6,10 +6,10 @@ library(tmle3)
 set.seed(429153)
 
 ## simulate simple data for tmle-shift sketch
-n_obs <- 1000                 # number of observations
-n_w <- 1                      # number of baseline covariates
-tx_mult <- 2                  # multiplier for effect of W = 1 on treatment
-delta_grid <- seq(-1, 1, 1)   # grid of shifts to consider
+n_obs <- 1000 # number of observations
+n_w <- 1 # number of baseline covariates
+tx_mult <- 2 # multiplier for effect of W = 1 on treatment
+delta_grid <- seq(-1, 1, 1) # grid of shifts to consider
 
 ## baseline covariates -- simple, binary
 W <- as.numeric(replicate(n_w, rbinom(n_obs, 1, 0.5)))
@@ -109,4 +109,3 @@ test_that("Targeted MSM approach and delta method MSM match nearly", {
     tol = 0.01,
   )
 })
-

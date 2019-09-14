@@ -83,11 +83,11 @@ tmle3_Spec_shift <- R6::R6Class(
       intervention <- tmle3::define_lf(LF_shift,
         name = "A",
         original_lf = likelihood$factor_list[["A"]],
-        likelihood_base = likelihood,                    # initial likelihood
-        shift_fxn, shift_fxn_inv,                        # shift fxns
-        shift_delta = delta_shift,                       # shift magnitude
-        max_shifted_ratio = max_shifted_ratio,           # max ratio difference
-        bound = A_bound                                  # bound shifted g
+        likelihood_base = likelihood, # initial likelihood
+        shift_fxn, shift_fxn_inv, # shift fxns
+        shift_delta = delta_shift, # shift magnitude
+        max_shifted_ratio = max_shifted_ratio, # max ratio difference
+        bound = A_bound # bound shifted g
       )
 
       # create parameter (counterfactual treatment-specific mean)

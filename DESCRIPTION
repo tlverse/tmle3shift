@@ -51,13 +51,10 @@ Suggests:
     haldensify,
     RFCDE
 Remotes:
-    github::osofr/simcausal,
-    github::osofr/condensier,
     github::tpospisi/RFCDE/r,
     github::nhejazi/haldensify,
     github::nhejazi/txshift,
     github::tlverse/origami,
-    github::tlverse/delayed,
     github::tlverse/sl3,
     github::tlverse/tmle3
 URL: https://tlverse.org/tmle3shift

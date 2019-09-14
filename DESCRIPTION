@@ -1,6 +1,6 @@
 Package: tmle3shift
 Title: Targeted Maximum Likelihood Estimation of Stochastic Intervention Effects
-Version: 0.1.7
+Version: 0.1.8
 Authors@R: c(
     person("Nima", "Hejazi", email = "nh@nimahejazi.org",
            role = c("aut", "cre", "cph"),
@@ -31,7 +31,6 @@ Imports:
     methods,
     data.table,
     assertthat,
-    sl3,
     tmle3
 Suggests:
     testthat,
@@ -41,8 +40,7 @@ Suggests:
     stats,
     ggplot2,
     tidyverse,
-    simcausal,
-    condensier,
+    sl3,
     Rsolnp,
     nnls,
     ranger,

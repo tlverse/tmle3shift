@@ -4,10 +4,14 @@
 \alias{tmle_vimshift_msm}
 \title{Outcome Under a Grid of Shifted Interventions via Targeted Working MSM}
 \usage{
-tmle_vimshift_msm(shift_fxn = shift_additive_bounded,
-  shift_fxn_inv = shift_additive_bounded_inv, shift_grid = seq(-1, 1,
-  by = 0.5), max_shifted_ratio = 2, weighting = c("identity",
-  "variance"), ...)
+tmle_vimshift_msm(
+  shift_fxn = shift_additive_bounded,
+  shift_fxn_inv = shift_additive_bounded_inv,
+  shift_grid = seq(-1, 1, by = 0.5),
+  max_shifted_ratio = 2,
+  weighting = c("identity", "variance"),
+  ...
+)
 }
 \arguments{
 \item{shift_fxn}{A \code{function} defining the type of shift to be applied

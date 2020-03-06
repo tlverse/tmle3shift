@@ -1,6 +1,6 @@
 Package: tmle3shift
-Title: Targeted Maximum Likelihood Estimation of Stochastic Intervention Effects
-Version: 0.1.8
+Title: Targeted Learning of the Causal Effects of Stochastic Interventions
+Version: 0.1.9
 Authors@R: c(
     person("Nima", "Hejazi", email = "nh@nimahejazi.org",
            role = c("aut", "cre", "cph"),
@@ -15,12 +15,12 @@ Authors@R: c(
 Maintainer: Nima Hejazi <nh@nimahejazi.org>
 Description: Targeted maximum likelihood estimation (TMLE) of population-level
     causal effects under stochastic treatment regimes and related nonparametric
-    variable importance analyses. Utilities are provided for computing the TML
-    estimate of a counterfactual mean under a stochastically modified
-    (continuous-valued) treatment node, under intervention policies that shift
-    the natural value of the treatment. The methodology implemented was first
+    variable importance analyses. Tools are provided for TML estimation of the
+    counterfactual mean under a stochastic intervention characterized as a
+    modified treatment policy, such as treatment policies that shift the natural
+    value of the exposure. The methodology implemented was first
     described by I. Díaz and M.J. van der Laan (2013;
-    doi: <10.1111/j.1541-0420.2011.01685.x>) and expanded upon in I. Díaz and
+    <doi:10.1111/j.1541-0420.2011.01685.x>) and expanded upon in I. Díaz and
     M.J. van der Laan (2018).
 Depends:
     R (>= 3.4.0)
@@ -39,26 +39,23 @@ Suggests:
     covr,
     stats,
     ggplot2,
-    tidyverse,
-    sl3,
+    sl3 (>= 1.3.7),
+    txshift (>= 0.3.1),
+    haldensify (>= 0.0.5),
+    hal9001,
+    ranger,
     Rsolnp,
     nnls,
-    ranger,
-    xgboost,
-    txshift,
-    haldensify,
-    RFCDE
 Remotes:
-    github::tpospisi/RFCDE/r,
-    github::nhejazi/haldensify,
-    github::nhejazi/txshift,
-    github::tlverse/origami,
     github::tlverse/sl3,
-    github::tlverse/tmle3
+    github::tlverse/tmle3@devel,
+    github::nhejazi/haldensify,
+    github::nhejazi/txshift
 URL: https://tlverse.org/tmle3shift
 BugReports: https://github.com/tlverse/tmle3shift/issues
 Encoding: UTF-8
 LazyData: true
 LazyLoad: yes
 VignetteBuilder: knitr
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
+Roxygen: list(markdown = TRUE, r6 = FALSE)

@@ -26,8 +26,10 @@ observed value of the treatment node "A".}
 Additive Shifts of Continuous-Valued Interventions Without Bounds
 }
 \seealso{
-Other shifting_interventions: \code{\link{shift_additive_bounded}}
+Other shifting_interventions: 
+\code{\link{shift_additive_bounded}()}
 
-Other shifting_interventions: \code{\link{shift_additive_bounded}}
+Other shifting_interventions: 
+\code{\link{shift_additive_bounded}()}
 }
 \concept{shifting_interventions}

@@ -1,12 +1,12 @@
 context("Incorporating corrections for missingness in covariates")
 
-library(sl3)
-library(uuid)
-library(assertthat)
 library(data.table)
-library(future)
+library(assertthat)
+library(uuid)
+library(sl3)
+
 # setup data for test
-set.seed(1234)
+set.seed(34831)
 data(cpp)
 data <- as.data.table(cpp)
 data$parity01 <- as.numeric(data$parity > 0)
@@ -18,7 +18,7 @@ node_list <- list(
     "apgar1", "apgar5", "gagebrth", "mage",
     "meducyrs", "sexn"
   ),
-  A = "parity01",
+  A = "waz",
   Y = "haz01"
 )
 
@@ -27,57 +27,54 @@ missing_W <- apply(is.na(data[, c(node_list$W,node_list$A),
                          with = FALSE]), 1, any)
 data <- data[!missing_W]
 
-qlib <- make_learner_stack(
-  "Lrnr_mean",
-  "Lrnr_glm_fast"
-)
-
-glib <- make_learner_stack(
-  "Lrnr_mean",
-  "Lrnr_glm_fast"
-)
-
+# learners used for conditional expectation regression (e.g., outcome)
+mean_lrnr <- Lrnr_mean$new()
+glm_lrnr <- Lrnr_glm$new()
 logit_metalearner <- make_learner(
   Lrnr_solnp, metalearner_logistic_binomial,
   loss_loglik_binomial
 )
-Q_learner <- make_learner(Lrnr_sl, qlib, logit_metalearner)
-g_learner <- make_learner(Lrnr_sl, glib, logit_metalearner)
-learner_list <- list(Y = Q_learner, A = g_learner, delta_Y=Q_learner)
-tmle_spec <- tmle_TSM_all()
+sl_lrnr <- Lrnr_sl$new(
+  learners = list(mean_lrnr, glm_lrnr),
+  metalearner = logit_metalearner 
+)
 
-# define data
+# learners used for conditional density regression (i.e., propensity score)
+haldensify_lrnr <- Lrnr_haldensify$new(
+  n_bins = 5, grid_type = "equal_mass",
+  lambda_seq = exp(seq(-1, -13, length = 100))
+)
+cv_haldensify_lrnr <- Lrnr_cv$new(haldensify_lrnr, full_fit = TRUE)
+
+# specify outcome and treatment regressions and create learner list
+Q_learner <- sl_lrnr
+g_learner <- cv_haldensify_lrnr
+learner_list <- list(Y = Q_learner, A = g_learner, delta_Y = Q_learner)
+
+# initialize a tmle specification
+tmle_spec <- tmle_shift(
+  shift_val = 0.5,
+  shift_fxn = shift_additive,
+  shift_fxn_inv = shift_additive_inv
+)
+
+## define data (from tmle3_Spec base class)
 tmle_task <- tmle_spec$make_tmle_task(data, node_list)
-Q_task <- tmle_task$get_regression_task("Y",drop_censored = TRUE)
+Q_task <- tmle_task$get_regression_task("Y", drop_censored = TRUE)
 Q_learner <- learner_list$Y
 Q_fit <- Q_learner$train(Q_task)
 
-# define likelihood
-initial_likelihood <- tmle_spec$make_initial_likelihood(tmle_task, learner_list)
+## define likelihood (from tmle3_Spec base class)
+likelihood_init <- tmle_spec$make_initial_likelihood(tmle_task, learner_list)
 
-# define update method (submodel + loss function)
-# disable cvtmle for this test to compare with tmle package
-updater <- tmle3_Update$new(cvtmle = FALSE)
+## define update method (submodel and loss function)
+updater <- tmle_spec$make_updater()
+likelihood_targeted <- Targeted_Likelihood$new(likelihood_init, updater)
 
-targeted_likelihood <- Targeted_Likelihood$new(initial_likelihood, updater)
-intervention1 <- define_lf(LF_static, "A", value = 1)
-intervention0 <- define_lf(LF_static, "A", value = 0)
-tsm1 <- define_param(Param_TSM, targeted_likelihood, intervention1)
-tsm0 <- define_param(Param_TSM, targeted_likelihood, intervention0)
-ate <- define_param(Param_delta, targeted_likelihood, delta_param_ATE,
-                    list(tsm0, tsm1))
-params <- list(tsm0,tsm1, ate)
-updater$tmle_params <- params
-H0W <- tsm0$clever_covariates(tmle_task)$Y
-H1W <- tsm1$clever_covariates(tmle_task)$Y
-tmle_fit <- fit_tmle3(tmle_task, targeted_likelihood, params, updater)
+## define param
+tmle_params <- tmle_spec$make_params(tmle_task, likelihood_targeted)
+updater$tmle_params <- tmle_params
 
-# extract results
-tmle3_psi <- tmle_fit$summary$tmle_est[3]
-tmle3_se <- tmle_fit$summary$se[3]
-tmle3_epsilon <- updater$epsilons[[1]]$Y
-
-submodel_data <- updater$generate_submodel_data(
-  initial_likelihood, tmle_task,
-  "full"
-)
+## fit tmle update
+tmle_fit <- fit_tmle3(tmle_task, likelihood_targeted, tmle_params, updater)
+tmle_fit

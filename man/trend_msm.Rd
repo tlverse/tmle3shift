@@ -4,8 +4,12 @@
 \alias{trend_msm}
 \title{Test for a trend in the effect of shift interventions}
 \usage{
-trend_msm(tmle_fit_estimates, delta_grid, level = 0.95,
-  weighting = c("identity", "variance"))
+trend_msm(
+  tmle_fit_estimates,
+  delta_grid,
+  level = 0.95,
+  weighting = c("identity", "variance")
+)
 }
 \arguments{
 \item{tmle_fit_estimates}{A \code{list} corresponding to the

@@ -4,9 +4,13 @@
 \alias{tmle_shift}
 \title{Outcome under Shifted Treatment}
 \usage{
-tmle_shift(shift_fxn = shift_additive_bounded,
-  shift_fxn_inv = shift_additive_bounded_inv, shift_val = 1,
-  max_shifted_ratio = 2, ...)
+tmle_shift(
+  shift_fxn = shift_additive_bounded,
+  shift_fxn_inv = shift_additive_bounded_inv,
+  shift_val = 1,
+  max_shifted_ratio = 2,
+  ...
+)
 }
 \arguments{
 \item{shift_fxn}{A \code{function} defining the type of shift to be applied

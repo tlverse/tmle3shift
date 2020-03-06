@@ -6,11 +6,23 @@
 \alias{get_density_ratio}
 \title{Additive Shifts of Continuous-Valued Interventions based on Bounded Densities}
 \usage{
-shift_additive_bounded(tmle_task, delta, likelihood_base,
-  max_shifted_ratio, fold_number, ...)
+shift_additive_bounded(
+  tmle_task,
+  delta,
+  likelihood_base,
+  max_shifted_ratio,
+  fold_number,
+  ...
+)
 
-shift_additive_bounded_inv(tmle_task, delta, likelihood_base,
-  max_shifted_ratio, fold_number, ...)
+shift_additive_bounded_inv(
+  tmle_task,
+  delta,
+  likelihood_base,
+  max_shifted_ratio,
+  fold_number,
+  ...
+)
 
 get_density_ratio(tmle_task, delta, likelihood_base, fold_number)
 }
@@ -37,27 +49,9 @@ observational unit when the ratio of the counterfactual intervention density
 to the observed intervention density is below this value.}
 
 \item{fold_number}{Whether to use cross-validated likelihood factor estimates
-or not. Passed through to method \code{get_likelihoods} in \pkg{tmle3}.}
+or not. Passed directly to method \code{get_likelihoods} in \pkg{tmle3}.}
 
 \item{...}{Additional arguments (currently unused).}
-
-\item{tmle_task}{A \code{tmle3_Task} object containing data and nodes, as
-described and implemented in the \code{tmle3} package. Please refer to the
-documentation and supporting materials of that package for details.}
-
-\item{delta}{A \code{numeric} value giving a value of the shift to be applied
-to the treatment. This is an additive shift so the value is merely to be
-added to the observed value of the treatment node "A". In the case of the
-inverse additive shift, the specified value will be subtracted from the
-observed value of the treatment node "A".}
-
-\item{likelihood_base}{The base observed data likelihood, to be used in
-implementing guards that ensure that the shifted treatment does not violate
-the bounds induced by the support of the intervention, conditional on the
-covariates.}
-
-\item{fold_number}{Whether to use cross-validated likelihood factor estimates
-or not. Passed directly to method \code{get_likelihoods} in \pkg{tmle3}.}
 }
 \description{
 Additive Shifts of Continuous-Valued Interventions based on Bounded Densities
@@ -65,11 +59,14 @@ Additive Shifts of Continuous-Valued Interventions based on Bounded Densities
 Compute Ratio of Observed and Counterfactual Intervention Densities
 }
 \seealso{
-Other shifting_interventions: \code{\link{shift_additive}}
+Other shifting_interventions: 
+\code{\link{shift_additive}()}
 
-Other shifting_interventions: \code{\link{shift_additive}}
+Other shifting_interventions: 
+\code{\link{shift_additive}()}
 
-Other shifting_interventions: \code{\link{shift_additive}}
+Other shifting_interventions: 
+\code{\link{shift_additive}()}
 }
 \concept{shifting_interventions}
 \keyword{internal}

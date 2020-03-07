@@ -36,6 +36,7 @@
 #'     \item{\code{intervention_list}}{A list of objects inheriting from
 #'       \code{\link{LF_base}}, representing the intervention.}
 #' }
+#'
 #' @export
 Param_MSM_linear <- R6Class(
   classname = "Param_MSM_linear",

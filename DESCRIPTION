@@ -43,6 +43,7 @@ Suggests:
     txshift (>= 0.3.1),
     haldensify (>= 0.0.5),
     hal9001,
+    xgboost,
     ranger,
     Rsolnp,
     nnls,

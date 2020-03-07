@@ -194,21 +194,20 @@ sl3_list_learners("density")
 
 To proceed, we'll select two of the above learners, `Lrnr_haldensify` for using
 the highly adaptive lasso for conditional density estimation, based on an
-algorithm given by @diaz2011super, and `Lrnr_rfcde`, an approach for using
-random forests for conditional density estimation [@pospisil2018rfcde]:
+algorithm given by @diaz2011super, and `Lrnr_density_semiparametric`, an
+approach for semiparametric conditional density estimation:
 
-```{r sl3_regression_lrnrs}
+```{r sl3_density_lrnrs}
 # learners used for conditional density regression (i.e., propensity score)
-lrn_haldensify <- Lrnr_haldensify$new(
-  n_bins = 5, grid_type = "equal_mass",
-  lambda_seq = exp(seq(-1, -13, length = 500))
+haldensify_lrnr <- Lrnr_haldensify$new(
+  n_bins = 3, grid_type = "equal_mass",
+  lambda_seq = exp(seq(-1, -9, length = 100))
 )
-lrn_rfcde <- Lrnr_rfcde$new(
-  n_trees = 1000, node_size = 5,
-  n_basis = 31, output_type = "observed"
-)
+hse_lrnr <- Lrnr_density_semiparametric(mean_learner = Lrnr_glm$new())
+mvd_lrnr <- Lrnr_density_semiparametric(mean_learner = Lrnr_glm$new(),
+                                        var_learner = Lrnr_mean$new())
 sl_lrn_dens <- Lrnr_sl$new(
-  learners = list(lrn_haldensify, lrn_rfcde),
+  learners = list(haldensify_lrnr, hse_lrnr, mvd_lrnr),
   metalearner = Lrnr_solnp_density$new()
 )
 ```
@@ -218,33 +217,25 @@ denoted "Q" in the targeted learning literature). For this, we build a Super
 Learner composed of an intercept model, a GLM, and the [xgboost
 algorithm](https://xgboost.ai/) for gradient boosting:
 
-```{r sl3_density_lrnrs}
+```{r sl3_regression_lrnrs}
 # learners used for conditional expectation regression (e.g., outcome)
-lrn_mean <- Lrnr_mean$new()
-lrn_fglm <- Lrnr_glm_fast$new()
-lrn_xgb <- Lrnr_xgboost$new(nrounds = 10)
+mean_lrnr <- Lrnr_mean$new()
+fglm_lrnr <- Lrnr_glm_fast$new()
+xgb_lrnr <- Lrnr_xgboost$new()
 sl_lrn <- Lrnr_sl$new(
-  learners = list(lrn_mean, lrn_fglm, lrn_xgb),
+  learners = list(mean_lrnr, fglm_lrnr, xgb_lrnr),
   metalearner = Lrnr_nnls$new()
 )
 ```
 
 We can make the above explicit with respect to standard notation by bundling
-the ensemble learners into a `list` object below. Note that in making the
-`learner_list` object for our TML estimators, for the sake of example, we use
-only the random forest conditional density estimation approach of the [`RFCDE`
-package](https://github.com/tpospisi/RFCDE/tree/master/r) in estimating the
-treatment mechanism; as this is done in an effort to save computation time, we
-recommend using a stacked regression approach in standard data analytic
-practice.
+the ensemble learners into a `list` object below.
 
 ```{r make_lrnr_list}
 # specify outcome and treatment regressions and create learner list
 Q_learner <- sl_lrn
-# in practice, we'd use an ensemble learner; here, we do not to save time
 g_learner <- sl_lrn_dens
-g_cv_learner <- Lrnr_cv$new(lrn_haldensify, full_fit = TRUE)
-learner_list <- list(Y = Q_learner, A = g_cv_learner)
+learner_list <- list(Y = Q_learner, A = g_learner)
 ```
 
 The `learner_list` object above specifies the role that each of the ensemble

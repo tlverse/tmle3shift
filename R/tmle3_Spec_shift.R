@@ -2,7 +2,7 @@
 #'
 #' @importFrom R6 R6Class
 #' @importFrom tmle3 tmle3_Spec define_lf tmle3_Update Targeted_Likelihood
-#'  Param_TSM
+#'  Param_TSM point_tx_likelihood
 #'
 #' @export
 tmle3_Spec_shift <- R6::R6Class(
@@ -44,28 +44,8 @@ tmle3_Spec_shift <- R6::R6Class(
       if (!is.null(likelihood_def)) {
         likelihood <- likelihood_def$train(tmle_task)
       } else {
-        # covariates
-        W_factor <- define_lf(LF_emp, "W")
-
-        # treatment, with bounded likelihood away from 0
-        A_bound <- c(1 / tmle_task$nrow, Inf)
-        A_factor <- define_lf(LF_fit, "A",
-          learner = learner_list[["A"]],
-          bound = A_bound
-        )
-
-        # outcome
-        Y_factor <- define_lf(LF_fit, "Y",
-          learner = learner_list[["Y"]],
-          type = "mean"
-        )
-
-        # construct likelihood from factor list
-        factor_list <- list(W_factor, A_factor, Y_factor)
-        likelihood_def <- Likelihood$new(factor_list)
-
-        # fit/train likelihood
-        likelihood <- likelihood_def$train(tmle_task)
+        # use likelihood helper from tmle3
+        likelihood <- tmle3::point_tx_likelihood(tmle_task, learner_list)
       }
       return(likelihood)
     },

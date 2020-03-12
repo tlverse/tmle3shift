@@ -71,12 +71,11 @@ Q_task <- tmle_task$get_regression_task("Y", drop_censored = TRUE)
 Q_learner <- learner_list$Y
 Q_fit <- Q_learner$train(Q_task)
 
-
 # define likelihood
 initial_likelihood <- tmle_spec$make_initial_likelihood(tmle_task,
                                                         learner_list)
 
-# define update method (submodel + loss function)
+# define update method: submodel + loss function
 updater <- tmle3_Update$new()
 targeted_likelihood <- Targeted_Likelihood$new(initial_likelihood, updater)
 

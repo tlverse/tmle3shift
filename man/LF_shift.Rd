@@ -11,8 +11,8 @@
 Shifts a likelihood factor according to a \code{shift_function} and a given
 magnitude of the desired shift (\code{shift_delta}). In effect,
 \code{get_likelihood(tmle_task)} from \code{tmle3} will instead be the
-likelihood from the \code{original_lf}, but a for shifted value
-\eqn{A'=}\code{shift_function}\eqn{(A, W)}
+likelihood from the \code{original_lf}, but for a shifted value
+\eqn{A'=}\code{shift_function}\eqn{(A, W)}.
 }
 \section{Constructor}{
 
@@ -28,7 +28,7 @@ factor to shift.}
 \item{\code{shift_inverse}}{\code{function}, the inverse of a given
 \code{shift_function}.}
 \item{\code{shift_delta}}{\code{numeric}, specification of the magnitude
-of the desired shift (on the level of the treatment)}
+of the desired shift (on the level of the treatment).}
 \item{\code{max_shifted_ratio}}{A \code{numeric} value indicating the
 maximum tolerance for the ratio of the counterfactual and observed
 intervention densities. In particular, the shifted value of the
@@ -48,7 +48,7 @@ factor to shift.}
 \item{\code{shift_inverse}}{\code{function}, the inverse of a given
 \code{shift_function}.}
 \item{\code{shift_delta}}{\code{numeric}, specification of the magnitude
-of the desired shift (on the level of the treatment}.}
+of the desired shift (on the level of the treatment).}
 \item{\code{max_shifted_ratio}}{A \code{numeric} value indicating the
 maximum tolerance for the ratio of the counterfactual and observed
 intervention densities. In particular, the shifted value of the

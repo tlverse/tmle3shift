@@ -203,9 +203,9 @@ haldensify_lrnr <- Lrnr_haldensify$new(
   n_bins = 3, grid_type = "equal_mass",
   lambda_seq = exp(seq(-1, -9, length = 100))
 )
-hse_lrnr <- Lrnr_density_semiparametric(mean_learner = Lrnr_glm$new())
-mvd_lrnr <- Lrnr_density_semiparametric(mean_learner = Lrnr_glm$new(),
-                                        var_learner = Lrnr_mean$new())
+hse_lrnr <- Lrnr_density_semiparametric$new(mean_learner = Lrnr_glm$new())
+mvd_lrnr <- Lrnr_density_semiparametric$new(mean_learner = Lrnr_glm$new(),
+                                            var_learner = Lrnr_mean$new())
 sl_lrn_dens <- Lrnr_sl$new(
   learners = list(haldensify_lrnr, hse_lrnr, mvd_lrnr),
   metalearner = Lrnr_solnp_density$new()

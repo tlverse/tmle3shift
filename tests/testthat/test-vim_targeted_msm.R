@@ -24,27 +24,36 @@ Y <- A + W + rnorm(n_obs, mean = 0, sd = 1)
 data <- data.table(W, A, Y)
 node_list <- list(W = "W", A = "A", Y = "Y")
 
-
 # learners used for conditional expectation regression (e.g., outcome)
 mean_lrnr <- Lrnr_mean$new()
 glm_lrnr <- Lrnr_glm$new()
+xgb_lrnr <- Lrnr_xgboost$new()
+logit_metalearner <- make_learner(
+  Lrnr_solnp, metalearner_logistic_binomial,
+  loss_loglik_binomial
+)
 sl_lrnr <- Lrnr_sl$new(
-  learners = list(mean_lrnr, glm_lrnr),
-  metalearner = Lrnr_nnls$new()
+  learners = list(mean_lrnr, glm_lrnr, xgb_lrnr),
+  metalearner = logit_metalearner
 )
 
-# learners used for conditional density regression (i.e., propensity score)
-haldensify_lrnr <- Lrnr_haldensify$new(
-  n_bins = 5, grid_type = "equal_mass",
-  lambda_seq = exp(seq(-1, -13, length = 100))
+# learners used for conditional density estimation (i.e., propensity score)
+hse_learner <- make_learner(Lrnr_density_semiparametric,
+  mean_learner = glm_lrnr
 )
-cv_haldensify_lrnr <- Lrnr_cv$new(haldensify_lrnr, full_fit = TRUE)
+mvd_learner <- make_learner(Lrnr_density_semiparametric,
+  mean_learner = xgb_lrnr,
+  var_learner = glm_lrnr
+)
+sl_density_lrnr <- Lrnr_sl$new(
+  learners = Stack$new(hse_learner, mvd_learner),
+  metalearner = Lrnr_solnp_density$new()
+)
 
 # specify outcome and treatment regressions and create learner list
 Q_learner <- sl_lrnr
-g_learner <- cv_haldensify_lrnr
-learner_list <- list(Y = Q_learner, A = g_learner)
-
+g_learner <- sl_density_lrnr
+learner_list <- list(Y = Q_learner, A = g_learner, delta_Y = Q_learner)
 
 # initialize a tmle specification for direct targeting of MSM parameters
 tmle_spec <- tmle_vimshift_msm(
@@ -72,7 +81,6 @@ tmle_fit_targeted_msm <- fit_tmle3(
   updater
 )
 
-
 # initialize a tmle specification for delta method
 tmle_spec <- tmle_vimshift_delta(
   shift_grid = delta_grid,
@@ -98,7 +106,6 @@ tmle_fit_delta_method <- fit_tmle3(
   tmle_task, likelihood_targeted, tmle_params,
   updater
 )
-
 
 ## extract relevant tmle3 results for test and re-format appropriately
 msm_delta_summary <- tmle_fit_delta_method$summary[4:5, ]

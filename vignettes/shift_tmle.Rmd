@@ -32,7 +32,6 @@ treatment regimes, please consider consulting @vdl2011targeted,
 To start, let's load the packages we'll use and set a seed for simulation:
 
 ```{r setup, message=FALSE, warning=FALSE}
-library(tidyverse)
 library(data.table)
 library(sl3)
 library(tmle3)
@@ -98,10 +97,11 @@ Y <- A + W + rnorm(n_obs, mean = 0, sd = 0.5)
 ```
 
 The above composes our observed data structure $O = (W, A, Y)$. To formally
-express this fact using the `tlverse` grammar introduced by the `tmle3` package,
-we create a single data object and specify the functional relationships between
-the nodes in the _directed acyclic graph_ (DAG) via _nonparametric structural
-equation models_ (NPSEMs), reflected in the node list that we set up:
+express this fact using the `tlverse` grammar introduced by the [`tmle3`
+package](https://github.com/tlverse/tmle3), we create a single data object and
+specify the functional relationships between the nodes in the _directed acyclic
+graph_ (DAG) via _nonparametric structural equation models_ (NPSEMs), reflected
+in the node list that we set up:
 
 ```{r data_nodes}
 # organize data and nodes for tmle3
@@ -133,15 +133,16 @@ As seen above, the `tmle_shift` specification object (like all `tmle3_Spec`
 objects) does _not_ store the data for our specific analysis of interest. Later,
 we'll see that passing a data object directly to the `tmle3` wrapper function,
 alongside the instantiated `tmle_spec`, will serve to construct a `tmle3_Task`
-object internally (see the `tmle3` documentation for details). Note that, by
-default, the `tmle_spec` object is set up to facilitate cross-validated
-estimation of likelihood components, ensuring certain empirical process
-conditions may be circumvented by reducing the contribution of an empirical
-process term to the estimated influence function [@zheng2011cross]. In practice,
-this automatic incorporation of cross-validation (CV-TMLE) means that the user
-need not be concerned with these theoretical conditions being satisfied;
-moreover, cross-validated estimation of the efficient influence function is
-expected to control the estimated variance.
+object internally (see the [`tmle3`
+documentation](https://tlverse.org/tmle3) for details). Note that, by default,
+the `tmle_spec` object is set up to facilitate cross-validated estimation of
+likelihood components, ensuring certain empirical process conditions may be
+circumvented by reducing the contribution of an empirical process term to the
+estimated influence function [@zheng2011cross]. In practice, this automatic
+incorporation of cross-validation (CV-TMLE) means that the user need not be
+concerned with these theoretical conditions being satisfied; moreover,
+cross-validated estimation of the efficient influence function is expected to
+control the estimated variance.
 
 ### _Interlude:_ Constructing Optimal Stacked Regressions with `sl3`
 

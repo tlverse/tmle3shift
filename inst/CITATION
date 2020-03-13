@@ -1,0 +1,16 @@
+citHeader("Please cite the following works when using the 'tmle3shift' software
+           package, including both the software tool and the article describing
+           the statistical methodology.")
+
+year <- format(Sys.Date(), "%Y")
+note <- sprintf("R package version %s", meta$Version)
+
+bibentry(bibtype = "Manual",
+         title = "{tmle3shift}: Targeted Learning of the Causal Effects of Stochastic Interventions",
+         author = c(person("Nima", "Hejazi", "S"),
+                    person("Jeremy", "Coyle", "R"),
+                    person("Mark", "van der Laan", "J")),
+         year = year,
+         note = note,
+         doi = "",
+         url = "https://github.com/tlverse/tmle3shift")

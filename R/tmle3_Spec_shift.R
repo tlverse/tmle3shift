@@ -12,10 +12,10 @@ tmle3_Spec_shift <- R6::R6Class(
   inherit = tmle3_Spec,
   public = list(
     initialize = function(shift_fxn = shift_additive_bounded,
-                              shift_fxn_inv = shift_additive_bounded_inv,
-                              shift_val = 0,
-                              max_shifted_ratio = 2,
-                              ...) {
+                          shift_fxn_inv = shift_additive_bounded_inv,
+                          shift_val = 0,
+                          max_shifted_ratio = 2,
+                          ...) {
       options <- list(
         shift_fxn = shift_fxn,
         shift_fxn_inv = shift_fxn_inv,

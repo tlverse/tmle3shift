@@ -32,7 +32,6 @@ treatment regimes, please consider consulting @vdl2011targeted,
 To start, let's load the packages we'll use and set a seed for simulation:
 
 ```{r setup, message=FALSE, warning=FALSE}
-library(tidyverse)
 library(data.table)
 library(sl3)
 library(tmle3)
@@ -95,10 +94,11 @@ Y <- A + W + rnorm(n_obs, mean = 0, sd = 0.5)
 ```
 
 The above composes our observed data structure $O = (W, A, Y)$. To formally
-express this fact using the `tlverse` grammar introduced by the `tmle3` package,
-we create a single data object and specify the functional relationships between
-the nodes in the _directed acyclic graph_ (DAG) via _nonparametric structural
-equation models_ (NPSEMs), reflected in the node list that we set up:
+express this fact using the `tlverse` grammar introduced by the [`tmle3`
+package](https://github.com/tlverse/tmle3), we create a single data object and
+specify the functional relationships between the nodes in the _directed acyclic
+graph_ (DAG) via _nonparametric structural equation models_ (NPSEMs), reflected
+in the node list that we set up:
 
 ```{r data_nodes}
 # organize data and nodes for tmle3

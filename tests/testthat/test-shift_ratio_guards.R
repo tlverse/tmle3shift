@@ -27,13 +27,9 @@ node_list <- list(W = "W", A = "A", Y = "Y")
 mean_lrnr <- Lrnr_mean$new()
 glm_lrnr <- Lrnr_glm$new()
 xgb_lrnr <- Lrnr_xgboost$new()
-logit_metalearner <- make_learner(
-  Lrnr_solnp, metalearner_logistic_binomial,
-  loss_loglik_binomial
-)
 sl_lrnr <- Lrnr_sl$new(
   learners = list(mean_lrnr, glm_lrnr, xgb_lrnr),
-  metalearner = logit_metalearner
+  metalearner = Lrnr_nnls$new()
 )
 
 # learners used for conditional density estimation (i.e., propensity score)

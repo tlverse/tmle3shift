@@ -1,4 +1,5 @@
 context("Incorporating corrections for missingness in covariates")
+
 library(data.table)
 library(assertthat)
 library(uuid)
@@ -23,8 +24,9 @@ node_list <- list(
 )
 
 # drop missing A for now, might add back to test later
-missing_W <- apply(is.na(data[, c(node_list$W,node_list$A),
-                         with = FALSE]), 1, any)
+missing_W <- apply(is.na(data[, c(node_list$W, node_list$A),
+  with = FALSE
+]), 1, any)
 data <- data[!missing_W]
 
 # learners used for conditional expectation regression (e.g., outcome)
@@ -72,8 +74,10 @@ Q_learner <- learner_list$Y
 Q_fit <- Q_learner$train(Q_task)
 
 # define likelihood
-initial_likelihood <- tmle_spec$make_initial_likelihood(tmle_task,
-                                                        learner_list)
+initial_likelihood <- tmle_spec$make_initial_likelihood(
+  tmle_task,
+  learner_list
+)
 
 # define update method: submodel + loss function
 updater <- tmle3_Update$new()

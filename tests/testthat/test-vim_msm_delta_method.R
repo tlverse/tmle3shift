@@ -29,13 +29,9 @@ node_list <- list(W = "W", A = "A", Y = "Y")
 mean_lrnr <- Lrnr_mean$new()
 glm_lrnr <- Lrnr_glm$new()
 xgb_lrnr <- Lrnr_xgboost$new()
-logit_metalearner <- make_learner(
-  Lrnr_solnp, metalearner_logistic_binomial,
-  loss_loglik_binomial
-)
 sl_lrnr <- Lrnr_sl$new(
   learners = list(mean_lrnr, glm_lrnr, xgb_lrnr),
-  metalearner = logit_metalearner
+  metalearner = Lrnr_nnls$new()
 )
 
 # learners used for conditional density estimation (i.e., propensity score)
@@ -59,7 +55,7 @@ learner_list <- list(Y = Q_learner, A = g_learner, delta_Y = Q_learner)
 # initialize a tmle specification
 tmle_spec <- tmle_vimshift_delta(
   shift_grid = delta_grid,
-  max_shifted_ratio = 3
+  max_shifted_ratio = 2
 )
 
 ## define data (from tmle3_Spec base class)

@@ -39,8 +39,8 @@
 <meta property="og:description" content="Shifts a likelihood factor according to a shift_function and a given
 magnitude of the desired shift (shift_delta). In effect,
 get_likelihood(tmle_task) from tmle3 will instead be the
-likelihood from the original_lf, but a for shifted value
-\(A'=\)shift_function\((A, W)\)" />
+likelihood from the original_lf, but for a shifted value
+\(A'=\)shift_function\((A, W)\)." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -83,7 +83,7 @@ likelihood from the original_lf, but a for shifted value
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tmle3shift</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
       </span>
     </div>
 
@@ -134,11 +134,10 @@ likelihood from the original_lf, but a for shifted value
     <p>Shifts a likelihood factor according to a <code>shift_function</code> and a given
 magnitude of the desired shift (<code>shift_delta</code>). In effect,
 <code>get_likelihood(tmle_task)</code> from <code>tmle3</code> will instead be the
-likelihood from the <code>original_lf</code>, but a for shifted value
-\(A'=\)<code>shift_function</code>\((A, W)\)</p>
+likelihood from the <code>original_lf</code>, but for a shifted value
+\(A'=\)<code>shift_function</code>\((A, W)\).</p>
     </div>
 
-    <pre class="usage"><span class='no'>LF_shift</span></pre>
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
@@ -153,24 +152,24 @@ likelihood from the <code>original_lf</code>, but a for shifted value
 
 <p><code>define_lf(LF_shift, name, type = "density", original_lf,
     shift_function, ...)</code></p>
-<p></p><dl class='dl-horizontal'>
-    <dt><code>name</code></dt><dd><p>character, the name of the factor. Should match a node
-          name in the nodes specified by <code>tmle3_Task$npsem</code></p></dd>
-    <dt><code>original_lf</code></dt><dd><p><code>LF_base</code> object, the likelihood
-          factor to shift</p></dd>
-    <dt><code>shift_function</code></dt><dd><p><code>function</code>, defines the shift</p></dd>
-    <dt><code>shift_inverse</code></dt><dd><p><code>function</code>, the inverse of a given
-          <code>shift_function</code></p></dd>
-    <dt><code>shift_delta</code></dt><dd><p><code>numeric</code>, specification of the magnitude
-          of the desired shift (on the level of the treatment)</p></dd>
-    <dt><code>max_shifted_ratio</code></dt><dd><p>A <code>numeric</code> value indicating the maximum
-          tolerance for the ratio of the counterfactual and observed
-          intervention densities. In particular, the shifted value of the
-          intervention is assigned to a given observational unit when the
-          ratio of the counterfactual intervention density to the observed
-          intervention density is below this value</p></dd>
-    <dt><code>...</code></dt><dd><p>Not currently used.</p></dd>
-  
+<dl class='dl-horizontal'>
+<dt><code>name</code></dt><dd><p>character, the name of the factor. Should match a
+node name in the specification in <code>tmle3_Task$npsem</code>.</p></dd>
+<dt><code>original_lf</code></dt><dd><p><code>LF_base</code> object, the likelihood
+factor to shift.</p></dd>
+<dt><code>shift_function</code></dt><dd><p><code>function</code>, defines the shift.</p></dd>
+<dt><code>shift_inverse</code></dt><dd><p><code>function</code>, the inverse of a given
+<code>shift_function</code>.</p></dd>
+<dt><code>shift_delta</code></dt><dd><p><code>numeric</code>, specification of the magnitude
+of the desired shift (on the level of the treatment).</p></dd>
+<dt><code>max_shifted_ratio</code></dt><dd><p>A <code>numeric</code> value indicating the
+maximum tolerance for the ratio of the counterfactual and observed
+intervention densities. In particular, the shifted value of the
+intervention is assigned to a given observational unit when the
+ratio of the counterfactual intervention density to the observed
+intervention density is below this value.</p></dd>
+<dt><code>...</code></dt><dd><p>Not currently used.</p></dd>
+
 </dl>
 
     <h2 class="hasAnchor" id="fields"><a class="anchor" href="#fields"></a>Fields</h2>
@@ -178,34 +177,34 @@ likelihood from the <code>original_lf</code>, but a for shifted value
     
 
 <dl class='dl-horizontal'>
-    <dt><code>original_lf</code></dt><dd><p><code>LF_base</code> object, the likelihood
-          factor to shift</p></dd>
-    <dt><code>shift_function</code></dt><dd><p><code>function</code>, defines the shift</p></dd>
-    <dt><code>shift_inverse</code></dt><dd><p><code>function</code>, the inverse of a given
-          <code>shift_function</code></p></dd>
-    <dt><code>shift_delta</code></dt><dd><p><code>numeric</code>, specification of the magnitude
-          of the desired shift (on the level of the treatment)</p></dd>
-    <dt><code>max_shifted_ratio</code></dt><dd><p>A <code>numeric</code> value indicating the maximum
-          tolerance for the ratio of the counterfactual and observed
-          intervention densities. In particular, the shifted value of the
-          intervention is assigned to a given observational unit when the
-          ratio of the counterfactual intervention density to the observed
-          intervention density is below this value</p></dd>
-    <dt><code>...</code></dt><dd><p>Additional arguments passed to the base class.</p></dd>
-  
+<dt><code>original_lf</code></dt><dd><p><code>LF_base</code> object, the likelihood
+factor to shift.</p></dd>
+<dt><code>shift_function</code></dt><dd><p><code>function</code>, defines the shift.</p></dd>
+<dt><code>shift_inverse</code></dt><dd><p><code>function</code>, the inverse of a given
+<code>shift_function</code>.</p></dd>
+<dt><code>shift_delta</code></dt><dd><p><code>numeric</code>, specification of the magnitude
+of the desired shift (on the level of the treatment).</p></dd>
+<dt><code>max_shifted_ratio</code></dt><dd><p>A <code>numeric</code> value indicating the
+maximum tolerance for the ratio of the counterfactual and observed
+intervention densities. In particular, the shifted value of the
+intervention is assigned to a given observational unit when the
+ratio of the counterfactual intervention density to the observed
+intervention density is below this value.</p></dd>
+<dt><code>...</code></dt><dd><p>Additional arguments passed to the base class.</p></dd>
+
 </dl>
 
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     
 <dl class='dl-horizontal'>
-  <dt>"Stochastic Treatment Regimes."</dt><dd><p>Díaz, Iván and van der Laan, Mark J
-        (2018). In Targeted Learning in Data Science: Causal Inference for
-        Complex Longitudinal Studies, 167–80. Springer Science &amp; Business
-        Media.</p></dd>
-  <dt>"Population Intervention Causal Effects Based on Stochastic
-        Interventions."</dt><dd><p>Díaz, Iván and van der Laan, Mark J (2012).
-        Biometrics 68 (2). Wiley Online Library: 541–49.</p></dd>
+<dt>"Stochastic Treatment Regimes."</dt><dd><p>Díaz, Iván and van der Laan, Mark
+(2018). In Targeted Learning in Data Science: Causal Inference for
+Complex Longitudinal Studies, 167–80. Springer Science &amp; Business
+Media.</p></dd>
+<dt>"Population Intervention Causal Effects Based on Stochastic
+Interventions."</dt><dd><p>Díaz, Iván and van der Laan, Mark J (2012).
+Biometrics 68 (2). Wiley Online Library: 541–49.</p></dd>
 
 </dl>
 
@@ -231,7 +230,7 @@ likelihood from the <code>original_lf</code>, but a for shifted value
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
 
       </footer>

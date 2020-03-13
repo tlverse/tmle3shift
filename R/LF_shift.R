@@ -78,8 +78,8 @@ LF_shift <- R6::R6Class(
   inherit = tmle3::LF_base,
   public = list(
     initialize = function(name, original_lf, likelihood_base,
-                              shift_function, shift_inverse, shift_delta,
-                              max_shifted_ratio, ...) {
+                          shift_function, shift_inverse, shift_delta,
+                          max_shifted_ratio, ...) {
       super$initialize(name, ..., type = "density")
       private$.original_lf <- original_lf
       private$.likelihood_base <- likelihood_base

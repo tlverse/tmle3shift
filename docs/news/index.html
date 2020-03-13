@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Additive Shifts of Continuous-Valued Interventions based on Bounded Densities — shift_additive_bounded • tmle3shift</title>
+<title>Changelog • tmle3shift</title>
 
 
 <!-- jquery -->
@@ -35,10 +35,7 @@
 
 
 
-<meta property="og:title" content="Additive Shifts of Continuous-Valued Interventions based on Bounded Densities — shift_additive_bounded" />
-<meta property="og:description" content="Additive Shifts of Continuous-Valued Interventions based on Bounded Densities
-Compute Ratio of Observed and Counterfactual Intervention Densities" />
-<meta name="twitter:card" content="summary" />
+<meta property="og:title" content="Changelog" />
 
 
 
@@ -67,7 +64,7 @@ Compute Ratio of Observed and Counterfactual Intervention Densities" />
   </head>
 
   <body>
-    <div class="container template-reference-topic">
+    <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -122,97 +119,70 @@ Compute Ratio of Observed and Counterfactual Intervention Densities" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Additive Shifts of Continuous-Valued Interventions based on Bounded Densities</h1>
-    
-    <div class="hidden name"><code>additive_shifting_bounded.Rd</code></div>
+      <h1>Changelog <small></small></h1>
+      
     </div>
 
-    <div class="ref-description">
-    <p>Additive Shifts of Continuous-Valued Interventions based on Bounded Densities</p>
-<p>Compute Ratio of Observed and Counterfactual Intervention Densities</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>shift_additive_bounded</span>(
-  <span class='no'>tmle_task</span>,
-  <span class='no'>delta</span>,
-  <span class='no'>likelihood_base</span>,
-  <span class='no'>max_shifted_ratio</span>,
-  <span class='no'>fold_number</span>,
-  <span class='no'>...</span>
-)
-
-<span class='fu'>shift_additive_bounded_inv</span>(
-  <span class='no'>tmle_task</span>,
-  <span class='no'>delta</span>,
-  <span class='no'>likelihood_base</span>,
-  <span class='no'>max_shifted_ratio</span>,
-  <span class='no'>fold_number</span>,
-  <span class='no'>...</span>
-)
-
-<span class='fu'>get_density_ratio</span>(<span class='no'>tmle_task</span>, <span class='no'>delta</span>, <span class='no'>likelihood_base</span>, <span class='no'>fold_number</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>tmle_task</th>
-      <td><p>A <code>tmle3_Task</code> object containing data and nodes, as
-described and implemented in the <code>tmle3</code> package. Please refer to the
-documentation and supporting materials of that package for details.</p></td>
-    </tr>
-    <tr>
-      <th>delta</th>
-      <td><p>A <code>numeric</code> value giving a value of the shift to be applied
-to the treatment. This is an additive shift so the value is merely to be
-added to the observed value of the treatment node "A". In the case of the
-inverse additive shift, the specified value will be subtracted from the
-observed value of the treatment node "A".</p></td>
-    </tr>
-    <tr>
-      <th>likelihood_base</th>
-      <td><p>The base observed data likelihood, to be used in
-implementing guards that ensure that the shifted treatment does not violate
-the bounds induced by the support of the intervention, conditional on the
-covariates.</p></td>
-    </tr>
-    <tr>
-      <th>max_shifted_ratio</th>
-      <td><p>A <code>numeric</code> value indicating maximum tolerance
-for the ratio of the counterfactual and observed intervention densities. In
-particular, the shifted value of the intervention is assigned to a given
-observational unit when the ratio of the counterfactual intervention density
-to the observed intervention density is below this value.</p></td>
-    </tr>
-    <tr>
-      <th>fold_number</th>
-      <td><p>Whether to use cross-validated likelihood factor estimates
-or not. Passed directly to method <code>get_likelihoods</code> in <span class="pkg">tmle3</span>.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Additional arguments (currently unused).</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p>Other shifting_interventions: 
-<code><a href='additive_shifting.html'>shift_additive</a>()</code></p>
-<p>Other shifting_interventions: 
-<code><a href='additive_shifting.html'>shift_additive</a>()</code></p>
-<p>Other shifting_interventions: 
-<code><a href='additive_shifting.html'>shift_additive</a>()</code></p></div>
-
+    <div id="tmle3shift-0-1-9" class="section level1">
+<h1 class="page-header">
+<a href="#tmle3shift-0-1-9" class="anchor"></a>tmle3shift 0.1.9</h1>
+<ul>
+<li>Change <code>Spec_shift</code> object to use point treatment helpers from <code>tmle3</code>.</li>
+<li>Support missing data functionality based on updates to <code>tmle3</code>.</li>
+<li>Change conditional density estimation in tests and vignettes to rely on <code>Lrnr_density_semiparametric</code> over <code>Lrnr_haldensify</code> to reduce time.</li>
+<li>Remove reliance on <code>Lrnr_rfcde</code> since package appears unstable.</li>
+</ul>
+</div>
+    <div id="tmle3shift-0-1-8" class="section level1">
+<h1 class="page-header">
+<a href="#tmle3shift-0-1-8" class="anchor"></a>tmle3shift 0.1.8</h1>
+<ul>
+<li>Change default for MSMs to use identity-based weighting over variance-based, improving stability of estimates.</li>
+<li>Bug fixes for cross-validation: <code>cv_fold</code> -&gt; <code>fold_number</code>.</li>
+</ul>
+</div>
+    <div id="tmle3shift-0-1-7" class="section level1">
+<h1 class="page-header">
+<a href="#tmle3shift-0-1-7" class="anchor"></a>tmle3shift 0.1.7</h1>
+<ul>
+<li>Addition of <code>cvtmle = TRUE</code> in <code>Updater</code> objects as the default.</li>
+<li>Bug fixes to bounding of conditional densities at the natural exposure value.</li>
+<li>Tweaks to <code>cvtmle</code> option and <code>fold_number</code> argument to match <code>tmle3</code> updates.</li>
+</ul>
+</div>
+    <div id="tmle3shift-0-1-6" class="section level1">
+<h1 class="page-header">
+<a href="#tmle3shift-0-1-6" class="anchor"></a>tmle3shift 0.1.6</h1>
+<ul>
+<li>Addition of HAL-based conditional density estimation as an option.</li>
+<li>Addition of random forest-based conditional density estimation as an option.</li>
+<li>Addition of bounding to <code>Spec</code> objects for variable importance measures.</li>
+<li>Addition of bounding for conditional density and likelihood objects.</li>
+<li>Minor bug fixes, including to vignettes.</li>
+</ul>
+</div>
+    <div id="tmle3shift-0-1-5" class="section level1">
+<h1 class="page-header">
+<a href="#tmle3shift-0-1-5" class="anchor"></a>tmle3shift 0.1.5</h1>
+<ul>
+<li>An initial stable release of the package.</li>
+</ul>
+</div>
   </div>
+
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#see-also">See also</a></li>
-    </ul>
-
+    <div id="tocnav">
+      <h2>Contents</h2>
+      <ul class="nav nav-pills nav-stacked">
+        <li><a href="#tmle3shift-0-1-9">0.1.9</a></li>
+        <li><a href="#tmle3shift-0-1-8">0.1.8</a></li>
+        <li><a href="#tmle3shift-0-1-7">0.1.7</a></li>
+        <li><a href="#tmle3shift-0-1-6">0.1.6</a></li>
+        <li><a href="#tmle3shift-0-1-5">0.1.5</a></li>
+      </ul>
+    </div>
   </div>
+
 </div>
 
 

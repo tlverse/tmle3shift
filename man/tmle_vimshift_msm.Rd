@@ -32,12 +32,12 @@ densities. In particular, the shifted value of the intervention is assigned
 to a given observational unit when the ratio of counterfactual intervention
 density to the observed intervention density is below this value.}
 
-\item{weighting}{A \code{character} indicating the type of weighting used for
-construction of the marginal structural model. \code{"identity"} applies the
-same weight to all individual estimates while \code{"variance"} applies
-weights based on the inverse variance of the estimate. It is expected that
-variance-based weighting would yield more stable estimates of the parameter
-of the MSM; however, the default remains the identity weighting.}
+\item{weighting}{A \code{character} indicating the type of weighting used
+for construction of the marginal structural model. \code{"identity"}
+applies the same weight to all individual estimates while \code{"variance"}
+applies weights based on the inverse variance of the estimate. It would be
+expected that variance-based weighting would yield more stable estimates of
+the parameter of the MSM. The default remains the identity weighting.}
 
 \item{...}{Additional arguments, passed to shift functions.}
 }

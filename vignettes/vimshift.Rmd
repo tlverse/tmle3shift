@@ -220,10 +220,10 @@ algorithm](https://xgboost.ai/) for gradient boosting:
 ```{r sl3_regression_lrnrs}
 # learners used for conditional expectation regression (e.g., outcome)
 mean_lrnr <- Lrnr_mean$new()
-fglm_lrnr <- Lrnr_glm_fast$new()
+glm_lrnr <- Lrnr_glm$new()
 xgb_lrnr <- Lrnr_xgboost$new()
 sl_lrn <- Lrnr_sl$new(
-  learners = list(mean_lrnr, fglm_lrnr, xgb_lrnr),
+  learners = list(mean_lrnr, glm_lrnr, xgb_lrnr),
   metalearner = Lrnr_nnls$new()
 )
 ```

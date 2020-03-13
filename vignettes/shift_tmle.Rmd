@@ -32,7 +32,6 @@ treatment regimes, please consider consulting @vdl2011targeted,
 To start, let's load the packages we'll use and set a seed for simulation:
 
 ```{r setup, message=FALSE, warning=FALSE}
-library(tidyverse)
 library(data.table)
 library(sl3)
 library(tmle3)
@@ -98,10 +97,11 @@ Y <- A + W + rnorm(n_obs, mean = 0, sd = 0.5)
 ```
 
 The above composes our observed data structure $O = (W, A, Y)$. To formally
-express this fact using the `tlverse` grammar introduced by the `tmle3` package,
-we create a single data object and specify the functional relationships between
-the nodes in the _directed acyclic graph_ (DAG) via _nonparametric structural
-equation models_ (NPSEMs), reflected in the node list that we set up:
+express this fact using the `tlverse` grammar introduced by the [`tmle3`
+package](https://github.com/tlverse/tmle3), we create a single data object and
+specify the functional relationships between the nodes in the _directed acyclic
+graph_ (DAG) via _nonparametric structural equation models_ (NPSEMs), reflected
+in the node list that we set up:
 
 ```{r data_nodes}
 # organize data and nodes for tmle3
@@ -133,15 +133,16 @@ As seen above, the `tmle_shift` specification object (like all `tmle3_Spec`
 objects) does _not_ store the data for our specific analysis of interest. Later,
 we'll see that passing a data object directly to the `tmle3` wrapper function,
 alongside the instantiated `tmle_spec`, will serve to construct a `tmle3_Task`
-object internally (see the `tmle3` documentation for details). Note that, by
-default, the `tmle_spec` object is set up to facilitate cross-validated
-estimation of likelihood components, ensuring certain empirical process
-conditions may be circumvented by reducing the contribution of an empirical
-process term to the estimated influence function [@zheng2011cross]. In practice,
-this automatic incorporation of cross-validation (CV-TMLE) means that the user
-need not be concerned with these theoretical conditions being satisfied;
-moreover, cross-validated estimation of the efficient influence function is
-expected to control the estimated variance.
+object internally (see the [`tmle3`
+documentation](https://tlverse.org/tmle3) for details). Note that, by default,
+the `tmle_spec` object is set up to facilitate cross-validated estimation of
+likelihood components, ensuring certain empirical process conditions may be
+circumvented by reducing the contribution of an empirical process term to the
+estimated influence function [@zheng2011cross]. In practice, this automatic
+incorporation of cross-validation (CV-TMLE) means that the user need not be
+concerned with these theoretical conditions being satisfied; moreover,
+cross-validated estimation of the efficient influence function is expected to
+control the estimated variance.
 
 ### _Interlude:_ Constructing Optimal Stacked Regressions with `sl3`
 
@@ -165,21 +166,20 @@ sl3_list_learners("density")
 
 To proceed, we'll select two of the above learners, `Lrnr_haldensify` for using
 the highly adaptive lasso for conditional density estimation, based on an
-algorithm given by @diaz2011super, and `Lrnr_rfcde`, an approach for using
-random forests for conditional density estimation [@pospisil2018rfcde]:
+algorithm given by @diaz2011super, and `Lrnr_density_semiparametric`, an
+approach for semiparametric conditional density estimation:
 
-```{r sl3_regression_lrnrs}
+```{r sl3_density_lrnrs}
 # learners used for conditional density regression (i.e., propensity score)
-lrn_haldensify <- Lrnr_haldensify$new(
-  n_bins = 10, grid_type = "equal_mass",
-  lambda_seq = exp(seq(-1, -13, length = 500))
+haldensify_lrnr <- Lrnr_haldensify$new(
+  n_bins = 3, grid_type = "equal_mass",
+  lambda_seq = exp(seq(-1, -9, length = 100))
 )
-lrn_rfcde <- Lrnr_rfcde$new(
-  n_trees = 1000, node_size = 5,
-  n_basis = 31, output_type = "observed"
-)
+hse_lrnr <- Lrnr_density_semiparametric$new(mean_learner = Lrnr_glm$new())
+mvd_lrnr <- Lrnr_density_semiparametric$new(mean_learner = Lrnr_glm$new(),
+                                            var_learner = Lrnr_mean$new())
 sl_lrn_dens <- Lrnr_sl$new(
-  learners = list(lrn_haldensify, lrn_rfcde),
+  learners = list(haldensify_lrnr, hse_lrnr, mvd_lrnr),
   metalearner = Lrnr_solnp_density$new()
 )
 ```
@@ -188,32 +188,25 @@ We also require an approach for estimating the outcome regression (denoted Q).
 For this, we build a Super Learner composed of an intercept model, a main terms
 GLM, and the [xgboost algorithm](https://xgboost.ai/) for gradient boosting:
 
-```{r sl3_density_lrnrs}
+```{r sl3_regression_lrnrs}
 # learners used for conditional expectation regression (e.g., outcome)
-lrn_mean <- Lrnr_mean$new()
-lrn_fglm <- Lrnr_glm_fast$new()
-lrn_xgb <- Lrnr_xgboost$new(nrounds = 10)
+mean_lrnr <- Lrnr_mean$new()
+glm_lrnr <- Lrnr_glm$new()
+xgb_lrnr <- Lrnr_xgboost$new()
 sl_lrn <- Lrnr_sl$new(
-  learners = list(lrn_mean, lrn_fglm, lrn_xgb),
+  learners = list(mean_lrnr, glm_lrnr, xgb_lrnr),
   metalearner = Lrnr_nnls$new()
 )
 ```
 
 We can make the above explicit with respect to standard notation by bundling
-the ensemble learners into a `list` object below. Note that in making the
-`learner_list` object for our TML estimator, for the sake of example, we use
-only the conditional density estimation approach of the [`haldensify`
-package](https://github.com/nhejazi/haldensify) to estimate the treatment
-mechanism; as this is done in an effort to save computation time, we recommend
-using a stacked regression approach in standard data analytic practice.
+the ensemble learners into a `list` object below.
 
 ```{r make_lrnr_list}
 # specify outcome and treatment regressions and create learner list
 Q_learner <- sl_lrn
-# in practice, we'd use an ensemble learner; here, we do not to save time
 g_learner <- sl_lrn_dens
-g_cv_learner <- Lrnr_cv$new(lrn_haldensify, full_fit = TRUE)
-learner_list <- list(Y = Q_learner, A = g_cv_learner)
+learner_list <- list(Y = Q_learner, A = g_learner)
 ```
 
 The `learner_list` object above specifies the role that each of the ensemble

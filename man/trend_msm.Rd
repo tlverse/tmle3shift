@@ -2,28 +2,32 @@
 % Please edit documentation in R/msm_trend_test.R
 \name{trend_msm}
 \alias{trend_msm}
-\title{Test for a trend in the effect of shift interventions}
+\title{Test for a trend in the effect of shift interventions via working MSM}
 \usage{
-trend_msm(tmle_fit_estimates, delta_grid, level = 0.95,
-  weighting = c("identity", "variance"))
+trend_msm(
+  tmle_fit_estimates,
+  delta_grid,
+  level = 0.95,
+  weighting = c("identity", "variance")
+)
 }
 \arguments{
 \item{tmle_fit_estimates}{A \code{list} corresponding to the
 \code{$estimates} slot of an object of class \code{tmle3_Fit}, containing
 estimates of a grid of posited shift interventions.}
 
-\item{delta_grid}{A \code{numeric} vector giving the individual values of the
-shift parameter used in computing each of the TML estimates.}
+\item{delta_grid}{A \code{numeric} vector giving the individual values of
+the shift parameter used in computing each of the TML estimates.}
 
 \item{level}{The nominal coverage probability of the confidence interval.}
 
-\item{weighting}{A \code{character} indicating the type of weighting used for
-construction of the marginal structural model. \code{"identity"} applies the
-same weight to all individual estimates while \code{"variance"} applies
-weights based on the inverse variance of the estimate. It is expected that
-variance-based weighting would yield more stable estimates of the parameter
-of the MSM; however, the default remains the identity weighting.}
+\item{weighting}{A \code{character} indicating the type of weighting used
+for construction of the marginal structural model. \code{"identity"}
+applies the same weight to all individual estimates while \code{"variance"}
+applies weights based on the inverse variance of the estimate. It would be
+expected that variance-based weighting would yield more stable estimates of
+the parameter of the MSM. The default is identity-based weighting.}
 }
 \description{
-Test for a trend in the effect of shift interventions
+Test for a trend in the effect of shift interventions via working MSM
 }

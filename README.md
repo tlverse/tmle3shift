@@ -15,8 +15,7 @@ developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repo
 [![License: GPL
 v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 
-> Targeted Learning and Variable Importance with Stochastic
-> Interventions
+> Targeted Learning of the Causal Effects of Stochastic Interventions
 
 **Authors:** [Nima Hejazi](https://nimahejazi.org), [Jeremy
 Coyle](https://github.com/jeremyrcoyle), and [Mark van der

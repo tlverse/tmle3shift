@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Test for a trend in the effect of shift interventions — trend_msm • tmle3shift</title>
+<title>Test for a trend in the effect of shift interventions via working MSM — trend_msm • tmle3shift</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,8 @@
 
 
 
-<meta property="og:title" content="Test for a trend in the effect of shift interventions — trend_msm" />
-<meta property="og:description" content="Test for a trend in the effect of shift interventions" />
+<meta property="og:title" content="Test for a trend in the effect of shift interventions via working MSM — trend_msm" />
+<meta property="og:description" content="Test for a trend in the effect of shift interventions via working MSM" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tmle3shift</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
       </span>
     </div>
 
@@ -121,17 +121,21 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Test for a trend in the effect of shift interventions</h1>
+    <h1>Test for a trend in the effect of shift interventions via working MSM</h1>
     
     <div class="hidden name"><code>trend_msm.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Test for a trend in the effect of shift interventions</p>
+    <p>Test for a trend in the effect of shift interventions via working MSM</p>
     </div>
 
-    <pre class="usage"><span class='fu'>trend_msm</span>(<span class='no'>tmle_fit_estimates</span>, <span class='no'>delta_grid</span>, <span class='kw'>level</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
-  <span class='kw'>weighting</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"identity"</span>, <span class='st'>"variance"</span>))</pre>
+    <pre class="usage"><span class='fu'>trend_msm</span>(
+  <span class='no'>tmle_fit_estimates</span>,
+  <span class='no'>delta_grid</span>,
+  <span class='kw'>level</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
+  <span class='kw'>weighting</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"identity"</span>, <span class='st'>"variance"</span>)
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -144,8 +148,8 @@ estimates of a grid of posited shift interventions.</p></td>
     </tr>
     <tr>
       <th>delta_grid</th>
-      <td><p>A <code>numeric</code> vector giving the individual values of the
-shift parameter used in computing each of the TML estimates.</p></td>
+      <td><p>A <code>numeric</code> vector giving the individual values of
+the shift parameter used in computing each of the TML estimates.</p></td>
     </tr>
     <tr>
       <th>level</th>
@@ -153,12 +157,12 @@ shift parameter used in computing each of the TML estimates.</p></td>
     </tr>
     <tr>
       <th>weighting</th>
-      <td><p>A <code>character</code> indicating the type of weighting used for
-construction of the marginal structural model. <code>"identity"</code> applies the
-same weight to all individual estimates while <code>"variance"</code> applies
-weights based on the inverse variance of the estimate. It is expected that
-variance-based weighting would yield more stable estimates of the parameter
-of the MSM; however, the default remains the identity weighting.</p></td>
+      <td><p>A <code>character</code> indicating the type of weighting used
+for construction of the marginal structural model. <code>"identity"</code>
+applies the same weight to all individual estimates while <code>"variance"</code>
+applies weights based on the inverse variance of the estimate. It would be
+expected that variance-based weighting would yield more stable estimates of
+the parameter of the MSM. The default is identity-based weighting.</p></td>
     </tr>
     </table>
 
@@ -180,7 +184,7 @@ of the MSM; however, the default remains the identity weighting.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
 
       </footer>

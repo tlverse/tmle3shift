@@ -23,6 +23,8 @@ environment:
     _R_CHECK_FORCE_SUGGESTS_: false
     USE_RTOOLS: true
     PKGTYPE: both
+    R_REMOTES_STANDALONE: true
+    R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
     GITHUB_PAT:
       secure: Nu6c5CmcVdYHDUVGej5ZIXGKOXVPBwqUwjrLV8d6UlbUaAtYuUhgpNuv9oLztAQQ
 
@@ -34,8 +36,8 @@ build_script:
   - echo Current directory=%CD%
   - travis-tool.sh install_r base64
   - travis-tool.sh install_github r-lib/sessioninfo r-lib/covr
-  - travis-tool.sh install_github tlverse/delayed tlverse/origami tlverse/sl3
-  - travis-tool.sh install_github tlverse/tmle3 tlverse/hal9001
+  - travis-tool.sh install_github tlverse/delayed tlverse/origami
+  - travis-tool.sh install_github tlverse/hal9001 tlverse/sl3 tlverse/tmle3
   - travis-tool.sh install_github nhejazi/haldensify nhejazi/txshift
   - travis-tool.sh install_deps
 

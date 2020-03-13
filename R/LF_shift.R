@@ -3,12 +3,12 @@
 #' Shifts a likelihood factor according to a \code{shift_function} and a given
 #' magnitude of the desired shift (\code{shift_delta}). In effect,
 #' \code{get_likelihood(tmle_task)} from \code{tmle3} will instead be the
-#' likelihood from the \code{original_lf}, but a for shifted value
-#' \eqn{A'=}\code{shift_function}\eqn{(A, W)}
+#' likelihood from the \code{original_lf}, but for a shifted value
+#' \eqn{A'=}\code{shift_function}\eqn{(A, W)}.
 #'
 #' @references
 #' \describe{
-#'   \item{"Stochastic Treatment Regimes."}{Díaz, Iván and van der Laan, Mark J
+#'   \item{"Stochastic Treatment Regimes."}{Díaz, Iván and van der Laan, Mark
 #'         (2018). In Targeted Learning in Data Science: Causal Inference for
 #'         Complex Longitudinal Studies, 167–80. Springer Science & Business
 #'         Media.}
@@ -34,57 +34,43 @@
 #'     shift_function, ...)}
 #'
 #'   \describe{
-#'     \item{\code{name}}{character, the name of the factor. Should match a node
-#'           name in the nodes specified by \code{\link{tmle3_Task}$npsem}
-#'     }
+#'     \item{\code{name}}{character, the name of the factor. Should match a
+#'           node name in the specification in \code{\link{tmle3_Task}$npsem}.}
 #'     \item{\code{original_lf}}{\code{\link{LF_base}} object, the likelihood
-#'           factor to shift
-#'     }
-#'     \item{\code{shift_function}}{\code{function}, defines the shift
-#'     }
+#'           factor to shift.}
+#'     \item{\code{shift_function}}{\code{function}, defines the shift.}
 #'     \item{\code{shift_inverse}}{\code{function}, the inverse of a given
-#'           \code{shift_function}
-#'     }
+#'           \code{shift_function}.}
 #'     \item{\code{shift_delta}}{\code{numeric}, specification of the magnitude
-#'           of the desired shift (on the level of the treatment)
-#'     }
-#'     \item{\code{max_shifted_ratio}}{A \code{numeric} value indicating the maximum
-#'           tolerance for the ratio of the counterfactual and observed
+#'           of the desired shift (on the level of the treatment).}
+#'     \item{\code{max_shifted_ratio}}{A \code{numeric} value indicating the
+#'           maximum tolerance for the ratio of the counterfactual and observed
 #'           intervention densities. In particular, the shifted value of the
 #'           intervention is assigned to a given observational unit when the
 #'           ratio of the counterfactual intervention density to the observed
-#'           intervention density is below this value
-##'    }
-#'     \item{\code{...}}{Not currently used.
-#'     }
+#'           intervention density is below this value.}
+#'     \item{\code{...}}{Not currently used.}
 #'   }
 #'
 #' @section Fields:
 #' \describe{
 #'     \item{\code{original_lf}}{\code{\link{LF_base}} object, the likelihood
-#'           factor to shift
-#'     }
-#'     \item{\code{shift_function}}{\code{function}, defines the shift
-#'     }
+#'           factor to shift.}
+#'     \item{\code{shift_function}}{\code{function}, defines the shift.}
 #'     \item{\code{shift_inverse}}{\code{function}, the inverse of a given
-#'           \code{shift_function}
-#'     }
+#'           \code{shift_function}.}
 #'     \item{\code{shift_delta}}{\code{numeric}, specification of the magnitude
-#'           of the desired shift (on the level of the treatment)
-##'    }
-#'     \item{\code{max_shifted_ratio}}{A \code{numeric} value indicating the maximum
-#'           tolerance for the ratio of the counterfactual and observed
+#'           of the desired shift (on the level of the treatment).}
+#'     \item{\code{max_shifted_ratio}}{A \code{numeric} value indicating the
+#'           maximum tolerance for the ratio of the counterfactual and observed
 #'           intervention densities. In particular, the shifted value of the
 #'           intervention is assigned to a given observational unit when the
 #'           ratio of the counterfactual intervention density to the observed
-#'           intervention density is below this value
-##'    }
-#'     \item{\code{...}}{Additional arguments passed to the base class.
-#'     }
+#'           intervention density is below this value.}
+#'     \item{\code{...}}{Additional arguments passed to the base class.}
 #'   }
 #'
 #' @export
-#
 LF_shift <- R6::R6Class(
   classname = "LF_shift",
   portable = TRUE,
@@ -92,8 +78,8 @@ LF_shift <- R6::R6Class(
   inherit = tmle3::LF_base,
   public = list(
     initialize = function(name, original_lf, likelihood_base,
-                              shift_function, shift_inverse, shift_delta,
-                              max_shifted_ratio, ...) {
+                          shift_function, shift_inverse, shift_delta,
+                          max_shifted_ratio, ...) {
       super$initialize(name, ..., type = "density")
       private$.original_lf <- original_lf
       private$.likelihood_base <- likelihood_base
@@ -102,7 +88,7 @@ LF_shift <- R6::R6Class(
       private$.shift_delta <- shift_delta
       private$.max_shifted_ratio <- max_shifted_ratio
     },
-    get_mean = function(tmle_task, fold_number = "full") {
+    get_mean = function(tmle_task, fold_number) {
       stop("get_mean not supported for LF_shift")
     },
     get_density = function(tmle_task, fold_number = "full") {

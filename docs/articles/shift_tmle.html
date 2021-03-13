@@ -6,13 +6,13 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Targeted Learning with Stochastic Treatment Regimes • tmle3shift</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Targeted Learning with Stochastic Treatment Regimes">
-<meta property="og:description" content="">
-<meta name="twitter:card" content="summary">
+<meta property="og:description" content="tmle3shift">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -24,7 +24,7 @@
   gtag('config', 'UA-115145808-1');
 </script>
 </head>
-<body>
+<body data-spy="scroll" data-target="#toc">
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -37,7 +37,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tmle3shift</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -62,7 +62,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/tlverse/tmle3shift">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -79,14 +79,14 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>Targeted Learning with Stochastic Treatment Regimes</h1>
+      <h1 data-toc-skip>Targeted Learning with Stochastic Treatment Regimes</h1>
                         <h4 class="author">
 <a href="https://nimahejazi.org">Nima Hejazi</a>, <a href="https://github.com/jeremyrcoyle">Jeremy Coyle</a>, and <a href="https://vanderlaan-lab.org">Mark van der Laan</a>
 </h4>
             
-            <h4 class="date">2020-03-12</h4>
+            <h4 class="date">2021-03-13</h4>
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/tlverse/tmle3shift/blob/master/vignettes/shift_tmle.Rmd"><code>vignettes/shift_tmle.Rmd</code></a></small>
       <div class="hidden name"><code>shift_tmle.Rmd</code></div>
 
     </div>
@@ -96,18 +96,19 @@
 <div id="introduction" class="section level2">
 <h2 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h2>
-<p>Stochastic treatment regimes present a relatively simple manner in which to assess the effects of continuous treatments by way of parameters that examine the effects induced by the counterfactual shifting of the observed values of a treatment of interest. Here, we present an implementation of a new algorithm for computing targeted minimum loss-based estimates of treatment shift parameters defined based on a shifting function <span class="math inline">\(d(A,W)\)</span>. For a technical presentation of the algorithm, the interested reader is invited to consult <span class="citation">Díaz and van der Laan (2018)</span>. For additional background on Targeted Learning and previous work on stochastic treatment regimes, please consider consulting <span class="citation">van der Laan and Rose (2011)</span>, <span class="citation">van der Laan and Rose (2018)</span>, and <span class="citation">Díaz and van der Laan (2012)</span>.</p>
+<p>Stochastic treatment regimes present a relatively simple manner in which to assess the effects of continuous treatments by way of parameters that examine the effects induced by the counterfactual shifting of the observed values of a treatment of interest. Here, we present an implementation of a new algorithm for computing targeted minimum loss-based estimates of treatment shift parameters defined based on a shifting function <span class="math inline">\(d(A,W)\)</span>. For a technical presentation of the algorithm, the interested reader is invited to consult <span class="citation">Dı́az and van der Laan (2018)</span>. For additional background on Targeted Learning and previous work on stochastic treatment regimes, please consider consulting <span class="citation">van der Laan and Rose (2011)</span>, <span class="citation">van der Laan and Rose (2018)</span>, and <span class="citation">Dı́az and van der Laan (2012)</span>.</p>
 <p>To start, let’s load the packages we’ll use and set a seed for simulation:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(data.table)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(sl3)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(tmle3)</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(tmle3shift)</a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">429153</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com">data.table</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tlverse.org/sl3">sl3</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tlverse.org/tmle3">tmle3</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tlverse.org/tmle3shift">tmle3shift</a></span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">429153</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="data-and-notation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#data-and-notation" class="anchor"></a>Data and Notation</h2>
-<p>Consider <span class="math inline">\(n\)</span> observed units <span class="math inline">\(O_1, \ldots, O_n\)</span>, where each random variable <span class="math inline">\(O = (W, A, Y)\)</span> corresponds to a single observational unit. Let <span class="math inline">\(W\)</span> denote baseline covariates (e.g., age, sex, education level), <span class="math inline">\(A\)</span> an intervention variable of interest (e.g., nutritional supplements), and <span class="math inline">\(Y\)</span> an outcome of interest (e.g., disease status). Though it need not be the case, let <span class="math inline">\(A\)</span> be continuous-valued, i.e. <span class="math inline">\(A \in \mathbb{R}\)</span>. Let <span class="math inline">\(O_i \sim \mathcal{P} \in \mathcal{M}\)</span>, where <span class="math inline">\(\mathcal{M}\)</span> is the nonparametric statistical model defined as the set of continuous densities on <span class="math inline">\(O\)</span> with respect to some dominating measure. To formalize the definition of stochastic interventions and their corresponding causal effects, we introduce a nonparametric structural equation model (NPSEM), based on <span class="citation">Pearl (2000)</span>, to define how the system changes under posited interventions: <span class="math display">\[\begin{align*}\label{eqn:npsem}
+<p>Consider <span class="math inline">\(n\)</span> observed units <span class="math inline">\(O_1, \ldots, O_n\)</span>, where each random variable <span class="math inline">\(O = (W, A, Y)\)</span> corresponds to a single observational unit. Let <span class="math inline">\(W\)</span> denote baseline covariates (e.g., age, sex, education level), <span class="math inline">\(A\)</span> an intervention variable of interest (e.g., nutritional supplements), and <span class="math inline">\(Y\)</span> an outcome of interest (e.g., disease status). Though it need not be the case, let <span class="math inline">\(A\)</span> be continuous-valued, i.e. <span class="math inline">\(A \in \mathbb{R}\)</span>. Let <span class="math inline">\(O_i \sim \mathcal{P} \in \mathcal{M}\)</span>, where <span class="math inline">\(\mathcal{M}\)</span> is the nonparametric statistical model defined as the set of continuous densities on <span class="math inline">\(O\)</span> with respect to some dominating measure. To formalize the definition of stochastic interventions and their corresponding causal effects, we introduce a nonparametric structural equation model (NPSEM), based on <span class="citation">Pearl (2000)</span>, to define how the system changes under posited interventions: <span class="math display">\[\begin{align*}\label{eqn:npsem}
   W &amp;= f_W(U_W) \\ A &amp;= f_A(W, U_A) \\ Y &amp;= f_Y(A, W, U_Y),
 \end{align*}\]</span> We denote the observed data structure <span class="math inline">\(O = (W, A, Y)\)</span></p>
 <p>Letting <span class="math inline">\(A\)</span> denote a continuous-valued treatment, we assume that the distribution of <span class="math inline">\(A\)</span> conditional on <span class="math inline">\(W = w\)</span> has support in the interval <span class="math inline">\((l(w), u(w))\)</span> – for convenience, let this support be <em>a.e.</em> That is, the minimum natural value of treatment <span class="math inline">\(A\)</span> for an individual with covariates <span class="math inline">\(W = w\)</span> is <span class="math inline">\(l(w)\)</span>; similarly, the maximum is <span class="math inline">\(u(w)\)</span>. Then, a simple stochastic intervention, based on a shift <span class="math inline">\(\delta\)</span>, may be defined <span class="math display">\[\begin{equation}\label{eqn:shift}
@@ -120,24 +121,26 @@
 <div id="simulate-data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#simulate-data" class="anchor"></a>Simulate Data</h3>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># simulate simple data for tmle-shift sketch</span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">n_obs &lt;-<span class="st"> </span><span class="dv">1000</span> <span class="co"># number of observations</span></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3">n_w &lt;-<span class="st"> </span><span class="dv">1</span> <span class="co"># number of baseline covariates</span></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4">tx_mult &lt;-<span class="st"> </span><span class="dv">2</span> <span class="co"># multiplier for the effect of W = 1 on the treatment</span></a>
-<a class="sourceLine" id="cb2-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb2-6" data-line-number="6">## baseline covariates -- simple, binary</a>
-<a class="sourceLine" id="cb2-7" data-line-number="7">W &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/lapply.html">replicate</a></span>(n_w, <span class="kw"><a href="https://rdrr.io/r/stats/Binomial.html">rbinom</a></span>(n_obs, <span class="dv">1</span>, <span class="fl">0.5</span>)))</a>
-<a class="sourceLine" id="cb2-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb2-9" data-line-number="9">## create treatment based on baseline W</a>
-<a class="sourceLine" id="cb2-10" data-line-number="10">A &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span>(<span class="kw"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(n_obs, <span class="dt">mean =</span> tx_mult <span class="op">*</span><span class="st"> </span>W, <span class="dt">sd =</span> <span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb2-11" data-line-number="11"></a>
-<a class="sourceLine" id="cb2-12" data-line-number="12">## create outcome as a linear function of A, W + white noise</a>
-<a class="sourceLine" id="cb2-13" data-line-number="13">Y &lt;-<span class="st"> </span>A <span class="op">+</span><span class="st"> </span>W <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(n_obs, <span class="dt">mean =</span> <span class="dv">0</span>, <span class="dt">sd =</span> <span class="fl">0.5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># simulate simple data for tmle-shift sketch</span>
+<span class="va">n_obs</span> <span class="op">&lt;-</span> <span class="fl">1000</span> <span class="co"># number of observations</span>
+<span class="va">n_w</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="co"># number of baseline covariates</span>
+<span class="va">tx_mult</span> <span class="op">&lt;-</span> <span class="fl">2</span> <span class="co"># multiplier for the effect of W = 1 on the treatment</span>
+
+<span class="co">## baseline covariates -- simple, binary</span>
+<span class="va">W</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">replicate</a></span><span class="op">(</span><span class="va">n_w</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html">rbinom</a></span><span class="op">(</span><span class="va">n_obs</span>, <span class="fl">1</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+
+<span class="co">## create treatment based on baseline W</span>
+<span class="va">A</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n_obs</span>, mean <span class="op">=</span> <span class="va">tx_mult</span> <span class="op">*</span> <span class="va">W</span>, sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span>
+
+<span class="co">## create outcome as a linear function of A, W + white noise</span>
+<span class="va">Y</span> <span class="op">&lt;-</span> <span class="va">A</span> <span class="op">+</span> <span class="va">W</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n_obs</span>, mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></code></pre></div>
 <p>The above composes our observed data structure <span class="math inline">\(O = (W, A, Y)\)</span>. To formally express this fact using the <code>tlverse</code> grammar introduced by the <a href="https://github.com/tlverse/tmle3"><code>tmle3</code> package</a>, we create a single data object and specify the functional relationships between the nodes in the <em>directed acyclic graph</em> (DAG) via <em>nonparametric structural equation models</em> (NPSEMs), reflected in the node list that we set up:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># organize data and nodes for tmle3</span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">data &lt;-<span class="st"> </span><span class="kw"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span>(W, A, Y)</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">node_list &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">W =</span> <span class="st">"W"</span>, <span class="dt">A =</span> <span class="st">"A"</span>, <span class="dt">Y =</span> <span class="st">"Y"</span>)</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(data)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># organize data and nodes for tmle3</span>
+<span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span><span class="op">(</span><span class="va">W</span>, <span class="va">A</span>, <span class="va">Y</span><span class="op">)</span>
+<span class="va">node_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>W <span class="op">=</span> <span class="st">"W"</span>, A <span class="op">=</span> <span class="st">"A"</span>, Y <span class="op">=</span> <span class="st">"Y"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></code></pre></div>
 <pre><code>##    W          A          Y
 ## 1: 1  2.4031607  3.7157578
 ## 2: 1  4.4973744  5.9651611
@@ -152,10 +155,11 @@
 <h2 class="hasAnchor">
 <a href="#methodology" class="anchor"></a>Methodology</h2>
 <p>To start, we will initialize a specification for the TMLE of our parameter of interest (called a <code>tmle3_Spec</code> in the <code>tlverse</code> nomenclature) simply by calling <code>tmle_shift</code>. We specify the argument <code>shift_val = 0.5</code> when initializing the <code>tmle3_Spec</code> object to communicate that we’re interested in a shift of <span class="math inline">\(0.5\)</span> on the scale of the treatment <span class="math inline">\(A\)</span> – that is, we specify <span class="math inline">\(\delta = 0.5\)</span> (note that this is an arbitrarily chosen value for this example).</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># initialize a tmle specification</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">tmle_spec &lt;-<span class="st"> </span><span class="kw"><a href="../reference/tmle_shift.html">tmle_shift</a></span>(<span class="dt">shift_val =</span> <span class="fl">0.5</span>,</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">                        <span class="dt">shift_fxn =</span> shift_additive,</a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">                        <span class="dt">shift_fxn_inv =</span> shift_additive_inv)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># initialize a tmle specification</span>
+<span class="va">tmle_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tmle_shift.html">tmle_shift</a></span><span class="op">(</span>shift_val <span class="op">=</span> <span class="fl">0.5</span>,
+                        shift_fxn <span class="op">=</span> <span class="va">shift_additive</span>,
+                        shift_fxn_inv <span class="op">=</span> <span class="va">shift_additive_inv</span><span class="op">)</span></code></pre></div>
 <p>As seen above, the <code>tmle_shift</code> specification object (like all <code>tmle3_Spec</code> objects) does <em>not</em> store the data for our specific analysis of interest. Later, we’ll see that passing a data object directly to the <code>tmle3</code> wrapper function, alongside the instantiated <code>tmle_spec</code>, will serve to construct a <code>tmle3_Task</code> object internally (see the <a href="https://tlverse.org/tmle3"><code>tmle3</code> documentation</a> for details). Note that, by default, the <code>tmle_spec</code> object is set up to facilitate cross-validated estimation of likelihood components, ensuring certain empirical process conditions may be circumvented by reducing the contribution of an empirical process term to the estimated influence function <span class="citation">(Zheng and Laan 2011)</span>. In practice, this automatic incorporation of cross-validation (CV-TMLE) means that the user need not be concerned with these theoretical conditions being satisfied; moreover, cross-validated estimation of the efficient influence function is expected to control the estimated variance.</p>
 <div id="interlude-constructing-optimal-stacked-regressions-with-sl3" class="section level3">
 <h3 class="hasAnchor">
@@ -163,55 +167,114 @@
 </h3>
 <p>To easily incorporate ensemble machine learning into the estimation procedure, we rely on the facilities provided in the <a href="https://tlverse.org/sl3"><code>sl3</code> R package</a>. For a complete guide on using the <code>sl3</code> R package, consider consulting <a href="https://tlverse.org/sl3" class="uri">https://tlverse.org/sl3</a>, or <a href="https://tlverse.org" class="uri">https://tlverse.org</a> for the <a href="https://github.com/tlverse"><code>tlverse</code> ecosystem</a>, of which <code>sl3</code> is a core component.</p>
 <p>Using the framework provided by the <a href="https://tlverse.org/sl3"><code>sl3</code> package</a>, the nuisance parameters of the TML estimator may be fit with ensemble learning, using the cross-validation framework of the Super Learner algorithm of <span class="citation">van der Laan, Polley, and Hubbard (2007)</span>. To estimate the treatment mechanism (denoted g, we must make use of learning algorithms specifically suited to conditional density estimation; a list of such learners may be extracted from <code>sl3</code> using <code><a href="https://tlverse.org/sl3/reference/list_learners.html">sl3_list_learners()</a></code>:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://tlverse.org/sl3/reference/list_learners.html">sl3_list_learners</a></span>(<span class="st">"density"</span>)</a></code></pre></div>
-<pre><code>## [1] "Lrnr_condensier"             "Lrnr_density_discretize"    
-## [3] "Lrnr_density_hse"            "Lrnr_density_semiparametric"
-## [5] "Lrnr_haldensify"             "Lrnr_rfcde"                 
-## [7] "Lrnr_solnp_density"</code></pre>
-<p>To proceed, we’ll select two of the above learners, <code>Lrnr_haldensify</code> for using the highly adaptive lasso for conditional density estimation, based on an algorithm given by <span class="citation">Díaz and van der Laan (2011)</span>, and <code>Lrnr_density_semiparametric</code>, an approach for semiparametric conditional density estimation:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co"># learners used for conditional density regression (i.e., propensity score)</span></a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">haldensify_lrnr &lt;-<span class="st"> </span>Lrnr_haldensify<span class="op">$</span><span class="kw">new</span>(</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3">  <span class="dt">n_bins =</span> <span class="dv">3</span>, <span class="dt">grid_type =</span> <span class="st">"equal_mass"</span>,</a>
-<a class="sourceLine" id="cb8-4" data-line-number="4">  <span class="dt">lambda_seq =</span> <span class="kw"><a href="https://rdrr.io/r/base/Log.html">exp</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">-9</span>, <span class="dt">length =</span> <span class="dv">100</span>))</a>
-<a class="sourceLine" id="cb8-5" data-line-number="5">)</a>
-<a class="sourceLine" id="cb8-6" data-line-number="6">hse_lrnr &lt;-<span class="st"> </span>Lrnr_density_semiparametric<span class="op">$</span><span class="kw">new</span>(<span class="dt">mean_learner =</span> Lrnr_glm<span class="op">$</span><span class="kw">new</span>())</a>
-<a class="sourceLine" id="cb8-7" data-line-number="7">mvd_lrnr &lt;-<span class="st"> </span>Lrnr_density_semiparametric<span class="op">$</span><span class="kw">new</span>(<span class="dt">mean_learner =</span> Lrnr_glm<span class="op">$</span><span class="kw">new</span>(),</a>
-<a class="sourceLine" id="cb8-8" data-line-number="8">                                            <span class="dt">var_learner =</span> Lrnr_mean<span class="op">$</span><span class="kw">new</span>())</a>
-<a class="sourceLine" id="cb8-9" data-line-number="9">sl_lrn_dens &lt;-<span class="st"> </span>Lrnr_sl<span class="op">$</span><span class="kw">new</span>(</a>
-<a class="sourceLine" id="cb8-10" data-line-number="10">  <span class="dt">learners =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(haldensify_lrnr, hse_lrnr, mvd_lrnr),</a>
-<a class="sourceLine" id="cb8-11" data-line-number="11">  <span class="dt">metalearner =</span> Lrnr_solnp_density<span class="op">$</span><span class="kw">new</span>()</a>
-<a class="sourceLine" id="cb8-12" data-line-number="12">)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://tlverse.org/sl3/reference/list_learners.html">sl3_list_learners</a></span><span class="op">(</span><span class="st">"density"</span><span class="op">)</span></code></pre></div>
+<pre><code>## [1] "Lrnr_density_discretize"     "Lrnr_density_hse"           
+## [3] "Lrnr_density_semiparametric" "Lrnr_haldensify"            
+## [5] "Lrnr_solnp_density"</code></pre>
+<p>To proceed, we’ll select two of the above learners, <code>Lrnr_haldensify</code> for using the highly adaptive lasso for conditional density estimation, based on an algorithm given by <span class="citation">Dı́az and van der Laan (2011)</span>, and <code>Lrnr_density_semiparametric</code>, an approach for semiparametric conditional density estimation:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># learners used for conditional density regression (i.e., propensity score)</span>
+<span class="va">haldensify_lrnr</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_haldensify.html">Lrnr_haldensify</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>
+  n_bins <span class="op">=</span> <span class="fl">3</span>, grid_type <span class="op">=</span> <span class="st">"equal_mass"</span>,
+  lambda_seq <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="op">-</span><span class="fl">9</span>, length <span class="op">=</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span>
+<span class="op">)</span>
+<span class="va">hse_lrnr</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_density_semiparametric.html">Lrnr_density_semiparametric</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>mean_learner <span class="op">=</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_glm.html">Lrnr_glm</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+<span class="va">mvd_lrnr</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_density_semiparametric.html">Lrnr_density_semiparametric</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>mean_learner <span class="op">=</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_glm.html">Lrnr_glm</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>,
+                                            var_learner <span class="op">=</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_mean.html">Lrnr_mean</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+<span class="va">sl_lrn_dens</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_sl.html">Lrnr_sl</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>
+  learners <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">haldensify_lrnr</span>, <span class="va">hse_lrnr</span>, <span class="va">mvd_lrnr</span><span class="op">)</span>,
+  metalearner <span class="op">=</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_solnp_density.html">Lrnr_solnp_density</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>
+<span class="op">)</span></code></pre></div>
 <p>We also require an approach for estimating the outcome regression (denoted Q). For this, we build a Super Learner composed of an intercept model, a main terms GLM, and the <a href="https://xgboost.ai/">xgboost algorithm</a> for gradient boosting:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># learners used for conditional expectation regression (e.g., outcome)</span></a>
-<a class="sourceLine" id="cb9-2" data-line-number="2">mean_lrnr &lt;-<span class="st"> </span>Lrnr_mean<span class="op">$</span><span class="kw">new</span>()</a>
-<a class="sourceLine" id="cb9-3" data-line-number="3">fglm_lrnr &lt;-<span class="st"> </span>Lrnr_glm_fast<span class="op">$</span><span class="kw">new</span>()</a>
-<a class="sourceLine" id="cb9-4" data-line-number="4">xgb_lrnr &lt;-<span class="st"> </span>Lrnr_xgboost<span class="op">$</span><span class="kw">new</span>()</a>
-<a class="sourceLine" id="cb9-5" data-line-number="5">sl_lrn &lt;-<span class="st"> </span>Lrnr_sl<span class="op">$</span><span class="kw">new</span>(</a>
-<a class="sourceLine" id="cb9-6" data-line-number="6">  <span class="dt">learners =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(mean_lrnr, fglm_lrnr, xgb_lrnr),</a>
-<a class="sourceLine" id="cb9-7" data-line-number="7">  <span class="dt">metalearner =</span> Lrnr_nnls<span class="op">$</span><span class="kw">new</span>()</a>
-<a class="sourceLine" id="cb9-8" data-line-number="8">)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># learners used for conditional expectation regression (e.g., outcome)</span>
+<span class="va">mean_lrnr</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_mean.html">Lrnr_mean</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>
+<span class="va">glm_lrnr</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_glm.html">Lrnr_glm</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>
+<span class="va">xgb_lrnr</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_xgboost.html">Lrnr_xgboost</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>
+<span class="va">sl_lrn</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_sl.html">Lrnr_sl</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>
+  learners <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">mean_lrnr</span>, <span class="va">glm_lrnr</span>, <span class="va">xgb_lrnr</span><span class="op">)</span>,
+  metalearner <span class="op">=</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_nnls.html">Lrnr_nnls</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>
+<span class="op">)</span></code></pre></div>
 <p>We can make the above explicit with respect to standard notation by bundling the ensemble learners into a <code>list</code> object below.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co"># specify outcome and treatment regressions and create learner list</span></a>
-<a class="sourceLine" id="cb10-2" data-line-number="2">Q_learner &lt;-<span class="st"> </span>sl_lrn</a>
-<a class="sourceLine" id="cb10-3" data-line-number="3">g_learner &lt;-<span class="st"> </span>sl_lrn_dens</a>
-<a class="sourceLine" id="cb10-4" data-line-number="4">learner_list &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">Y =</span> Q_learner, <span class="dt">A =</span> g_learner)</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># specify outcome and treatment regressions and create learner list</span>
+<span class="va">Q_learner</span> <span class="op">&lt;-</span> <span class="va">sl_lrn</span>
+<span class="va">g_learner</span> <span class="op">&lt;-</span> <span class="va">sl_lrn_dens</span>
+<span class="va">learner_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>Y <span class="op">=</span> <span class="va">Q_learner</span>, A <span class="op">=</span> <span class="va">g_learner</span><span class="op">)</span></code></pre></div>
 <p>The <code>learner_list</code> object above specifies the role that each of the ensemble learners we’ve generated is to play in computing initial estimators to be used in building a TMLE for the parameter of interest here. In particular, it makes explicit the fact that our <code>Q_learner</code> is used in fitting the outcome regression while our <code>g_learner</code> is used in fitting our treatment mechanism regression.</p>
 </div>
 <div id="targeted-estimation-of-stochastic-interventions-effects" class="section level3">
 <h3 class="hasAnchor">
 <a href="#targeted-estimation-of-stochastic-interventions-effects" class="anchor"></a>Targeted Estimation of Stochastic Interventions Effects</h3>
 <p>Note that, by default, the</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">tmle_fit &lt;-<span class="st"> </span><span class="kw"><a href="http://tlverse.org/tmle3/reference/tmle3.html">tmle3</a></span>(tmle_spec, data, node_list, learner_list)</a></code></pre></div>
-<pre><code>## 
-## Iter: 1 fn: 1398.5769     Pars:  0.25275 0.43996 0.30729
-## Iter: 2 fn: 1398.5769     Pars:  0.25275 0.43996 0.30729
-## solnp--&gt; Completed in 2 iterations</code></pre>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">tmle_fit</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">tmle_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://tlverse.org/tmle3/reference/tmle3.html">tmle3</a></span><span class="op">(</span><span class="va">tmle_spec</span>, <span class="va">data</span>, <span class="va">node_list</span>, <span class="va">learner_list</span><span class="op">)</span></code></pre></div>
+<pre><code>## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## 
+## Iter: 1 fn: 1419.0430     Pars:  0.75107 0.24893
+## Iter: 2 fn: 1419.0430     Pars:  0.75107 0.24893
+## solnp--&gt; Completed in 2 iterations
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model
+## Error : Optimal lambda not selected by CV in fitted haldensify model</code></pre>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">tmle_fit</span></code></pre></div>
 <pre><code>## A tmle3_Fit that took 1 step(s)
 ##    type         param init_est tmle_est         se    lower    upper
-## 1:  TSM E[Y_{A=NULL}] 2.051413 2.051115 0.06012758 1.933267 2.168963
+## 1:  TSM E[Y_{A=NULL}] 2.051413  2.05467 0.06087795 1.935351 2.173989
 ##    psi_transformed lower_transformed upper_transformed
-## 1:        2.051115          1.933267          2.168963</code></pre>
+## 1:         2.05467          1.935351          2.173989</code></pre>
 <p>The <code>print</code> method of the resultant <code>tmle_fit</code> object conveniently displays the results from computing our TML estimator.</p>
 </div>
 <div id="statistical-inference-for-targeted-maximum-likelihood-estimates" class="section level3">
@@ -229,12 +292,13 @@
 <p><span class="math display">\[\psi_n \pm z_{\alpha} \cdot \frac{\sigma_n}{\sqrt{n}},\]</span> where <span class="math inline">\(\sigma_n^2\)</span> is an estimator of <span class="math inline">\(V(D(P_0))\)</span>. The estimator <span class="math inline">\(\sigma_n^2\)</span> may be obtained using the bootstrap or computed directly via the following</p>
 <p><span class="math display">\[\sigma_n^2 = \frac{1}{n} \sum_{i = 1}^{n} D^2(\bar{Q}_n^{\star}, g_n)(O_i)\]</span></p>
 <p>Having now re-examined these facts, let’s simply examine the results of computing our TML estimator:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">tmle_fit</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">tmle_fit</span></code></pre></div>
 <pre><code>## A tmle3_Fit that took 1 step(s)
 ##    type         param init_est tmle_est         se    lower    upper
-## 1:  TSM E[Y_{A=NULL}] 2.051413 2.051115 0.06012758 1.933267 2.168963
+## 1:  TSM E[Y_{A=NULL}] 2.051413  2.05467 0.06087795 1.935351 2.173989
 ##    psi_transformed lower_transformed upper_transformed
-## 1:        2.051115          1.933267          2.168963</code></pre>
+## 1:         2.05467          1.935351          2.173989</code></pre>
 </div>
 </div>
 <div id="references" class="section level2 unnumbered">
@@ -242,10 +306,10 @@
 <a href="#references" class="anchor"></a>References</h2>
 <div id="refs" class="references">
 <div id="ref-diaz2011super">
-<p>Díaz, Iván, and Mark J van der Laan. 2011. “Super Learner Based Conditional Density Estimation with Application to Marginal Structural Models.” <em>The International Journal of Biostatistics</em> 7 (1). De Gruyter: 1–20.</p>
+<p>Dı́az, Iván, and Mark J van der Laan. 2011. “Super Learner Based Conditional Density Estimation with Application to Marginal Structural Models.” <em>The International Journal of Biostatistics</em> 7 (1): 1–20.</p>
 </div>
 <div id="ref-diaz2012population">
-<p>———. 2012. “Population Intervention Causal Effects Based on Stochastic Interventions.” <em>Biometrics</em> 68 (2). Wiley Online Library: 541–49.</p>
+<p>———. 2012. “Population Intervention Causal Effects Based on Stochastic Interventions.” <em>Biometrics</em> 68 (2): 541–49.</p>
 </div>
 <div id="ref-diaz2018stochastic">
 <p>———. 2018. “Stochastic Treatment Regimes.” In <em>Targeted Learning in Data Science: Causal Inference for Complex Longitudinal Studies</em>, 167–80. Springer Science &amp; Business Media.</p>
@@ -269,19 +333,11 @@
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <div id="tocnav">
-      <h2 class="hasAnchor">
-<a href="#tocnav" class="anchor"></a>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-<li><a href="#introduction">Introduction</a></li>
-      <li><a href="#data-and-notation">Data and Notation</a></li>
-      <li><a href="#methodology">Methodology</a></li>
-      <li><a href="#references">References</a></li>
-      </ul>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
 </div>
-      </div>
 
 </div>
 
@@ -292,7 +348,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

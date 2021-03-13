@@ -36,9 +36,8 @@ build_script:
   - echo Current directory=%CD%
   - travis-tool.sh install_r base64
   - travis-tool.sh install_github r-lib/sessioninfo r-lib/covr
-  - travis-tool.sh install_github tlverse/delayed tlverse/origami
-  - travis-tool.sh install_github tlverse/hal9001 tlverse/sl3 tlverse/tmle3
-  - travis-tool.sh install_github nhejazi/haldensify nhejazi/txshift
+  - travis-tool.sh install_github tlverse/sl3 tlverse/tmle3
+  - travis-tool.sh install_github nhejazi/txshift
   - travis-tool.sh install_deps
 
 test_script:

@@ -14,6 +14,7 @@ state and is being actively
 developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![License: GPL
 v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4603372.svg)](https://doi.org/10.5281/zenodo.4603372)
 
 > Targeted Learning of the Causal Effects of Stochastic Interventions
 
@@ -34,11 +35,12 @@ builds upon the core `tlverse` grammar introduced by `tmle3`, a general
 framework that supports the implementation of a range of TMLE parameters
 through a unified interface. For a detailed description of the target
 parameter, TML estimator, and algorithm implemented in `tmle3shift`, the
-interested reader is invited to consult Díaz and van der Laan (2012) and
-Díaz and van der Laan (2018). For a general discussion of the framework
-of targeted minimum loss-based estimation and the role this methodology
-plays in statistical and causal inference, the canonical references are
-van der Laan and Rose (2011) and van der Laan and Rose (2018).
+interested reader is invited to consult Dı́az and van der Laan (2012)
+and Dı́az and van der Laan (2018). For a general discussion of the
+framework of targeted minimum loss-based estimation and the role this
+methodology plays in statistical and causal inference, the canonical
+references are van der Laan and Rose (2011) and van der Laan and Rose
+(2018).
 
 Building on the original work surrounding the TML estimator for the
 aforementioned target parameter, `tmle3shift` additionally implements a
@@ -67,6 +69,26 @@ remotes::install_github("tlverse/tmle3shift")
 
 If you encounter any bugs or have any specific feature requests, please
 [file an issue](https://github.com/tlverse/tmle3shift/issues).
+
+-----
+
+## Citation
+
+After using the `tmle3shift` R package, please cite the following:
+
+``` 
+    @software{hejazi2021tmle3shift-rpkg,
+      author = {Hejazi, Nima S and Coyle, Jeremy R and {van der Laan}, Mark
+        J},
+      title = {{tmle3shift}: {Targeted Learning} of the Causal Effects of
+        Stochastic Interventions},
+      year = {2021},
+      howpublished = {\url{https://github.com/tlverse/tmle3shift}},
+      note = {{R} package version 0.2.0},
+      url = {https://doi.org/10.5281/zenodo.4603372},
+      doi = {10.5281/zenodo.4603372}
+    }
+```
 
 -----
 
@@ -100,9 +122,9 @@ See file `LICENSE` for details.
 
 <div id="ref-diaz2012population">
 
-Díaz, Iván, and Mark J van der Laan. 2012. “Population Intervention
-Causal Effects Based on Stochastic Interventions.” *Biometrics* 68 (2).
-Wiley Online Library: 541–49.
+Dı́az, Iván, and Mark J van der Laan. 2012. “Population Intervention
+Causal Effects Based on Stochastic Interventions.” *Biometrics* 68 (2):
+541–49.
 
 </div>
 

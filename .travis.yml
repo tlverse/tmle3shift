@@ -30,13 +30,13 @@ r_packages:
   - delayed
   - origami
   - hal9001
+  - haldensify
 
 r_github_packages:
   - r-lib/covr
   - r-lib/sessioninfo
   - tlverse/sl3
   - tlverse/tmle3
-  - nhejazi/haldensify
   - nhejazi/txshift
 
 after_success:

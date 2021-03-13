@@ -3,7 +3,9 @@
 \name{LF_shift}
 \alias{LF_shift}
 \title{Shifted Likelihood Factor}
-\format{\code{\link{R6Class}} object.}
+\format{
+\code{\link{R6Class}} object.
+}
 \value{
 \code{LF_base} object
 }

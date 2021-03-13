@@ -3,7 +3,9 @@
 \name{Param_MSM_linear}
 \alias{Param_MSM_linear}
 \title{Parameter for Linear Working Marginal Structural Model}
-\format{\code{\link{R6Class}} object.}
+\format{
+\code{\link{R6Class}} object.
+}
 \value{
 \code{Param_base} object
 }

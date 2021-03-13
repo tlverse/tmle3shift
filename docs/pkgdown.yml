@@ -1,9 +1,10 @@
-pandoc: 2.2.1
-pkgdown: 1.4.1
+pandoc: '2.5'
+pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   shift_tmle: shift_tmle.html
   vimshift: vimshift.html
+last_built: 2021-03-13T22:49Z
 urls:
   reference: https://tlverse.org/tmle3shift/reference
   article: https://tlverse.org/tmle3shift/articles

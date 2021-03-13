@@ -87,9 +87,9 @@ txshift_sl_tmle <- txshift(
   W = W, A = A, Y = Y,
   delta = delta_value,
   fluctuation = "standard",
-  g_fit_args = list(
+  g_exp_fit_args = list(
     fit_type = "sl",
-    sl_learners = g_learner
+    sl_learners_density = g_learner
   ),
   Q_fit_args = list(
     fit_type = "sl",

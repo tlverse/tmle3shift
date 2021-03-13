@@ -21,6 +21,7 @@ knitr::opts_chunk$set(
 [![Coverage Status](https://img.shields.io/codecov/c/github/tlverse/tmle3shift/master.svg)](https://codecov.io/github/tlverse/tmle3shift?branch=master)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4603372.svg)](https://doi.org/10.5281/zenodo.4603372)
 
 > Targeted Learning of the Causal Effects of Stochastic Interventions
 
@@ -72,6 +73,33 @@ remotes::install_github("tlverse/tmle3shift")
 
 If you encounter any bugs or have any specific feature requests, please [file an
 issue](https://github.com/tlverse/tmle3shift/issues).
+
+---
+
+## Contributions
+
+Contributions are very welcome. Interested contributors should consult our
+[contribution
+guidelines](https://github.com/tlverse/tmle3shift/blob/master/CONTRIBUTING.md)
+prior to submitting a pull request.
+
+---
+
+## Citation
+
+After using the `tmle3shift` R package, please cite the following:
+
+        @software{hejazi2021tmle3shift-rpkg,
+          author = {Hejazi, Nima S and Coyle, Jeremy R and {van der Laan}, Mark
+            J},
+          title = {{tmle3shift}: {Targeted Learning} of the Causal Effects of
+            Stochastic Interventions},
+          year = {2021},
+          howpublished = {\url{https://github.com/tlverse/tmle3shift}},
+          note = {{R} package version 0.2.0},
+          url = {https://doi.org/10.5281/zenodo.4603372},
+          doi = {10.5281/zenodo.4603372}
+        }
 
 ---
 

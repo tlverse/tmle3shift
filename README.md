@@ -72,6 +72,15 @@ If you encounter any bugs or have any specific feature requests, please
 
 -----
 
+## Contributions
+
+Contributions are very welcome. Interested contributors should consult
+our [contribution
+guidelines](https://github.com/tlverse/tmle3shift/blob/master/CONTRIBUTING.md)
+prior to submitting a pull request.
+
+-----
+
 ## Citation
 
 After using the `tmle3shift` R package, please cite the following:

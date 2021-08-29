@@ -3,12 +3,9 @@
 
 # R/`tmle3shift`
 
-[![Travis-CI Build
-Status](https://travis-ci.org/tlverse/tmle3shift.svg?branch=master)](https://travis-ci.org/tlverse/tmle3shift)
-[![AppVeyor Build
-Status](https://ci.appveyor.com/api/projects/status/github/tlverse/tmle3shift?branch=master&svg=true)](https://ci.appveyor.com/project/nhejazi/tmle3shift)
+[![R-CMD-check](https://github.com/tlverse/tmle3shift/workflows/R-CMD-check/badge.svg)](https://github.com/tlverse/tmle3shift/actions)
 [![Coverage
-Status](https://img.shields.io/codecov/c/github/tlverse/tmle3shift/master.svg)](https://codecov.io/github/tlverse/tmle3shift?branch=master)
+Status](https://codecov.io/gh/tlverse/tmle3shift/branch/master/graph/badge.svg)](https://codecov.io/gh/tlverse/tmle3shift)
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
 developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)

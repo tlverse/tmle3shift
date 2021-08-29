@@ -16,9 +16,8 @@ knitr::opts_chunk$set(
 
 # R/`tmle3shift`
 
-[![Travis-CI Build Status](https://travis-ci.org/tlverse/tmle3shift.svg?branch=master)](https://travis-ci.org/tlverse/tmle3shift)
-[![AppVeyor Build  Status](https://ci.appveyor.com/api/projects/status/github/tlverse/tmle3shift?branch=master&svg=true)](https://ci.appveyor.com/project/nhejazi/tmle3shift)
-[![Coverage Status](https://img.shields.io/codecov/c/github/tlverse/tmle3shift/master.svg)](https://codecov.io/github/tlverse/tmle3shift?branch=master)
+[![R-CMD-check](https://github.com/tlverse/tmle3shift/workflows/R-CMD-check/badge.svg)](https://github.com/tlverse/tmle3shift/actions)
+[![Coverage Status](https://codecov.io/gh/tlverse/tmle3shift/branch/master/graph/badge.svg)](https://codecov.io/gh/tlverse/tmle3shift)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4603372.svg)](https://doi.org/10.5281/zenodo.4603372)

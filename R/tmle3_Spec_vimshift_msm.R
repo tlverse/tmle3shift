@@ -11,8 +11,8 @@ tmle3_Spec_vimshift_msm <- R6::R6Class(
   class = TRUE,
   inherit = tmle3_Spec_shift,
   public = list(
-    initialize = function(shift_fxn = shift_additive_bounded,
-                          shift_fxn_inv = shift_additive_bounded_inv,
+    initialize = function(shift_fxn = shift_additive,
+                          shift_fxn_inv = shift_additive_inv,
                           shift_grid = seq(-1, 1, by = 0.5),
                           max_shifted_ratio = 2,
                           weighting = c("identity", "variance"),
@@ -116,8 +116,8 @@ tmle3_Spec_vimshift_msm <- R6::R6Class(
 #' @param ... Additional arguments, passed to shift functions.
 #'
 #' @export
-tmle_vimshift_msm <- function(shift_fxn = shift_additive_bounded,
-                              shift_fxn_inv = shift_additive_bounded_inv,
+tmle_vimshift_msm <- function(shift_fxn = shift_additive,
+                              shift_fxn_inv = shift_additive_inv,
                               shift_grid = seq(-1, 1, by = 0.5),
                               max_shifted_ratio = 2,
                               weighting = c("identity", "variance"),

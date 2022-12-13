@@ -5,8 +5,8 @@
 \title{Outcome under Shifted Treatment}
 \usage{
 tmle_shift(
-  shift_fxn = shift_additive_bounded,
-  shift_fxn_inv = shift_additive_bounded_inv,
+  shift_fxn = shift_additive,
+  shift_fxn_inv = shift_additive_inv,
   shift_val = 1,
   max_shifted_ratio = 2,
   ...
@@ -14,10 +14,10 @@ tmle_shift(
 }
 \arguments{
 \item{shift_fxn}{A \code{function} defining the type of shift to be applied
-to the treatment. For an example, see \code{shift_additive}.}
+to the treatment. For a simple example, see \code{shift_additive}.}
 
 \item{shift_fxn_inv}{A \code{function} defining the inverse of the type of
-shift to be applied to the treatment. For an example, see
+shift to be applied to the treatment. For a simple example, see
 \code{shift_additive_inv}.}
 
 \item{shift_val}{A \code{numeric}, specification of the magnitude of the

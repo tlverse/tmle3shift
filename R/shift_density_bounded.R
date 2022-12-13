@@ -1,12 +1,12 @@
-#' Additive Shifts of Continuous-Valued Interventions based on Bounded Densities
+#' Additive Shifts of Continuous Interventions Based on Bounded Densities
 #'
 #' @param tmle_task A \code{tmle3_Task} object containing data and nodes, as
 #'  described and implemented in the \code{tmle3} package. Please refer to the
 #'  documentation and supporting materials of that package for details.
-#' @param delta A \code{numeric} value giving a value of the shift to be applied
-#'  to the treatment. This is an additive shift so the value is merely to be
-#'  added to the observed value of the treatment node "A". In the case of the
-#'  inverse additive shift, the specified value will be subtracted from the
+#' @param delta A \code{numeric} value giving a value of the shift to be
+#'  applied to the treatment. This is an additive shift so the value is merely
+#'  to be added to the observed value of the treatment node "A". In the case of
+#'  the inverse additive shift, the specified value will be subtracted from the
 #'  observed value of the treatment node "A".
 #' @param likelihood_base The base observed data likelihood, to be used in
 #'  implementing guards that ensure that the shifted treatment does not violate
@@ -15,10 +15,11 @@
 #' @param max_shifted_ratio A \code{numeric} value indicating maximum tolerance
 #'  for the ratio of the counterfactual and observed intervention densities. In
 #'  particular, the shifted value of the intervention is assigned to a given
-#'  observational unit when the ratio of the counterfactual intervention density
-#'  to the observed intervention density is below this value.
-#' @param fold_number Whether to use cross-validated likelihood factor estimates
-#'  or not. Passed through to method \code{get_likelihoods} in \pkg{tmle3}.
+#'  observational unit when the ratio of the counterfactual intervention
+#'  density to the observed intervention density is below this value.
+#' @param fold_number Whether to use cross-validated likelihood factor
+#'  estimates or not. Passed through to method \code{get_likelihoods} in
+#'  \pkg{tmle3}.
 #' @param ... Additional arguments (currently unused).
 #'
 #' @family shifting_interventions
@@ -26,7 +27,6 @@
 #' @rdname additive_shifting_bounded
 #'
 #' @export
-#
 shift_additive_bounded <- function(tmle_task, delta, likelihood_base,
                                    max_shifted_ratio, fold_number, ...) {
   # ratio of observed and shifted intervention densities
@@ -85,17 +85,18 @@ shift_additive_bounded_inv <- function(tmle_task, delta, likelihood_base,
 #' @param tmle_task A \code{tmle3_Task} object containing data and nodes, as
 #'  described and implemented in the \code{tmle3} package. Please refer to the
 #'  documentation and supporting materials of that package for details.
-#' @param delta A \code{numeric} value giving a value of the shift to be applied
-#'  to the treatment. This is an additive shift so the value is merely to be
-#'  added to the observed value of the treatment node "A". In the case of the
-#'  inverse additive shift, the specified value will be subtracted from the
+#' @param delta A \code{numeric} value giving a value of the shift to be
+#'  applied to the treatment. This is an additive shift so the value is merely
+#'  to be added to the observed value of the treatment node "A". In the case of
+#'  the inverse additive shift, the specified value will be subtracted from the
 #'  observed value of the treatment node "A".
 #' @param likelihood_base The base observed data likelihood, to be used in
 #'  implementing guards that ensure that the shifted treatment does not violate
 #'  the bounds induced by the support of the intervention, conditional on the
 #'  covariates.
-#' @param fold_number Whether to use cross-validated likelihood factor estimates
-#'  or not. Passed directly to method \code{get_likelihoods} in \pkg{tmle3}.
+#' @param fold_number Whether to use cross-validated likelihood factor
+#'  estimates or not. Passed directly to method \code{get_likelihoods} in
+#'  \pkg{tmle3}.
 #'
 #' @importFrom data.table data.table
 #'
@@ -104,7 +105,6 @@ shift_additive_bounded_inv <- function(tmle_task, delta, likelihood_base,
 #' @rdname additive_shifting_bounded
 #'
 #' @keywords internal
-#
 get_density_ratio <- function(tmle_task, delta, likelihood_base, fold_number) {
   # extract observed natural value of treatment and compute shifted values
   shifted_a <- tmle_task$get_tmle_node("A") - delta

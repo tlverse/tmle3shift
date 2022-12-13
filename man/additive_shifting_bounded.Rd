@@ -4,7 +4,7 @@
 \alias{shift_additive_bounded}
 \alias{shift_additive_bounded_inv}
 \alias{get_density_ratio}
-\title{Additive Shifts of Continuous-Valued Interventions based on Bounded Densities}
+\title{Additive Shifts of Continuous Interventions Based on Bounded Densities}
 \usage{
 shift_additive_bounded(
   tmle_task,
@@ -31,10 +31,10 @@ get_density_ratio(tmle_task, delta, likelihood_base, fold_number)
 described and implemented in the \code{tmle3} package. Please refer to the
 documentation and supporting materials of that package for details.}
 
-\item{delta}{A \code{numeric} value giving a value of the shift to be applied
-to the treatment. This is an additive shift so the value is merely to be
-added to the observed value of the treatment node "A". In the case of the
-inverse additive shift, the specified value will be subtracted from the
+\item{delta}{A \code{numeric} value giving a value of the shift to be
+applied to the treatment. This is an additive shift so the value is merely
+to be added to the observed value of the treatment node "A". In the case of
+the inverse additive shift, the specified value will be subtracted from the
 observed value of the treatment node "A".}
 
 \item{likelihood_base}{The base observed data likelihood, to be used in
@@ -45,16 +45,17 @@ covariates.}
 \item{max_shifted_ratio}{A \code{numeric} value indicating maximum tolerance
 for the ratio of the counterfactual and observed intervention densities. In
 particular, the shifted value of the intervention is assigned to a given
-observational unit when the ratio of the counterfactual intervention density
-to the observed intervention density is below this value.}
+observational unit when the ratio of the counterfactual intervention
+density to the observed intervention density is below this value.}
 
-\item{fold_number}{Whether to use cross-validated likelihood factor estimates
-or not. Passed directly to method \code{get_likelihoods} in \pkg{tmle3}.}
+\item{fold_number}{Whether to use cross-validated likelihood factor
+estimates or not. Passed directly to method \code{get_likelihoods} in
+\pkg{tmle3}.}
 
 \item{...}{Additional arguments (currently unused).}
 }
 \description{
-Additive Shifts of Continuous-Valued Interventions based on Bounded Densities
+Additive Shifts of Continuous Interventions Based on Bounded Densities
 
 Compute Ratio of Observed and Counterfactual Intervention Densities
 }

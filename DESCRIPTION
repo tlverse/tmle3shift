@@ -1,6 +1,6 @@
 Package: tmle3shift
 Title: Targeted Learning of the Causal Effects of Stochastic Interventions
-Version: 0.2.0
+Version: 0.2.1
 Authors@R: c(
     person("Nima", "Hejazi", email = "nh@nimahejazi.org",
            role = c("aut", "cre", "cph"),
@@ -56,5 +56,5 @@ Encoding: UTF-8
 LazyData: true
 LazyLoad: yes
 VignetteBuilder: knitr
-RoxygenNote: 7.1.1.9001
+RoxygenNote: 7.2.2
 Roxygen: list(markdown = TRUE, r6 = FALSE)

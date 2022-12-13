@@ -5,8 +5,8 @@
 \title{Outcome Under a Grid of Shifted Interventions via Delta Method}
 \usage{
 tmle_vimshift_delta(
-  shift_fxn = shift_additive_bounded,
-  shift_fxn_inv = shift_additive_bounded_inv,
+  shift_fxn = shift_additive,
+  shift_fxn_inv = shift_additive_inv,
   shift_grid = seq(-1, 1, by = 0.5),
   max_shifted_ratio = 2,
   weighting = c("identity", "variance"),

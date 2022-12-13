@@ -1,3 +1,9 @@
+# tmle3shift 0.2.1
+
+* Change all instances of default shift being `shift_additive_bounded` to use
+  `shift_additive` instead, since the former is incompatible with the simplifer
+  identifying functional under the modified treatment policy definition.
+
 # tmle3shift 0.1.9
 
 * Change `Spec_shift` object to use point treatment helpers from `tmle3`.

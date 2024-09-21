@@ -14,7 +14,7 @@ tmle3_Spec_shift <- R6::R6Class(
     initialize = function(shift_fxn = shift_additive,
                           shift_fxn_inv = shift_additive_inv,
                           shift_val = 0,
-                          max_shifted_ratio = 2,
+                          max_shifted_ratio = 5,
                           ...) {
       options <- list(
         shift_fxn = shift_fxn,
@@ -31,7 +31,7 @@ tmle3_Spec_shift <- R6::R6Class(
       if (A_type$type != "continuous") {
         msg <- paste(
           "This parameter is defined as a shift of a continuous",
-          "treatment. The treatment detected is NOT continuous."
+          "treatment. The treatment variable is not continuous."
         )
         stop(msg)
       }
@@ -112,7 +112,8 @@ tmle3_Spec_shift <- R6::R6Class(
 #' @export
 tmle_shift <- function(shift_fxn = shift_additive,
                        shift_fxn_inv = shift_additive_inv,
-                       shift_val = 1, max_shifted_ratio = 2, ...) {
+                       shift_val = 1, max_shifted_ratio = 5,
+                       ...) {
   # TODO: unclear why this has to be in a factory function
   tmle3_Spec_shift$new(
     shift_fxn, shift_fxn_inv,

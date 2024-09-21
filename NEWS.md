@@ -1,7 +1,12 @@
+# tmle3shift 0.2.2
+
+* Change default value of argument `max_shifted_ratio` from 2 to 5 throughout.
+* Bump up minimum versions of dependencies `sl3`, `hal9001`, and `haldensify`.
+
 # tmle3shift 0.2.1
 
 * Change all instances of default shift being `shift_additive_bounded` to use
-  `shift_additive` instead, since the former is incompatible with the simplifer
+  `shift_additive` instead, since the former is incompatible with the simpler
   identifying functional under the modified treatment policy definition.
 
 # tmle3shift 0.1.9

@@ -8,7 +8,7 @@ tmle_vimshift_delta(
   shift_fxn = shift_additive,
   shift_fxn_inv = shift_additive_inv,
   shift_grid = seq(-1, 1, by = 0.5),
-  max_shifted_ratio = 2,
+  max_shifted_ratio = 5,
   weighting = c("identity", "variance"),
   ...
 )

@@ -1,6 +1,6 @@
 Package: tmle3shift
 Title: Targeted Learning of the Causal Effects of Stochastic Interventions
-Version: 0.2.1
+Version: 0.2.2
 Authors@R: c(
     person("Nima", "Hejazi", email = "nh@nimahejazi.org",
            role = c("aut", "cre", "cph"),
@@ -39,12 +39,12 @@ Suggests:
     covr,
     stats,
     ggplot2,
-    sl3 (>= 1.4.2),
-    txshift (>= 0.3.5),
-    haldensify (>= 0.0.5),
+    sl3 (>= 1.4.5),
+    txshift (>= 0.3.8),
+    haldensify (>= 0.2.3),
     hal9001,
     xgboost,
-    ranger,
+    speedglm,
     Rsolnp,
     nnls
 Remotes:
@@ -56,5 +56,5 @@ Encoding: UTF-8
 LazyData: true
 LazyLoad: yes
 VignetteBuilder: knitr
-RoxygenNote: 7.2.2
+RoxygenNote: 7.3.2
 Roxygen: list(markdown = TRUE, r6 = FALSE)

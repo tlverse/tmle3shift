@@ -11,9 +11,8 @@ n_w <- 1 # number of baseline covariates
 tx_mult <- 2 # multiplier for effect of W = 1 on treatment
 delta_grid <- seq(-1, 1, 1) # grid of shifts
 
-
 ## baseline covariates -- simple, binary
-W <- as.numeric(replicate(n_w, rbinom(n_obs, 1, 0.5)))
+W <- as.numeric(replicate(n_w, rbinom(n_obs, 1, 0.65)))
 
 ## create treatment based on baseline W
 A <- as.numeric(rnorm(n_obs, mean = tx_mult * W, sd = 1))
@@ -25,37 +24,43 @@ Y <- A + W + rnorm(n_obs, mean = 0, sd = 1)
 data <- data.table(W, A, Y)
 node_list <- list(W = "W", A = "A", Y = "Y")
 
-# learners used for conditional expectation regression (e.g., outcome)
-mean_lrnr <- Lrnr_mean$new()
-glm_lrnr <- Lrnr_glm$new()
-xgb_lrnr <- Lrnr_xgboost$new()
-sl_lrnr <- Lrnr_sl$new(
-  learners = list(mean_lrnr, glm_lrnr, xgb_lrnr),
-  metalearner = Lrnr_nnls$new()
+# learners used for outcome regression (conditional expectation)
+mean_learner <- Lrnr_mean$new()
+fglm_learner <- Lrnr_glm_fast$new()
+xgb_learner <- Lrnr_xgboost$new()
+sl_or_learner <- Lrnr_sl$new(
+  learners = list(mean_learner, fglm_learner, xgb_learner)
 )
 
-# learners used for conditional density estimation (i.e., propensity score)
-hse_learner <- make_learner(Lrnr_density_semiparametric,
-  mean_learner = glm_lrnr
+# learners used for generalized propensity score (conditional density)
+hse_mean_learner <- make_learner(Lrnr_density_semiparametric,
+  mean_learner = mean_learner
 )
-mvd_learner <- make_learner(Lrnr_density_semiparametric,
-  mean_learner = xgb_lrnr,
-  var_learner = glm_lrnr
+hse_fglm_learner <- make_learner(Lrnr_density_semiparametric,
+  mean_learner = fglm_learner
 )
-sl_density_lrnr <- Lrnr_sl$new(
-  learners = Stack$new(hse_learner, mvd_learner),
+hse_xgb_learner <- make_learner(Lrnr_density_semiparametric,
+  mean_learner = xgb_learner
+)
+mvd_xgb_fglm_learner <- make_learner(Lrnr_density_semiparametric,
+  mean_learner = xgb_learner,
+  var_learner = fglm_learner
+)
+sl_gps_learner <- Lrnr_sl$new(
+  learners = Stack$new(hse_mean_learner, hse_xgb_learner, hse_fglm_learner,
+                       mvd_xgb_fglm_learner),
   metalearner = Lrnr_solnp_density$new()
 )
 
 # specify outcome and treatment regressions and create learner list
-Q_learner <- sl_lrnr
-g_learner <- sl_density_lrnr
-learner_list <- list(Y = Q_learner, A = g_learner, delta_Y = Q_learner)
+or_learner <- sl_or_learner
+gps_learner <- sl_gps_learner
+learner_list <- list(Y = or_learner, A = gps_learner, delta_Y = or_learner)
 
 # initialize a tmle specification
 tmle_spec <- tmle_vimshift_delta(
   shift_grid = delta_grid,
-  max_shifted_ratio = 2
+  max_shifted_ratio = 10
 )
 
 ## define data (from tmle3_Spec base class)

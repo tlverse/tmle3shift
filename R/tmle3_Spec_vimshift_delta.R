@@ -14,7 +14,7 @@ tmle3_Spec_vimshift_delta <- R6::R6Class(
     initialize = function(shift_fxn = shift_additive,
                           shift_fxn_inv = shift_additive_inv,
                           shift_grid = seq(-1, 1, by = 0.5),
-                          max_shifted_ratio = 2,
+                          max_shifted_ratio = 5,
                           weighting = c("identity", "variance"),
                           ...) {
       options <- list(
@@ -84,7 +84,7 @@ tmle3_Spec_vimshift_delta <- R6::R6Class(
   private = list()
 )
 
-################################################################################
+###############################################################################
 
 #' Outcome Under a Grid of Shifted Interventions via Delta Method
 #'
@@ -119,7 +119,7 @@ tmle3_Spec_vimshift_delta <- R6::R6Class(
 tmle_vimshift_delta <- function(shift_fxn = shift_additive,
                                 shift_fxn_inv = shift_additive_inv,
                                 shift_grid = seq(-1, 1, by = 0.5),
-                                max_shifted_ratio = 2,
+                                max_shifted_ratio = 5,
                                 weighting = c("identity", "variance"),
                                 ...) {
   # set default for weighting

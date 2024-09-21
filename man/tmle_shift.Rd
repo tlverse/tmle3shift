@@ -8,7 +8,7 @@ tmle_shift(
   shift_fxn = shift_additive,
   shift_fxn_inv = shift_additive_inv,
   shift_val = 1,
-  max_shifted_ratio = 2,
+  max_shifted_ratio = 5,
   ...
 )
 }
